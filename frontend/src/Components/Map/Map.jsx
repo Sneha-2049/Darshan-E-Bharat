@@ -1,65 +1,67 @@
 import React, { useEffect, useState, useRef } from "react";
 import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
-import L from "leaflet"; // Import Leaflet for bounds calculation
+import L from "leaflet"; // Leaflet for bounds calculation
 import "leaflet/dist/leaflet.css";
 
 const IndiaMap = () => {
   const [indiaGeoJSON, setIndiaGeoJSON] = useState(null);
-  const mapRef = useRef(null); // Ref for the map to adjust zoom dynamically
+  const mapRef = useRef(null); // Ref for controlling map zoom
 
   useEffect(() => {
-    // Fetch India’s detailed GeoJSON (including states and internal boundaries)
-    fetch("https://raw.githubusercontent.com/geohacker/india/master/state/india_state.geojson") // Reliable source for India's states
+    fetch("https://raw.githubusercontent.com/geohacker/india/master/state/india_state.geojson")
       .then((response) => response.json())
       .then((data) => {
-        console.log(data); // Inspect the GeoJSON data
-        data.features.forEach((feature, index) => {
-          console.log(`Feature ${index}:`, feature.geometry); // Log each feature's geometry
-        });
-        setIndiaGeoJSON(data);
-
-        // Calculate bounds from GeoJSON and fit the map to those bounds
-        if (mapRef.current && data.features) {
-          const bounds = L.geoJSON(data).getBounds(); // Use Leaflet to calculate bounds
-          mapRef.current.fitBounds(bounds); // Fit the map to the bounds
+        if (data && data.features) {
+          setIndiaGeoJSON(data);
+          if (mapRef.current) {
+            const bounds = L.geoJSON(data).getBounds();
+            mapRef.current.fitBounds(bounds); // Adjust zoom to fit India
+          }
+        } else {
+          console.error("Invalid GeoJSON structure:", data);
         }
       })
       .catch((error) => console.error("Error loading India GeoJSON:", error));
   }, []);
 
-  // Style for India's boundary and internal regions
-  const geoJsonStyle = {
-    color: "green", // Border color
-    weight: 1, // Border thickness
-    fillColor: "lightgreen", // Fill color for internal regions
-    fillOpacity: 0.5, // Fill opacity
-  };
+  // ✅ Style for India's boundary & internal regions
+  const geoJsonStyle = (feature) => ({
+    color: "black",       // Border color for states
+    weight: 1.5,          // Slightly thicker border for visibility
+    fillColor: "lightblue", // Visible fill color for regions
+    fillOpacity: 0.8,     // Increased opacity for better visibility
+  });
 
-  // Function to apply styles dynamically (optional)
+  // ✅ Tooltip & Click Event: Show state names
   const onEachFeature = (feature, layer) => {
-    // You can add interactivity or custom styles here
-    if (feature.properties && feature.properties.name) {
-      layer.bindTooltip(feature.properties.name); // Display state names as tooltips
+    if (feature.properties && feature.properties.NAME_1) {
+      // Tooltip on hover
+      layer.bindTooltip(feature.properties.NAME_1, { permanent: false, direction: "auto" });
+
+      // Click event: Popup with state name
+      layer.on("click", () => {
+        layer.bindPopup(`<b>${feature.properties.NAME_1}</b>`).openPopup();
+      });
     }
   };
 
   return (
     <MapContainer
       ref={mapRef}
-      style={{ height: "600px", width: "100%", background: "transparent" }} // Transparent background
+      style={{ height: "600px", width: "100%", background: "transparent" }}
       zoom={5}
-      scrollWheelZoom={false} // Disable zooming with mouse scroll
-      center={[20.5937, 78.9629]} // Default center (India)
+      scrollWheelZoom={true} // Enable zooming for better visibility
+      center={[20.5937, 78.9629]} // Centered on India
     >
-      {/* Hide base map if only India's map is needed */}
+      {/* Hide base map if only India's shape is needed */}
       {/* <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" /> */}
 
-      {/* Render India's boundary and internal regions */}
+      {/* Render India's boundary & internal states */}
       {indiaGeoJSON && (
         <GeoJSON
           data={indiaGeoJSON}
           style={geoJsonStyle}
-          onEachFeature={onEachFeature} // Optional: Add interactivity
+          onEachFeature={onEachFeature}
         />
       )}
     </MapContainer>
