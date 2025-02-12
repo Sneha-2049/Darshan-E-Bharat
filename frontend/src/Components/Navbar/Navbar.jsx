@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -7,16 +8,16 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <a href="/" className="logo">
+        <Link to="/" className="logo">
           Darshan-E-Bharat
-        </a>
+        </Link>
         <ul className={`nav-links ${isMobile ? 'mobile' : ''}`}>
-          <li><a href="/">Home</a></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="/quiz">Quiz</a></li>
-          <li><a href="/courses">Courses</a></li>
-          <li><a href="/marketplace">Marketplace</a></li>
-          <li><a href="/contact">Contact</a></li>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/about">About</Link></li>
+          <li><Link to="/quiz">Quiz</Link></li>
+          <li><Link to="/courses">Courses</Link></li>
+          <li><Link to="/marketplace">Marketplace</Link></li>
+          <li><Link to="/contact">Contact</Link></li>
         </ul>
         <div className="auth-buttons">
           <button className="btn signup-btn">Sign Up</button>

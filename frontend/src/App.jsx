@@ -1,6 +1,9 @@
-import Navbar from './Components/Navbar/Navbar'
-import Map from './Components/Map/Map'
-import './App.css'
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Navbar from "./Components/Navbar/Navbar";
+import Map from "./Components/Map/Map";
+import Contact from "./Components/Contact/Contact";
+
+import "./App.css";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -14,13 +17,19 @@ L.Icon.Default.mergeOptions({
 });
 
 function App() {
-
   return (
-    <div className='App'>
-      <Navbar />
-      <Map />
-    </div>
-  )
+    <Router>
+      <div className="App">
+        <Navbar />
+        <div className= "main-content">
+        <Routes>
+          <Route path="/" element={<Map />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+        </div>
+      </div>
+    </Router>
+  );
 }
 
-export default App
+export default App;
