@@ -2,6 +2,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./Components/Navbar/Navbar";
 import Map from "./Components/Map/Map";
 import Contact from "./Components/Contact/Contact";
+import CoursePage from './Components/Courses/CoursePage';  // Import CoursesPage
+import CourseDetails from './Components/Courses/CourseDetails';  // Course Details page
 
 import "./App.css";
 import L from "leaflet";
@@ -25,6 +27,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Map />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/courses" element={<CoursePage />} />  {/* Courses Page */}
+          <Route path="/course/:id" element={<CourseDetails />} />  {/* Course Details Page */}
+
         </Routes>
         </div>
       </div>

@@ -1,0 +1,244 @@
+/* General CourseCard styling */
+.course-card {
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 300px;
+  margin: 10px;
+  text-align: center;
+  background-color: white;
+}
+
+.course-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.course-card h3 {
+  font-size: 1.25rem;
+  margin-top: 10px;
+}
+
+.course-card p {
+  font-size: 0.875rem;
+  color: #555;
+}
+
+.course-card .btn {
+  background-color: #388e3c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: 15px;
+}
+
+.course-card .btn:hover {
+  background-color: #4caf50;
+}
+
+/* Make CourseCard responsive */
+@media (max-width: 768px) {
+  .course-card {
+    max-width: 100%;
+    margin: 20px auto;
+  }
+}
+
+/* General layout for CourseList */
+.course-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  justify-items: center;
+}
+
+/* For smaller devices (mobile) */
+@media (max-width: 768px) {
+  .course-list {
+    display: block; /* Stack course cards vertically on small screens */
+    padding: 10px;
+  }
+}
+
+/* General styling for CourseDetails */
+.course-details {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+}
+
+.course-details img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.course-details h2 {
+  font-size: 2rem;
+  margin-top: 20px;
+  color: #333;
+}
+
+.course-details p {
+  font-size: 1rem;
+  color: #555;
+  margin-top: 10px;
+}
+
+/* Enroll Button Styling */
+.enroll-button {
+  background-color: #388e3c;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 300px; /* Limit max width for the button */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  text-align: center; /* Make sure the text is centered */
+}
+
+.enroll-button:hover {
+  background-color: #1f6e6e;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* .enroll-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+} */
+
+/* Responsive styling for CourseDetails */
+@media (max-width: 768px) {
+  .course-details img {
+    height: 200px;
+  }
+
+  .course-details h2 {
+    font-size: 1.5rem;
+  }
+
+  .course-details p {
+    font-size: 0.875rem;
+  }
+}
+
+/* General styling for CoursePage */
+.course-page {
+  padding: 30px;
+  background-color: #f4f4f4;
+  text-align: center;
+}
+
+.course-page h1 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.course-page p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+/* Make CoursePage responsive */
+@media (max-width: 768px) {
+  .course-page h1 {
+    font-size: 2rem;
+  }
+
+  .course-page p {
+    font-size: 0.875rem;
+  }
+}
+
+/* For smaller screens like mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .course-list {
+    display: block; /* Stack course cards vertically */
+    padding: 10px;
+  }
+
+  .course-card {
+    width: 100%;
+    margin: 20px 0;
+  }
+
+  .course-details {
+    padding: 15px;
+  }
+
+  .course-details img {
+    height: 200px; /* Smaller image for mobile */
+  }
+}
+
+/* For tablets and larger screens (above 768px) */
+@media (min-width: 769px) {
+  .course-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+}
+
+/* For Mobile: stack everything vertically, larger fonts, etc. */
+@media (max-width: 768px) {
+  /* Stack CourseCards in a single column */
+  .course-list {
+    display: block;
+    padding: 10px;
+  }
+
+  /* Make CourseCard take full width */
+  .course-card {
+    width: 100%;
+    margin: 20px auto;
+  }
+
+  /* CourseDetails image size */
+  .course-details img {
+    height: 200px;
+  }
+
+  /* Course details font sizes */
+  .course-details h2 {
+    font-size: 1.5rem;
+  }
+
+  .course-details p {
+    font-size: 0.875rem;
+  }
+
+  /* Adjust CoursePage header */
+  .course-page h1 {
+    font-size: 2rem;
+  }
+
+  .course-page p {
+    font-size: 0.875rem;
+  }
+}
+
+/* For larger screens (above 768px), adjust the layout back to grid or more spacing */
+@media (min-width: 769px) {
+  .course-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+}
