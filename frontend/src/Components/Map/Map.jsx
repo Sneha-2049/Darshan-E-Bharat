@@ -50,7 +50,7 @@ const IndiaMap = () => {
       ref={mapRef}
       style={{ height: "600px", width: "100%", background: "transparent" }}
       zoom={5}
-      scrollWheelZoom={true} // Enable zooming for better visibility
+      scrollWheelZoom={false} // ❌ Scroll zoom disabled
       center={[20.5937, 78.9629]} // Centered on India
     >
       {/* Hide base map if only India's shape is needed */}
