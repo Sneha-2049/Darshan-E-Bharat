@@ -1,7 +1,13 @@
+import festivals from './hindu.png'
+import history  from './Crusade.png'
+import heritage  from './taj-mahal.png'
+import culture  from './indian-woman.png'
+
+
 const quiz_data = [
   {
     "topic": "Festivals of India",
-    "image": "festivals.jpg",
+    "image": festivals,
     "description": "Test your knowledge about India's famous festivals and their significance.",
     "questionsCount": 10,
     "timeLimit": "10 min",
@@ -60,7 +66,7 @@ const quiz_data = [
   },
   {
     "topic": "Indian History",
-    "image": "history.jpg",
+    "image": history,
     "description": "Explore India's rich historical past with this quiz on major events and personalities.",
     "questionsCount": 10,
     "timeLimit": "12 min",
@@ -119,7 +125,7 @@ const quiz_data = [
   },
   {
     "topic": "Indian Heritage Sites",
-    "image": "heritage.jpg",
+    "image": heritage,
     "description": "Discover the architectural wonders and cultural heritage sites of India.",
     "questionsCount": 10,
     "timeLimit": "10 min",
@@ -173,6 +179,65 @@ const quiz_data = [
         "question": "Which Indian monument was built as a victory tower by Rana Kumbha?",
         "options": ["Hawa Mahal", "Vijay Stambh", "Gol Gumbaz", "Charminar"],
         "answer": "Vijay Stambh"
+      }
+    ]
+  },
+  {
+    "topic": "Indian Culture",
+    "image": culture,
+    "description": "Dive into the rich traditions, customs, and practices of Indian culture.",
+    "questionsCount": 10,
+    "timeLimit": "10 min",
+    "questions": [
+      {
+        "question": "Which Indian classical dance form originates from Tamil Nadu?",
+        "options": ["Kathak", "Bharatanatyam", "Odissi", "Manipuri"],
+        "answer": "Bharatanatyam"
+      },
+      {
+        "question": "Which is the national flower of India?",
+        "options": ["Lotus", "Rose", "Marigold", "Jasmine"],
+        "answer": "Lotus"
+      },
+      {
+        "question": "What is the traditional dress worn by men in Punjab?",
+        "options": ["Kurta-Pajama", "Dhoti", "Lungi", "Sherwani"],
+        "answer": "Kurta-Pajama"
+      },
+      {
+        "question": "Which Indian festival is known as the ‘festival of lights’?",
+        "options": ["Diwali", "Holi", "Navratri", "Eid"],
+        "answer": "Diwali"
+      },
+      {
+        "question": "Which musical instrument is associated with Pandit Ravi Shankar?",
+        "options": ["Sitar", "Tabla", "Shehnai", "Sarod"],
+        "answer": "Sitar"
+      },
+      {
+        "question": "Which is the official language of the Indian government along with English?",
+        "options": ["Sanskrit", "Tamil", "Hindi", "Bengali"],
+        "answer": "Hindi"
+      },
+      {
+        "question": "Which traditional Indian art form involves intricate hand-painted designs on fabric?",
+        "options": ["Madhubani", "Kalamkari", "Pattachitra", "Warli"],
+        "answer": "Kalamkari"
+      },
+      {
+        "question": "Which Indian state is famous for its Chhau dance?",
+        "options": ["Odisha", "Kerala", "Punjab", "Maharashtra"],
+        "answer": "Odisha"
+      },
+      {
+        "question": "Which Indian dish is made with fermented rice and urad dal?",
+        "options": ["Dosa", "Pav Bhaji", "Biryani", "Pani Puri"],
+        "answer": "Dosa"
+      },
+      {
+        "question": "Which of these is a traditional embroidery style from Gujarat?",
+        "options": ["Phulkari", "Chikankari", "Kantha", "Kutchi"],
+        "answer": "Kutchi"
       }
     ]
   }

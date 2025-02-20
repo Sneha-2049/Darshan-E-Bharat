@@ -5,6 +5,8 @@ import Contact from "./Components/Contact/Contact";
 import CoursePage from './Components/Courses/CoursePage';  // Import CoursesPage
 import CourseDetails from './Components/Courses/CourseDetails';  // Course Details page
 import QuizCard from './Components/Quiz/QuizCard';  
+import Quiz from './Components/Quiz/Quiz';  
+
 import "./App.css";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -28,7 +30,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/courses" element={<CoursePage />} />  {/* Courses Page */}
-          <Route path="/quiz" element={<QuizCard />} />  {/* Quiz Page */}
+          <Route path="/quizcard" element={<QuizCard />} />  {/* Quizcard Page */}
+          <Route path="/quiz" element={<Quiz />} />  {/* Quizcard Page */}
           <Route path="/course/:id" element={<CourseDetails />} />  {/* Course Details Page */}
         </Routes>
         </div>
