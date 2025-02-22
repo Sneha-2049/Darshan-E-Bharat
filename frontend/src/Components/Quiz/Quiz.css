@@ -128,4 +128,51 @@
   .start-quiz:hover {
     background: #e65c00;
   }
+  /* test-container */
+  .test-container{
+    width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .test-container h1{
+    margin-top: 30px;
+  }
+  .question-container{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  .ques{
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+  .option-container{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 70px;
+  }
+  .options{
+    display: flex;
+    gap: 10px;
+  }
+  .quiz-submit{
+    width: 150px;
+    height: 45px;
+    cursor: pointer;
+  }
+  .score-box{
+    font-size: 40px;
+  }
+
+
+
+
+
   
