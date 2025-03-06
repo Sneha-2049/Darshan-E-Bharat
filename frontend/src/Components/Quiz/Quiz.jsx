@@ -1,5 +1,6 @@
 import React, {useState,useRef} from  'react'
 import quiz_data from '../../assets/Quizdata'
+import Swal from "sweetalert2";
 
 function Quiz(props) {
   const [score,setScore]=useState(0);
@@ -16,10 +17,19 @@ function Quiz(props) {
         });     
        }
   }
-  const handleClick = ()=>{
-    scoreRef.current.innerHTML = `Congratulations! Your Total Score is:, ${score}`; 
-   }
-  return (
+  // const handleClick = ()=>{
+  //   scoreRef.current.innerHTML = `Congratulations! Your Total Score is: ${score}`; 
+  //  }
+  const handleClick = async (event) => {
+    event.preventDefault();
+    Swal.fire({
+      title: "Quiz Submitted!",
+      text: `Congratulations! Your Total Score is: ${score}`,
+      icon: "success"
+    });
+  }
+  
+    return (
     <div className='test-container'>
       <h1>{quiz_data[props.index].topic}</h1>
       <div className='question-container'>
@@ -45,7 +55,7 @@ function Quiz(props) {
 
           ))
         }
-        <button type='submit' className='quiz-submit' onClick={handleClick}>Submit</button>
+        <button type='submit' className='quiz-submit' onClick={handleClick} >Submit</button>
         <div ref={scoreRef} className='score-box'></div>
 
       </div>

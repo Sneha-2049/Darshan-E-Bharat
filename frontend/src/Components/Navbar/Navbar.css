@@ -92,6 +92,9 @@
     background-color: #fff;
     border-radius: 5px;
   }
+  .quiz-scroll{
+    cursor: pointer;
+  }
   
   /* Mobile View */
   @media screen and (max-width: 768px) {
