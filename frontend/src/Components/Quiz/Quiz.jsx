@@ -17,9 +17,6 @@ function Quiz(props) {
         });     
        }
   }
-  // const handleClick = ()=>{
-  //   scoreRef.current.innerHTML = `Congratulations! Your Total Score is: ${score}`; 
-  //  }
   const handleClick = async (event) => {
     event.preventDefault();
     Swal.fire({
