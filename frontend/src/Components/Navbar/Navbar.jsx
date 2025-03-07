@@ -22,6 +22,7 @@ const Navbar = () => {
             offset={-50} // Adjust offset if header is fixed
             spy={true} // Active class when in view
             activeClass="active"
+            className='quiz-scroll'
           >Quiz</ScrollLink></li>
           <li><Link to="/courses">Courses</Link></li>
           <li><Link to="/marketplace">Marketplace</Link></li>
