@@ -1,10 +1,21 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Link as ScrollLink } from "react-scroll";
 import './Navbar.css';
+import { useSnackbar } from 'notistack';
 
 const Navbar = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+  const token = localStorage.getItem('token');
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    enqueueSnackbar('Logged out!', { variant: 'info' });
+    navigate('/');
+  };
+
 
   return (
     <nav className="navbar">
@@ -29,8 +40,20 @@ const Navbar = () => {
           <li><Link to="/contact">Contact</Link></li>
         </ul>
         <div className="auth-buttons">
-          <button className="btn signup-btn">Sign Up</button>
-          <button className="btn login-btn">Login</button>
+          {/* <button className="btn signup-btn">Sign Up</button>
+          <button className="btn login-btn">Login</button> */}
+          {!token ? (
+            <>
+             <Link to = "/signup">
+              <button className="btn signup-btn">Sign Up</button>
+             </Link>
+              <Link to = "/login">
+              <button className="btn login-btn">Login</button>
+              </Link>
+            </>
+          ) : (
+            <button className="btn logout-btn" onClick={handleLogout}>Logout</button>
+          )}
         </div>
         <div className="hamburger" onClick={() => setIsMobile(!isMobile)}>
           <span className="bar"></span>
