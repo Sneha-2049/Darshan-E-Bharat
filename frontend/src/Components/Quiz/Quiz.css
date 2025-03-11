@@ -149,12 +149,14 @@
   .option-container{
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
     margin-left: 70px;
   }
   .options{
     display: flex;
     gap: 10px;
+    height: 30px;
+    align-items: center;
   }
   .quiz-submit{
     width: 150px;

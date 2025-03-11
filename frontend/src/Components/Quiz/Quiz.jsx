@@ -4,21 +4,54 @@ import Swal from "sweetalert2";
 
 function Quiz(props) {
   const [score,setScore]=useState(0);
-  let scoreRef=useRef(0);
+  const [correctAnswers, setCorrectAnswers] = useState([]); 
+  const [wrongAnswers, setWrongAnswers] = useState([]); 
+  let colorRef=useRef([]);
   let quesNo = 0;
+  const checkmark = document.createTextNode(" ✅");
+  const wrongMark = document.createTextNode(" ❌");
+
   const questions = quiz_data[props.index].questions
+  console.log(questions)
   const handleChange = (index,evt)=>{
       console.log(evt.target.value);
       console.log(index);
       if (evt.target.value === questions[index].answer){
+        console.log(evt.target.parentNode);
+        setCorrectAnswers(prevAnswers => [...prevAnswers, evt.target.parentNode]);
         setScore(prevScore => {
           console.log(prevScore + 1); 
           return prevScore + 1;
         });     
        }
+       else{
+        console.log(evt.target.parentNode)
+        setWrongAnswers(prevAnswers => [...prevAnswers, evt.target.parentNode]);
+       }
+
   }
   const handleClick = async (event) => {
     event.preventDefault();
+    // questions.forEach((ques, ix) => {
+    //   console.log(colorRef.current.parentNode)
+
+    //   if(ques.answer==colorRef[ix].current.innerText){
+    //     colorRef[ix].current.parentNode.style.backgroundColor='#90EE90'
+    //   }
+    // });
+    correctAnswers.forEach((element) => {
+      console.log(element)
+      element.style.backgroundColor = "#90EE90";
+      element.appendChild(checkmark);
+        });    
+    wrongAnswers.forEach((element) => {
+      console.log(element)
+      element.style.backgroundColor = "#FF4C4C";
+       element.appendChild(wrongMark);
+
+
+    });    
+
     Swal.fire({
       title: "Quiz Submitted!",
       text: `Congratulations! Your Total Score is: ${score}`,
@@ -44,7 +77,7 @@ function Quiz(props) {
                       value={opt}
                       onChange={(event)=>handleChange(index,event)}
                     />
-                    <label htmlFor={`ques-${index}-${idx}`}>{opt}</label>
+                    <label ref={colorRef} htmlFor={`ques-${index}-${idx}`}>{opt}</label>
                   </div>
                 ))}
               </div>
@@ -53,7 +86,6 @@ function Quiz(props) {
           ))
         }
         <button type='submit' className='quiz-submit' onClick={handleClick} >Submit</button>
-        <div ref={scoreRef} className='score-box'></div>
 
       </div>
     </div>
