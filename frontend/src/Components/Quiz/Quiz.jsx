@@ -1,65 +1,68 @@
-import React, {useState,useRef} from  'react'
+import React, { useState, useRef } from 'react'
 import quiz_data from '../../assets/Quizdata'
 import Swal from "sweetalert2";
 
 function Quiz(props) {
-  const [score,setScore]=useState(0);
-  const [correctAnswers, setCorrectAnswers] = useState([]); 
-  const [wrongAnswers, setWrongAnswers] = useState([]); 
-  let colorRef=useRef([]);
+  const [score, setScore] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState([]);
+  const [wrongAnswers, setWrongAnswers] = useState([]);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  let colorRef = useRef([]);
   let quesNo = 0;
-  const checkmark = document.createTextNode(" ✅");
   const wrongMark = document.createTextNode(" ❌");
 
   const questions = quiz_data[props.index].questions
-  console.log(questions)
-  const handleChange = (index,evt)=>{
-      console.log(evt.target.value);
-      console.log(index);
-      if (evt.target.value === questions[index].answer){
-        console.log(evt.target.parentNode);
-        setCorrectAnswers(prevAnswers => [...prevAnswers, evt.target.parentNode]);
-        setScore(prevScore => {
-          console.log(prevScore + 1); 
-          return prevScore + 1;
-        });     
-       }
-       else{
-        console.log(evt.target.parentNode)
-        setWrongAnswers(prevAnswers => [...prevAnswers, evt.target.parentNode]);
-       }
+  const handleChange = (index, evt) => {
+    if (evt.target.value === questions[index].answer) {
+      setCorrectAnswers(prevAnswers => [...prevAnswers, evt.target.parentNode]);
+      setScore(prevScore => {
+        console.log(prevScore + 1);
+        return prevScore + 1;
+      });
+    }
+    else {
+      console.log(evt.target.parentNode)
+      setWrongAnswers(prevAnswers => [...prevAnswers, evt.target.parentNode]);
+    }
 
   }
   const handleClick = async (event) => {
     event.preventDefault();
-    // questions.forEach((ques, ix) => {
-    //   console.log(colorRef.current.parentNode)
+    setIsSubmitted(true);
+    document.querySelectorAll("input[type='radio']").forEach((input) => {
+      input.disabled = true;
+    });
 
-    //   if(ques.answer==colorRef[ix].current.innerText){
-    //     colorRef[ix].current.parentNode.style.backgroundColor='#90EE90'
-    //   }
-    // });
-    correctAnswers.forEach((element) => {
-      console.log(element)
-      element.style.backgroundColor = "#90EE90";
-      element.appendChild(checkmark);
-        });    
+    // function to display correct answer
+    questions.forEach((ques, idx) => {
+      ques.options.forEach((option, optionIdx) => {
+        if (option === ques.answer) {
+          const correctOption = colorRef.current[idx][optionIdx];
+          if (correctOption) {
+            correctOption.parentNode.style.backgroundColor = "#90EE90";
+            const checkmark = document.createTextNode(" ✅");
+            correctOption.parentNode.appendChild(checkmark);
+          }
+        }
+      });
+    });
+    // function to display wrong answer
     wrongAnswers.forEach((element) => {
       console.log(element)
       element.style.backgroundColor = "#FF4C4C";
-       element.appendChild(wrongMark);
-
-
-    });    
+      element.appendChild(wrongMark);
+    });
 
     Swal.fire({
       title: "Quiz Submitted!",
       text: `Congratulations! Your Total Score is: ${score}`,
       icon: "success"
     });
+
   }
-  
-    return (
+
+  return (
     <div className='test-container'>
       <h1>{quiz_data[props.index].topic}</h1>
       <div className='question-container'>
@@ -75,17 +78,22 @@ function Quiz(props) {
                       name={`question-${index}`}
                       type='radio'
                       value={opt}
-                      onChange={(event)=>handleChange(index,event)}
+                      onChange={(event) => handleChange(index, event)}
                     />
-                    <label ref={colorRef} htmlFor={`ques-${index}-${idx}`}>{opt}</label>
-                  </div>
+                    <label ref={(el) => {
+                      if (!colorRef.current[index]) colorRef.current[index] = [];
+                      colorRef.current[index][idx] = el;
+                    }} htmlFor={`ques-${index}-${idx}`}>
+                      {opt}
+                    </label>            
+                          </div>
                 ))}
               </div>
             </div>
 
           ))
         }
-        <button type='submit' className='quiz-submit' onClick={handleClick} >Submit</button>
+        <button type='submit' className='quiz-submit' onClick={handleClick}  disabled={isSubmitted}>Submit</button>
 
       </div>
     </div>
