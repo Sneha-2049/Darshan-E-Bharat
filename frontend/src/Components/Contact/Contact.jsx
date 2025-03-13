@@ -27,7 +27,8 @@ const Contact = () => {
                 title: "Success!",
                 text: "Message sent successfully!",
                 icon: "success"
-              });
+            });
+            event.target.reset(); // Reset the form
         }
       };
 
