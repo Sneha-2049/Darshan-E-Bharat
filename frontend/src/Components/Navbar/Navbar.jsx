@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Link as ScrollLink } from "react-scroll";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link as ScrollLink, animateScroll as scroll } from "react-scroll";
 import './Navbar.css';
 import { useSnackbar } from 'notistack';
 
 const Navbar = () => {
   const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { enqueueSnackbar } = useSnackbar();
   const token = localStorage.getItem('token');
 
@@ -16,6 +17,16 @@ const Navbar = () => {
     navigate('/');
   };
 
+  const handleQuizNavigation = () => {
+    if (location.pathname === "/") {
+      scroll.scrollTo(document.getElementById("quiz-box").offsetTop - 50, {
+        duration: 800,
+        smooth: "easeInOutQuad",
+      });
+    } else {
+      navigate("/quizcard");
+    }
+  };
 
   return (
     <nav className="navbar">
@@ -26,29 +37,23 @@ const Navbar = () => {
         <ul className={`nav-links ${isMobile ? 'mobile' : ''}`}>
           <li><Link to="/">Home</Link></li>
           <li><Link to="/about">About</Link></li>
-          <li><ScrollLink
-            to="/quiz"
-            smooth="easeInOutQuad" // Smooth animation
-            duration={800} // Adjust duration for better control
-            offset={-50} // Adjust offset if header is fixed
-            spy={true} // Active class when in view
-            activeClass="active"
-            className='quiz-scroll'
-          >Quiz</ScrollLink></li>
+          <li>
+            <button className='quiz-menu' onClick={handleQuizNavigation}>
+              Quiz
+            </button>
+          </li>
           <li><Link to="/courses">Courses</Link></li>
           <li><Link to="/marketplace">Marketplace</Link></li>
           <li><Link to="/contact">Contact</Link></li>
         </ul>
         <div className="auth-buttons">
-          {/* <button className="btn signup-btn">Sign Up</button>
-          <button className="btn login-btn">Login</button> */}
           {!token ? (
             <>
-             <Link to = "/signup">
-              <button className="btn signup-btn">Sign Up</button>
-             </Link>
-              <Link to = "/login">
-              <button className="btn login-btn">Login</button>
+              <Link to="/signup">
+                <button className="btn signup-btn">Sign Up</button>
+              </Link>
+              <Link to="/login">
+                <button className="btn login-btn">Login</button>
               </Link>
             </>
           ) : (
