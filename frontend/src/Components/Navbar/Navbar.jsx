@@ -19,7 +19,7 @@ const Navbar = () => {
 
   const handleQuizNavigation = () => {
     if (location.pathname === "/") {
-      scroll.scrollTo(document.getElementById("quiz-box").offsetTop - 50, {
+      scroll.scrollTo(document.getElementById("features").offsetTop - 50, {
         duration: 800,
         smooth: "easeInOutQuad",
       });
