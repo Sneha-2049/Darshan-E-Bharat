@@ -47,7 +47,7 @@ const IndiaMap = () => {
   };
 
   return (
-    <div style={{ height: "600px", width: "100%" }}>
+    <div style={{ height: "600px", width: "100%",}} >
       <MapContainer
         ref={mapRef}
         style={{ height: "100%", width: "100%", background: "transparent" }} // Transparent background

@@ -17,14 +17,31 @@ const Navbar = () => {
     navigate('/');
   };
 
-  const handleQuizNavigation = () => {
+  const handleNavigation = (event) => {
+    console.log(event.target.className)
     if (location.pathname === "/") {
-      scroll.scrollTo(document.getElementById("features").offsetTop - 50, {
-        duration: 800,
-        smooth: "easeInOutQuad",
-      });
-    } else {
-      navigate("/quizcard");
+      const targetId = event.target.className;
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        const navbarHeight = document.querySelector(".navbar").offsetHeight || 60;
+        const extraOffset = 70;
+        const yOffset = targetElement.getBoundingClientRect().top + window.scrollY - navbarHeight - extraOffset;
+        scroll.scrollTo(yOffset, {
+          duration: 800,
+          smooth: "easeInOutQuad",
+        });
+      }
+    }
+    else {
+      if (event.target.className === 'quiz') {
+        navigate("/quizcard");
+      }
+      if (event.target.className === 'cource') {
+        navigate("/courses");
+      }
+      if (event.target.className === 'marketplace') {
+        navigate("/marketplace");
+      }
     }
   };
 
@@ -38,12 +55,20 @@ const Navbar = () => {
           <li><Link to="/">Home</Link></li>
           <li><Link to="/about">About</Link></li>
           <li>
-            <button className='quiz-menu' onClick={handleQuizNavigation}>
+            <button id='features-button' className='quiz' onClick={handleNavigation}>
               Quiz
             </button>
           </li>
-          <li><Link to="/courses">Courses</Link></li>
-          <li><Link to="/marketplace">Marketplace</Link></li>
+          <li>
+            <button id='features-button' className='cource' onClick={handleNavigation}>
+              Cources
+            </button>
+          </li>
+          <li>
+            <button id='features-button' className='marketplace' onClick={handleNavigation}>
+              Marketplace
+            </button>
+          </li>
           <li><Link to="/contact">Contact</Link></li>
         </ul>
         <div className="auth-buttons">
@@ -69,5 +94,6 @@ const Navbar = () => {
     </nav>
   );
 };
+
 
 export default Navbar;

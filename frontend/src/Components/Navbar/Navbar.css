@@ -45,7 +45,7 @@
   transition: color 0.3s ease;
 }
 
-.quiz-menu {
+#features-button {
   background-color: transparent;
   color: white;
   border: none;
@@ -55,7 +55,7 @@
   font-family: 'Times New Roman', Times, serif;
 }
 
-.quiz-menu:hover {
+#features-button:hover {
   color: #66bb6a;
 }
 

@@ -6,12 +6,12 @@ import { Link } from 'react-router-dom';
 function Homecards() {
     console.log(card_Data)
     return (
-        <div className='features-container' id='features'>
+        <div className='features-container'>
             {
                 card_Data.map((features, index) => (
-                    <div className='features-card'>
+                    <div className='features-card' id={features.id}>
                         <h1 className='feature-head'>{features.title}</h1>
-                        <div className='feature-description'>
+                        <div className='feature-description' style={{ flexDirection: `${features.flexDirection}` }}>
                             <div className='descriptions'>
                                 <h1>{features.heading}</h1>
                                 <p>{features.description}</p>
@@ -19,11 +19,7 @@ function Homecards() {
                             </div>
                             <div className='feature-image' style={{ backgroundImage: `url(${features.img})` }}></div>
                         </div>
-
-
                     </div>
-
-
                 ))
             }
         </div>
