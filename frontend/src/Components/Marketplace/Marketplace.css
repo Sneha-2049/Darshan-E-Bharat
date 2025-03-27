@@ -1,0 +1,169 @@
+
+/* Marketplace container */
+.marketplace-container {
+  padding: 20px;
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Title and Go to Cart Button container */
+.marketplace-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.marketplace-title {
+  font-size: 2.5rem;
+  margin-bottom: 0;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  flex-grow: 1;
+  text-align: center;
+}
+
+.go-to-cart {
+  position: absolute;
+  right: 0;
+}
+
+.view-cart-btn {
+  background-color: #f39c12;
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  transition: background-color 0.3s;
+}
+
+.view-cart-btn:hover {
+  background-color: #e67e22;
+}
+
+/* Flexbox grid for items */
+.items-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  justify-items: center;
+  margin-top: 30px;
+}
+
+/* Item card styling */
+.item-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
+}
+
+.item-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 2px solid #ddd;
+}
+
+/* Item details section */
+.item-info {
+  padding: 15px;
+  text-align: left;
+}
+
+.item-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.item-description {
+  font-size: 1rem;
+  color: #777;
+  margin-bottom: 15px;
+}
+
+.item-price {
+  font-size: 1.1rem;
+  color: #e74c3c;
+  margin-bottom: 20px;
+}
+
+/* Buttons container */
+.buttons-container {
+  display: flex;
+  gap: 10px; /* Space between the buttons */
+  justify-content: space-between;
+}
+
+/* Add to Cart button styling */
+.add-to-cart-btn {
+  background-color:  #c4831c;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background-color 0.3s;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #967b0f;
+}
+
+/* Buy Now button styling */
+.buy-now-btn {
+  background-color:#19c05f ;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background-color 0.3s;
+  margin-left: 11px;
+}
+
+.buy-now-btn:hover {
+  background-color: #21ad5c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .marketplace-title {
+    font-size: 2rem;
+  }
+
+  .item-card {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .marketplace-title {
+    font-size: 1.5rem;
+  }
+
+  .item-name {
+    font-size: 1rem;
+  }
+
+  .item-description {
+    font-size: 0.9rem;
+  }
+
+  .item-price {
+    font-size: 1rem;
+  }
+
+  .add-to-cart-btn,
+  .buy-now-btn {
+    padding: 8px 16px;
+  }
+}

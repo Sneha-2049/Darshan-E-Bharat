@@ -12,6 +12,9 @@ import Login from './Components/Login';  // Import Login
 import Signup from './Components/Signup';  // Import Signup 
 import RequiredAuth from './Components/RequiredAuth';  // Import RequiredAuth
 
+import Marketplace from "./Components/Marketplace/Marketplace";
+import Cart from "./Components/Cart/Cart";
+
 import "./App.css";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -34,6 +37,20 @@ function App() {
   };
   console.log("Rendering App Component");
 
+  const [cart, setCart] = useState([]);
+
+  const addToCart = (item) => {
+    setCart([...cart, item]);
+  };
+
+  const removeFromCart = (itemId) => {
+    setCart(cart.filter((item) => item.id !== itemId));
+  };
+
+  const clearCart = () => {
+    setCart([]);
+  };
+
   return (
     <SnackbarProvider maxSnack={3}>
     <Router>
@@ -49,6 +66,14 @@ function App() {
           <Route path= "/login" element={<Login />} />  {/* Login Page */}
           <Route path= "/signup" element={<Signup />} />  {/* Signup Page */}
           <Route path="/course/:id" element={<CourseDetails />} />  {/* Course Details Page */}
+          <Route
+          path="/marketplace"
+          element={<Marketplace cart={cart} addToCart={addToCart} />}
+        />
+        <Route
+          path="/cart"
+          element={<Cart cart={cart} removeFromCart={removeFromCart} clearCart={clearCart} />}
+        />
         </Routes>
         </div>
       </div>
