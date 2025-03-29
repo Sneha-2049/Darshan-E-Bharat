@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import quiz_data from '../../assets/Quizdata';
+import React, { useState, useRef,useEffect } from 'react';
+import quiz_data from '../../assets/QuizData'
 import Swal from "sweetalert2";
 import "./Quiz.css";
 
@@ -8,16 +8,22 @@ function Quiz(props) {
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [randomQuestions, setRandomQuestions] = useState([]);
+  const questions = quiz_data[props.index].questions;
+
+  useEffect(() => {
+    // Shuffle and select 10 random questions
+    const shuffled = [...questions].sort(() => Math.random() - 0.5).slice(0, 10);
+    setRandomQuestions(shuffled);
+  }, [props.questions]);
 
   let colorRef = useRef([]);
   let quesNo = 0;
   const wrongMark = document.createTextNode(" ❌");
 
-  const questions = quiz_data[props.index].questions;
-
   //  selcted-answer-checking-function
   const handleChange = (index, evt) => {
-    if (evt.target.value === questions[index].answer) {
+    if (evt.target.value === randomQuestions[index].answer) {
       setCorrectAnswers(prevAnswers => [...prevAnswers, evt.target.parentNode]);
       setScore(prevScore => prevScore + 1);
     } else {
@@ -34,7 +40,7 @@ function Quiz(props) {
     });
 
     // Show correct answers
-    questions.forEach((ques, idx) => {
+    randomQuestions.forEach((ques, idx) => {
       ques.options.forEach((option, optionIdx) => {
         if (option === ques.answer) {
           const correctOption = colorRef.current[idx][optionIdx];
@@ -65,7 +71,7 @@ function Quiz(props) {
     <div className='test-container'>
       <h1>{quiz_data[props.index].topic}</h1>
       <div className='question-container'>
-        {questions.map((ques, index) => (
+        {randomQuestions.map((ques, index) => (
           <div key={index} className='ques'>
             <h2 className='question'><span>{++quesNo}.</span> {ques.question}</h2>
             <div className='option-container'>
