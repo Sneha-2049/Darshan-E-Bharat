@@ -11,6 +11,7 @@ import Quiz from './Components/Quiz/Quiz';
 import Login from './Components/Login';  // Import Login
 import Signup from './Components/Signup';  // Import Signup 
 import RequiredAuth from './Components/RequiredAuth';  // Import RequiredAuth
+import Footer from "./Components/Footer/Footer";
 
 import Marketplace from "./Components/Marketplace/Marketplace";
 import Cart from "./Components/Cart/Cart";
@@ -51,6 +52,16 @@ function App() {
     setCart([]);
   };
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
+
+  const handleLogin = () => {
+    setIsLoggedIn(true); // Set login state to true
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
   return (
     <SnackbarProvider maxSnack={3}>
     <Router>
@@ -63,7 +74,7 @@ function App() {
           <Route path="/courses" element={<CoursePage />} />  {/* Courses Page */}
           <Route path="/quizcard" element={<QuizCard sendIndex={handleChildData} />} />  {/* Quizcard Page */}
           <Route path="/quiz" element={<RequiredAuth><Quiz index={index} /></RequiredAuth>} />  {/* Quizcard Page */}
-          <Route path= "/login" element={<Login />} />  {/* Login Page */}
+          <Route path= "/login" element={<Login onLogin={handleLogin} />} />  {/* Login Page */}
           <Route path= "/signup" element={<Signup />} />  {/* Signup Page */}
           <Route path="/course/:id" element={<CourseDetails />} />  {/* Course Details Page */}
           <Route
@@ -76,6 +87,8 @@ function App() {
         />
         </Routes>
         </div>
+        {/* Footer Component included globally */}
+        <Footer isLoggedIn={isLoggedIn} onLogout={handleLogout} />
       </div>
     </Router>
     </SnackbarProvider>

@@ -6,7 +6,7 @@
   flex-wrap: wrap;
   gap: 40px;
   padding: 20px;
-  position: absolute;
+  position: relative; /* Ensure it stays in the normal document flow */
   left: 50%;
   transform: translateX(-50%);
 }
