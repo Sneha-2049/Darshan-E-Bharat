@@ -15,6 +15,7 @@ import Footer from "./Components/Footer/Footer";
 
 import Marketplace from "./Components/Marketplace/Marketplace";
 import Cart from "./Components/Cart/Cart";
+import AboutPage from "./Components/About/AboutPage";  // Import About Page
 
 import "./App.css";
 import L from "leaflet";
@@ -70,6 +71,7 @@ function App() {
         <div className= "main-content">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<AboutPage />} />  {/* About Page Route */}
           <Route path="/contact" element={<Contact />} />
           <Route path="/courses" element={<CoursePage />} />  {/* Courses Page */}
           <Route path="/quizcard" element={<QuizCard sendIndex={handleChildData} />} />  {/* Quizcard Page */}

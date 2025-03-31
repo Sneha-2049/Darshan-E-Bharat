@@ -15,7 +15,7 @@ const CourseList = () => {
           description: 'Dive into the philosophical thoughts of ancient Indian schools like Vedanta, Buddhism, and Jainism.',
           instructor: 'Dr. Ravi Kumar',
           price: '₹499',
-          image: '/assets/img1.jpg', // Add the path to an image related to philosophy (e.g., a statue or a meditative scene)
+          image: '/assets/courses/img1.jpg', // Add the path to an image related to philosophy (e.g., a statue or a meditative scene)
         },
         {
           id: 2,
@@ -23,7 +23,7 @@ const CourseList = () => {
           description: 'Explore the historical monuments, temples, and sculptures from the Mauryan period to the Mughal era.',
           instructor: 'Prof. Sita Sharma',
           price: '₹799',
-          image: '/assets/img2.jpg', // Add the path to an image of an iconic monument like the Taj Mahal
+          image: '/assets/courses/img2.jpg', // Add the path to an image of an iconic monument like the Taj Mahal
         },
         {
           id: 3,
@@ -31,7 +31,7 @@ const CourseList = () => {
           description: 'Learn about the rich classical music and dance forms like Bharatanatyam, Kathak, and Hindustani music.',
           instructor: 'Ananya Rao',
           price: '₹599',
-          image: '/assets/img3.jpg', // Image suggestion: a dancer performing Bharatanatyam or a musician with traditional instruments
+          image: '/assets/courses/img3.jpg', // Image suggestion: a dancer performing Bharatanatyam or a musician with traditional instruments
         },
         {
           id: 4,
@@ -39,7 +39,7 @@ const CourseList = () => {
           description: 'Study the events, leaders, and movements that led to India’s independence from British colonial rule.',
           instructor: 'Dr. Amit Verma',
           price: '₹399',
-          image: '/assets/img4.jpg', // Image suggestion: a historic black-and-white photo from the independence movement
+          image: '/assets/courses/img4.jpg', // Image suggestion: a historic black-and-white photo from the independence movement
         },
         {
           id: 5,
@@ -47,7 +47,7 @@ const CourseList = () => {
           description: 'Explore the cultural and spiritual significance of Indian festivals like Diwali, Holi, Eid, and more.',
           instructor: 'Priya Desai',
           price: '₹299',
-          image: '/assets/img5.jpg', // Image suggestion: vibrant colors during Diwali or Holi
+          image: '/assets/courses/img5.jpg', // Image suggestion: vibrant colors during Diwali or Holi
         },
         {
           id: 6,
@@ -55,7 +55,7 @@ const CourseList = () => {
           description: 'Understand the evolution of Indian literature, from the ancient texts like Mahabharata to contemporary authors.',
           instructor: 'Prof. Neha Reddy',
           price: '₹649',
-          image: '/assets/img6.jpg', // Image suggestion: an image of ancient manuscripts or a modern author
+          image: '/assets/courses/img6.jpg', // Image suggestion: an image of ancient manuscripts or a modern author
         },
         {
           id: 7,
@@ -63,7 +63,7 @@ const CourseList = () => {
           description: 'Study the origins, practices, and health benefits of Yoga and Meditation in the Indian spiritual tradition.',
           instructor: 'Rishikesh Yoga School',
           price: '₹499',
-          image: '/assets/img7.jpg', // Image suggestion: a person practicing yoga in nature or an ashram
+          image: '/assets/courses/img7.jpg', // Image suggestion: a person practicing yoga in nature or an ashram
         },
         {
           id: 8,
@@ -71,7 +71,7 @@ const CourseList = () => {
           description: 'Learn about the traditional textile and handicraft techniques from various regions of India.',
           instructor: 'Shalini Gupta',
           price: '₹399',
-          image: '/assets/img8.jpg', // Image suggestion: vibrant handwoven fabrics or traditional embroidery
+          image: '/assets/courses/img8.jpg', // Image suggestion: vibrant handwoven fabrics or traditional embroidery
         },
       ];
       
