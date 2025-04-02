@@ -18,8 +18,29 @@ const Login = () => {
 		try {
 			const url = "http://localhost:8080/api/auth";
 			const { data: res } = await axios.post(url, data);
-			localStorage.setItem("token", res.data);
-			window.location = "/";
+			console.log("Login Response:", res);
+
+			if (res && res.data && res.data.token) {
+				// Save token and user details in localStorage
+				console.log("Stored Data in localStorage:");
+				localStorage.setItem("token", res.data.token);
+				localStorage.setItem("firstName", res.data.firstName);
+				localStorage.setItem("lastName", res.data.lastName);
+				localStorage.setItem("email", res.data.email);
+				
+                // Log to verify storage
+                console.log("Stored Data in localStorage:");
+                console.log("Token:", localStorage.getItem("token"));
+                console.log("First Name:", localStorage.getItem("firstName"));
+                console.log("Last Name:", localStorage.getItem("lastName"));
+                console.log("Email:", localStorage.getItem("email"));
+
+
+				// Redirect to the homepage
+				window.location = "/";
+			  } else {
+				console.error("Response data does not contain expected properties");
+			  }
 		} catch (error) {
 			if (
 				error.response &&

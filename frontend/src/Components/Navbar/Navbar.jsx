@@ -6,13 +6,23 @@ import { useSnackbar } from 'notistack';
 
 const Navbar = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false); // State for toggling profile dropdown
+  const [isPanelOpen, setIsPanelOpen] = useState(false); // State for sliding panel
   const navigate = useNavigate();
   const location = useLocation();
   const { enqueueSnackbar } = useSnackbar();
   const token = localStorage.getItem('token');
+  // const username = 'Demo t'; // Fetch or set the username from user data (or JWT if available)
+  const firstName = localStorage.getItem('firstName');
+  const lastName = localStorage.getItem('lastName');
+  const username = firstName && lastName ? `${firstName} ${lastName}` : 'Demo t';
+
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('firstName');
+    localStorage.removeItem('lastName');
+    localStorage.removeItem('email');
     enqueueSnackbar('Logged out!', { variant: 'info' });
     navigate('/');
   };
@@ -43,6 +53,14 @@ const Navbar = () => {
         navigate("/marketplace");
       }
     }
+  };
+
+  const toggleProfileDropdown = () => {
+    setIsProfileOpen(!isProfileOpen);
+  };
+
+  const toggleSlidingPanel = () => {
+    setIsPanelOpen(!isPanelOpen);
   };
 
   return (
@@ -82,7 +100,19 @@ const Navbar = () => {
               </Link>
             </>
           ) : (
-            <button className="btn logout-btn" onClick={handleLogout}>Logout</button>
+            <div className="profile-section">
+              <button className="profile-btn" onClick={toggleSlidingPanel}>
+                {username} <span className="dropdown-arrow">&#9662;</span>
+              </button>
+              {isProfileOpen && (
+                <div className="profile-dropdown">
+                  <Link to="/profile" className="profile-link">My Profile</Link>
+                  <button onClick={handleLogout} className="profile-link">Logout</button>
+                </div>
+              )}
+            </div>
+
+
           )}
         </div>
         <div className="hamburger" onClick={() => setIsMobile(!isMobile)}>
@@ -91,6 +121,22 @@ const Navbar = () => {
           <span className="bar"></span>
         </div>
       </div>
+      
+      {/* Sliding Panel */}
+      {token && (
+        <div className={`profile-panel ${isPanelOpen ? 'show' : ''}`}>
+          <div className="panel-header">
+            <button className="close-panel" onClick={toggleSlidingPanel}>&#10005;</button>
+          </div>
+          <div className="panel-content">
+            <h2>Welcome, {username}</h2>
+            <p>Manage your account and settings here.</p>
+            <Link to="/profile" className="panel-link">My Profile</Link>
+            <button onClick={handleLogout} className="panel-link">Logout</button>
+          </div>
+        </div>
+      )}
+
     </nav>
   );
 };

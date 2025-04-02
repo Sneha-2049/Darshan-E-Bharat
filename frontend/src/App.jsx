@@ -12,6 +12,7 @@ import Login from './Components/Login';  // Import Login
 import Signup from './Components/Signup';  // Import Signup 
 import RequiredAuth from './Components/RequiredAuth';  // Import RequiredAuth
 import Footer from "./Components/Footer/Footer";
+import Profile from "./Components/UserProfile/Profile";  // Import Profile
 
 import Marketplace from "./Components/Marketplace/Marketplace";
 import Cart from "./Components/Cart/Cart";
@@ -79,6 +80,7 @@ function App() {
           <Route path= "/login" element={<Login onLogin={handleLogin} />} />  {/* Login Page */}
           <Route path= "/signup" element={<Signup />} />  {/* Signup Page */}
           <Route path="/course/:id" element={<CourseDetails />} />  {/* Course Details Page */}
+          <Route path="/profile" element={<Profile />} />  {/* Profile Page */}
           <Route
           path="/marketplace"
           element={<Marketplace cart={cart} addToCart={addToCart} />}
