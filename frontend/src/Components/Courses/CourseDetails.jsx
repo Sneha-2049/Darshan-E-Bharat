@@ -51,7 +51,7 @@ const CourseDetails = () => {
       description: 'Dive into the philosophical thoughts of ancient Indian schools like Vedanta, Buddhism, and Jainism.',
       instructor: 'Dr. Ravi Kumar',
       price: '₹499',
-      image: '/assets/img1.jpg',
+      image: '/assets/courses//img1.jpg',
     },
     {
       id: 2,
@@ -59,7 +59,7 @@ const CourseDetails = () => {
       description: 'Explore the historical monuments, temples, and sculptures from the Mauryan period to the Mughal era.',
       instructor: 'Prof. Sita Sharma',
       price: '₹799',
-      image: '/assets/img2.jpg',
+      image: '/assets/courses//img2.jpg',
     },
     {
       id: 3,
@@ -67,7 +67,7 @@ const CourseDetails = () => {
       description: 'Learn about the rich classical music and dance forms like Bharatanatyam, Kathak, and Hindustani music.',
       instructor: 'Ananya Rao',
       price: '₹599',
-      image: '/assets/img3.jpg',
+      image: '/assets/courses//img3.jpg',
     },
     {
       id: 4,
@@ -75,7 +75,7 @@ const CourseDetails = () => {
       description: 'Study the events, leaders, and movements that led to India’s independence from British colonial rule.',
       instructor: 'Dr. Amit Verma',
       price: '₹399',
-      image: '/assets/img4.jpg',
+      image: '/assets/courses/img4.jpg',
     },
     {
       id: 5,
@@ -83,7 +83,7 @@ const CourseDetails = () => {
       description: 'Explore the cultural and spiritual significance of Indian festivals like Diwali, Holi, Eid, and more.',
       instructor: 'Priya Desai',
       price: '₹299',
-      image: '/assets/img5.jpg',
+      image: '/assets/courses//img5.jpg',
     },
     {
       id: 6,
@@ -91,7 +91,7 @@ const CourseDetails = () => {
       description: 'Understand the evolution of Indian literature, from the ancient texts like Mahabharata to contemporary authors.',
       instructor: 'Prof. Neha Reddy',
       price: '₹649',
-      image: '/assets/img6.jpg',
+      image: '/assets/courses//img6.jpg',
     },
     {
       id: 7,
@@ -99,7 +99,7 @@ const CourseDetails = () => {
       description: 'Study the origins, practices, and health benefits of Yoga and Meditation in the Indian spiritual tradition.',
       instructor: 'Rishikesh Yoga School',
       price: '₹499',
-      image: '/assets/img7.jpg',
+      image: '/assets/courses//img7.jpg',
     },
     {
       id: 8,
@@ -107,7 +107,7 @@ const CourseDetails = () => {
       description: 'Learn about the traditional textile and handicraft techniques from various regions of India.',
       instructor: 'Shalini Gupta',
       price: '₹399',
-      image: '/assets/img8.jpg',
+      image: '/assets/courses//img8.jpg',
     },
   ];
 
