@@ -61,7 +61,7 @@ function Quiz(props) {
 
     Swal.fire({
       title: "Quiz Submitted!",
-      text: `Your Total Score: ${score} / ${questions.length}`,
+      text: `Your Total Score: ${score} / ${randomQuestions.length}`,
       icon: "success",
       confirmButtonColor: "#27ae60",
     });

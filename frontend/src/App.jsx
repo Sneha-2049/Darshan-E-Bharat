@@ -2,7 +2,7 @@ import React, {useState} from  'react'
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { SnackbarProvider } from 'notistack';
 import Navbar from "./Components/Navbar/Navbar";
-import Home from "./Components/Home";
+import Home from "./Components/Homepage-components/Home";
 import Contact from "./Components/Contact/Contact";
 import CoursePage from './Components/Courses/CoursePage';  // Import CoursesPage
 import CourseDetails from './Components/Courses/CourseDetails';  // Course Details page

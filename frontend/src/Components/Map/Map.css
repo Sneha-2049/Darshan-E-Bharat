@@ -1,0 +1,100 @@
+/* IndiaMap.css */
+
+.map-wrapper {
+  width: 80%;
+  max-width: 900px;
+  height: 600px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(34, 26, 26, 0.15);
+  border: 1px solid #e0e0e0;
+}
+
+.india-map-container {
+  height: 100%;
+  width: 100%;
+  background: white;
+}
+
+/* Popup styling */
+.custom-popup .leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  padding: 0;
+}
+
+.custom-popup .leaflet-popup-content {
+  margin: 0;
+  width: 100% !important;
+}
+
+.cultural-popup {
+  padding: 10px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 250px;
+  height: 200px;
+}
+
+.cultural-popup h3 {
+  margin: 0 0 5px 0;
+  color: #2c3e50;
+  font-size: 1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 6px;
+}
+
+.cultural-popup p {
+  margin: 0 0 8px 0;
+  color: #414040;
+  font-size: 0.7rem;
+  line-height: 1.4;
+}
+
+.slideshow-container {
+  height: 180px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+.slide-image {
+  width: 100%;
+  height: 60%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.slide-image.active {
+  opacity: 1;
+}
+
+.map-tooltip {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .map-wrapper {
+    width: 95%;
+    height: 400px;
+  }
+  
+  .cultural-popup {
+    padding: 8px;
+  }
+  
+  .slideshow-container {
+    height: 150px;
+  }
+}
