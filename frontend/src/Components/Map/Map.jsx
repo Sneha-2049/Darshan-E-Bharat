@@ -3,12 +3,13 @@ import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import stateCulturalData from '../../assets/Culturalinfo';
-import './Map.css'; // New CSS file for map styling
+import './Map.css'; 
 
 const IndiaMap = () => {
   const [indiaGeoJSON, setIndiaGeoJSON] = useState(null);
   const mapRef = useRef(null);
   const popupRefs = useRef({});
+  const selectedLayer = useRef(null);
 
   useEffect(() => {
     fetch("https://raw.githubusercontent.com/geohacker/india/master/state/india_state.geojson")
@@ -26,11 +27,10 @@ const IndiaMap = () => {
   }, []);
 
   const geoJsonStyle = (feature) => ({
-    color: "#444",
-    weight: 1,
+    color: "#222",
+    weight: 1.5,
     fillColor: getColor(feature),
     fillOpacity: 0.8,
-    dashArray: null
   });
 
   const getColor = (feature) => {
@@ -46,11 +46,20 @@ const IndiaMap = () => {
 
   const onEachFeature = (feature, layer) => {
     const stateName = feature.properties?.NAME_1;
+
     if (stateName) {
       layer.bindTooltip(stateName, { 
         permanent: false, 
         direction: "auto",
         className: "map-tooltip"
+      });
+
+      layer.on("mouseover", () => {
+        layer.setStyle({ fillColor: "#ff5733", fillOpacity: 1 });
+      });
+
+      layer.on("mouseout", () => {
+        layer.setStyle(geoJsonStyle(feature));
       });
 
       layer.on("click", () => {
@@ -59,12 +68,21 @@ const IndiaMap = () => {
           delete popupRefs.current[stateName];
         }
 
+        if (selectedLayer.current) {
+          selectedLayer.current.setStyle(geoJsonStyle(selectedLayer.current.feature));
+        }
+
+        selectedLayer.current = layer;
+        mapRef.current.setView(layer.getBounds().getCenter(), 6);
+
         const culturalInfo = stateCulturalData[stateName] || stateCulturalData["default"];
         
         const popupContent = `
           <div class="cultural-popup">
             <h3>${stateName}</h3>
-            <p>${culturalInfo.description}</p>
+            <div class="popup-scroll">
+              <p>${culturalInfo.description}</p>
+            </div>
             <div id="slideshow-${stateName.replace(/\s+/g, '-')}" class="slideshow-container">
               ${culturalInfo.images.map((img, index) => `
                 <img 
@@ -80,7 +98,7 @@ const IndiaMap = () => {
         const popup = layer.bindPopup(popupContent, {
           maxWidth: 350,
           minWidth: 300,
-          className: "custom-popup" // Added custom class for popup
+          className: "custom-popup"
         }).openPopup();
 
         setTimeout(() => {
@@ -110,12 +128,15 @@ const IndiaMap = () => {
 
   return (
     <div className="map-wrapper">
+      <button className="reset-btn" onClick={() => mapRef.current.setView([23.5937, 78.9629], 4)}>Reset View</button>
+      
       <MapContainer
         ref={mapRef}
         className="india-map-container"
-        zoom={4} // Increased initial zoom level
-        minZoom={4.4} // Set minimum zoom level
-        maxZoom={8} // Set maximum zoom level        scrollWheelZoom={false}
+        zoom={5}
+        minZoom={4.3}
+        maxZoom={6}
+        scrollWheelZoom={false}
         center={[20.5937, 78.9629]}
         attributionControl={false}
       >

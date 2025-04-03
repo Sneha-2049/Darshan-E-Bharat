@@ -5060,7 +5060,7 @@ const quiz_data = [
           ]
         },
         {
-            "topic": "Indian Heritage Sites",
+            "topic": "Social and Cast Structure",
             "image": heritage,
             "description": "Discover the architectural wonders and cultural heritage sites of India.",
             "questionsCount": 10,
