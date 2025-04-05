@@ -56,7 +56,7 @@
   line-height: 1.4;
 }
 .reset-btn {
-  position: fixed; 
+  position: absolute; 
   top: 380px; 
   left: 50%;
   transform: translateX(-50%);

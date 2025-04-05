@@ -16,6 +16,7 @@ const CourseList = () => {
           instructor: 'Dr. Ravi Kumar',
           price: '₹499',
           image: '/assets/courses/img1.jpg', // Add the path to an image related to philosophy (e.g., a statue or a meditative scene)
+          link: "https://www.youtube.com/watch?v=vCEDptvB5Q4"
         },
         {
           id: 2,

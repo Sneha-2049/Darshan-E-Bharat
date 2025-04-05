@@ -255,3 +255,22 @@
   margin-left: 5px;
   transition: transform 0.3s ease;
 }
+
+/* Logo styling */
+.logo-img {
+  height: 40px; /* Adjust as needed */
+  border-radius: 18px;
+  width: auto;
+  margin-right: 18px; /* Add space between the logo and the text */
+  vertical-align: middle; /* Ensures the logo aligns vertically with the text */
+}
+
+/* Ensure that the logo and text are aligned correctly */
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  color: #f5e5a1;
+  font-weight: bold;
+  text-decoration: none;
+}

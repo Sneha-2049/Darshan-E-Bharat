@@ -66,7 +66,9 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
+        {/* Logo on the left */}
         <Link to="/" className="logo">
+          <img src="/assets/Darshan_logo.png" alt="Logo" className="logo-img" /> {/* Add your logo path here */}
           Darshan-E-Bharat
         </Link>
         <ul className={`nav-links ${isMobile ? 'mobile' : ''}`}>
@@ -79,7 +81,7 @@ const Navbar = () => {
           </li>
           <li>
             <button id='features-button' className='cource' onClick={handleNavigation}>
-              Cources
+              Courses
             </button>
           </li>
           <li>

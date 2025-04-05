@@ -6,7 +6,8 @@ import './Courses.css';
 const CourseCard = ({ course }) => {
   return (
     <div className="course-card">
-      <img src={course.image || 'default-image.jpg'} alt={course.title} />
+      <a href='https://www.youtube.com/watch?v=vCEDptvB5Q4'><img src={course.image || 'default-image.jpg'} alt={course.title} />
+      </a>
       <h3>{course.title}</h3>
       <p>{course.description}</p>
       <p><strong>Instructor:</strong> {course.instructor}</p>

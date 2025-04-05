@@ -14,7 +14,7 @@ let card_Data=[
         "flexDirection": "row"
     },
     {
-        "title": "Cources...",
+        "title": "Courses...",
         "id": "cource",
         "heading": "🎯 Learn from the Masters: Explore India’s Timeless Art, Dance & Music Online!",
         "description": "Immerse yourself in the vibrant heritage of India by enrolling in expert-led courses on traditional arts 🎭, crafts, dance 💃, and music 🎶. Learn from master artisans and renowned performers, refine your skills, and keep India's cultural legacy alive—all while earning rewards that unlock even more enriching experiences!",
