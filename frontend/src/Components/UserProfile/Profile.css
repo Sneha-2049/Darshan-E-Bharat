@@ -58,4 +58,55 @@
     box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
     transform: translateY(-5px); /* Lift the profile card on hover */
   }
+
+  /* Quiz performance section */
+.quiz-performance {
+  margin-top: 30px;
+}
+
+.total-coins {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #ffb400;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.coin-icon {
+  color: #ffb400;
+  font-size: 1.6em;
+}
+
+/* Each quiz card */
+.quiz-list {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.quiz-card {
+  background-color: #fff;
+  border-left: 6px solid #21ad5c;
+  padding: 15px 20px;
+  border-radius: 6px;
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.07);
+  transition: transform 0.2s ease;
+}
+
+.quiz-card:hover {
+  transform: scale(1.02);
+}
+
+.quiz-card h3 {
+  color: #21ad5c;
+  margin-bottom: 10px;
+}
+
+.coin-icon-sm {
+  color: #ffb400;
+  margin-left: 4px;
+}
+
   

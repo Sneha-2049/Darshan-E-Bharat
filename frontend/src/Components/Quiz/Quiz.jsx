@@ -39,6 +39,19 @@ function Quiz(props) {
       input.disabled = true;
     });
 
+  // (R)Count score here
+  let calculatedScore = 0;
+
+  randomQuestions.forEach((ques, index) => {
+    const selected = document.querySelector(`input[name='question-${index}']:checked`);
+    if (selected && selected.value === ques.answer) {
+      calculatedScore++;
+    }
+  });
+
+  // (R)Update score state
+  setScore(calculatedScore);
+
     // Show correct answers
     randomQuestions.forEach((ques, idx) => {
       ques.options.forEach((option, optionIdx) => {
@@ -59,12 +72,38 @@ function Quiz(props) {
       element.appendChild(wrongMark);
     });
 
+    // (R)Submit to backend
+  try {
+    const token = localStorage.getItem("token");
+    const topic = quiz_data[props.index].topic;
+
+    const response = await fetch("http://localhost:8080/api/quiz/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": token
+      },
+      body: JSON.stringify({ topic, score: calculatedScore })
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      console.log("Score submitted. Coins:", data.coins);
+    } else {
+      console.error("Score submission failed:", data.message);
+    }
+  } catch (err) {
+    console.error("Error submitting score:", err);
+  }
+
+
     Swal.fire({
       title: "Quiz Submitted!",
       text: `Your Total Score: ${score} / ${randomQuestions.length}`,
       icon: "success",
       confirmButtonColor: "#27ae60",
     });
+    
   };
 
   return (
