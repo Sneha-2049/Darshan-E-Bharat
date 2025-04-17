@@ -1,5 +1,5 @@
-import React, { useState, useRef,useEffect } from 'react';
-import quiz_data from '../../assets/QuizData'
+import React, { useState, useRef, useEffect } from 'react';
+import quiz_data from '../../assets/QuizData';
 import Swal from "sweetalert2";
 import "./Quiz.css";
 
@@ -9,37 +9,50 @@ function Quiz(props) {
   const [wrongAnswers, setWrongAnswers] = useState([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [randomQuestions, setRandomQuestions] = useState([]);
+  const [timeLeft, setTimeLeft] = useState(60);
   const questions = quiz_data[props.index].questions;
-
-  useEffect(() => {
-    // Shuffle and select 10 random questions
-    const shuffled = [...questions].sort(() => Math.random() - 0.5).slice(0, 10);
-    setRandomQuestions(shuffled);
-  }, [props.questions]);
-
   let colorRef = useRef([]);
   let quesNo = 0;
-  const wrongMark = document.createTextNode(" ❌");
 
-  //  selcted-answer-checking-function
+  useEffect(() => {
+    const shuffled = [...questions].sort(() => Math.random() - 0.5).slice(0, 10);
+    setRandomQuestions(shuffled);
+  }, [props.index]);
+
+  useEffect(() => {
+    if (isSubmitted) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft(prevTime => {
+        if (prevTime <= 1) {
+          clearInterval(timer);
+          handleClick();
+          return 0;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isSubmitted]);
+
   const handleChange = (index, evt) => {
     if (evt.target.value === randomQuestions[index].answer) {
-      setCorrectAnswers(prevAnswers => [...prevAnswers, evt.target.parentNode]);
-      setScore(prevScore => prevScore + 1);
+      setCorrectAnswers(prev => [...prev, evt.target.parentNode]);
+      setScore(prev => prev + 1);
     } else {
-      setWrongAnswers(prevAnswers => [...prevAnswers, evt.target.parentNode]);
+      setWrongAnswers(prev => [...prev, evt.target.parentNode]);
     }
   };
-  //  quiz-submit-handling
-  const handleClick = async (event) => {
-    event.preventDefault();
+
+  const handleClick = (event) => {
+    if (event) event.preventDefault();
     setIsSubmitted(true);
 
     document.querySelectorAll("input[type='radio']").forEach((input) => {
       input.disabled = true;
     });
 
-    // Show correct answers
     randomQuestions.forEach((ques, idx) => {
       ques.options.forEach((option, optionIdx) => {
         if (option === ques.answer) {
@@ -53,9 +66,9 @@ function Quiz(props) {
       });
     });
 
-    // Show wrong answers
     wrongAnswers.forEach((element) => {
       element.classList.add("wrong");
+      const wrongMark = document.createTextNode(" ❌");
       element.appendChild(wrongMark);
     });
 
@@ -67,9 +80,18 @@ function Quiz(props) {
     });
   };
 
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
   return (
     <div className='test-container'>
-      <h1>{quiz_data[props.index].topic}</h1>
+      <div className="test-header">
+        <h1>{quiz_data[props.index].topic}</h1>
+        <div className="quiz-timer">⏳ Time Left: <span>{formatTime(timeLeft)}</span></div>
+      </div>
       <div className='question-container'>
         {randomQuestions.map((ques, index) => (
           <div key={index} className='ques'>
@@ -84,10 +106,13 @@ function Quiz(props) {
                     value={opt}
                     onChange={(event) => handleChange(index, event)}
                   />
-                  <label ref={(el) => {
-                    if (!colorRef.current[index]) colorRef.current[index] = [];
-                    colorRef.current[index][idx] = el;
-                  }} htmlFor={`ques-${index}-${idx}`}>
+                  <label
+                    ref={(el) => {
+                      if (!colorRef.current[index]) colorRef.current[index] = [];
+                      colorRef.current[index][idx] = el;
+                    }}
+                    htmlFor={`ques-${index}-${idx}`}
+                  >
                     {opt}
                   </label>
                 </div>
