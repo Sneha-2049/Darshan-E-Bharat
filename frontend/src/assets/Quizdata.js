@@ -8,7 +8,7 @@ const quiz_data = [
     "image": festivals,
     "description": "Test your knowledge about India's famous festivals and their significance.",
     "questionsCount": 10,
-    "timeLimit": "10 min",
+    "timeLimit": "5 min",
     "questions":
 [
   {
@@ -1802,7 +1802,7 @@ const quiz_data = [
     "image": heritage,
     "description": "Discover the architectural wonders and cultural heritage sites of India.",
     "questionsCount": 10,
-    "timeLimit": "10 min",
+    "timeLimit": "5 min",
     "questions":
     [
       {
@@ -2662,7 +2662,7 @@ const quiz_data = [
       "image": heritage,
       "description": "Discover the architectural wonders and cultural heritage sites of India.",
       "questionsCount": 10,
-      "timeLimit": "10 min",
+      "timeLimit": "5 min",
       "questions":
       [
         {
@@ -3488,7 +3488,7 @@ const quiz_data = [
         "image": heritage,
         "description": "Discover the architectural wonders and cultural heritage sites of India.",
         "questionsCount": 10,
-        "timeLimit": "10 min",
+        "timeLimit": "5 min",
         "questions":
         [
           {
@@ -4218,7 +4218,7 @@ const quiz_data = [
           "image": heritage,
           "description": "Discover the architectural wonders and cultural heritage sites of India.",
           "questionsCount": 10,
-          "timeLimit": "10 min",
+          "timeLimit": "5 min",
           "questions":
           [
             {
@@ -5064,7 +5064,7 @@ const quiz_data = [
             "image": heritage,
             "description": "Discover the architectural wonders and cultural heritage sites of India.",
             "questionsCount": 10,
-            "timeLimit": "10 min",
+            "timeLimit": "5 min",
             "questions":
             [
               {

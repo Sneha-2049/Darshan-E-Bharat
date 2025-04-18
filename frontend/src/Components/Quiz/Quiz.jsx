@@ -5,11 +5,10 @@ import "./Quiz.css";
 
 function Quiz(props) {
   const [score, setScore] = useState(0);
-  const [correctAnswers, setCorrectAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [randomQuestions, setRandomQuestions] = useState([]);
-  const [timeLeft, setTimeLeft] = useState(60);
+  const [timeLeft, setTimeLeft] = useState(300);
   const questions = quiz_data[props.index].questions;
   let colorRef = useRef([]);
   let quesNo = 0;
@@ -20,8 +19,8 @@ function Quiz(props) {
   }, [props.index]);
 
   useEffect(() => {
-    if (isSubmitted) return;
-
+    if (isSubmitted || randomQuestions.length === 0) return;
+  
     const timer = setInterval(() => {
       setTimeLeft(prevTime => {
         if (prevTime <= 1) {
@@ -32,54 +31,100 @@ function Quiz(props) {
         return prevTime - 1;
       });
     }, 1000);
-
+  
     return () => clearInterval(timer);
-  }, [isSubmitted]);
+  }, [isSubmitted, randomQuestions.length]);
 
-  const handleChange = (index, evt) => {
-    if (evt.target.value === randomQuestions[index].answer) {
-      setCorrectAnswers(prev => [...prev, evt.target.parentNode]);
-      setScore(prev => prev + 1);
-    } else {
-      setWrongAnswers(prev => [...prev, evt.target.parentNode]);
-    }
-  };
-
-  const handleClick = (event) => {
+  const handleClick = async (event) => {
     if (event) event.preventDefault();
     setIsSubmitted(true);
-
+  
+    // Disable all radio inputs
     document.querySelectorAll("input[type='radio']").forEach((input) => {
       input.disabled = true;
     });
-
+  
+    // Calculate score
+    let calculatedScore = 0;
+    const newlyWrongAnswers = [];
+  
+    randomQuestions.forEach((ques, index) => {
+      const selected = document.querySelector(`input[name='question-${index}']:checked`);
+  
+      if (selected && selected.value === ques.answer) {
+        calculatedScore++;
+      } else if (selected) {
+        newlyWrongAnswers.push(selected.parentNode);
+      }
+    });
+  
+    setScore(calculatedScore);
+    setWrongAnswers(newlyWrongAnswers); // update state with current wrong answers
+  
+    // Highlight correct answers
     randomQuestions.forEach((ques, idx) => {
       ques.options.forEach((option, optionIdx) => {
         if (option === ques.answer) {
           const correctOption = colorRef.current[idx][optionIdx];
-          if (correctOption) {
+          if (correctOption && !correctOption.parentNode.classList.contains("correct")) {
             correctOption.parentNode.classList.add("correct");
-            const checkmark = document.createTextNode(" ✅");
-            correctOption.parentNode.appendChild(checkmark);
+  
+            // Avoid adding multiple ✅ marks
+            if (!correctOption.parentNode.textContent.includes("✅")) {
+              const checkmark = document.createTextNode(" ✅");
+              correctOption.parentNode.appendChild(checkmark);
+            }
           }
         }
       });
     });
-
-    wrongAnswers.forEach((element) => {
-      element.classList.add("wrong");
-      const wrongMark = document.createTextNode(" ❌");
-      element.appendChild(wrongMark);
+  
+    // Highlight wrong answers
+    newlyWrongAnswers.forEach((element) => {
+      if (!element.classList.contains("wrong")) {
+        element.classList.add("wrong");
+  
+        // Avoid adding multiple ❌ marks
+        if (!element.textContent.includes("❌")) {
+          const wrongMark = document.createTextNode(" ❌");
+          element.appendChild(wrongMark);
+        }
+      }
     });
-
+  
+    // Submit to backend
+    try {
+      const token = localStorage.getItem("token");
+      const topic = quiz_data[props.index].topic;
+  
+      const response = await fetch("http://localhost:8080/api/quiz/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": token
+        },
+        body: JSON.stringify({ topic, score: calculatedScore })
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Score submitted. Coins:", data.coins);
+      } else {
+        console.error("Score submission failed:", data.message);
+      }
+    } catch (err) {
+      console.error("Error submitting score:", err);
+    }
+  
+    // Show result popup
     Swal.fire({
       title: "Quiz Submitted!",
-      text: `Your Total Score: ${score} / ${randomQuestions.length}`,
+      text: `Your Total Score: ${calculatedScore} / ${randomQuestions.length}`,
       icon: "success",
       confirmButtonColor: "#27ae60",
     });
   };
-
+  
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -104,7 +149,6 @@ function Quiz(props) {
                     name={`question-${index}`}
                     type='radio'
                     value={opt}
-                    onChange={(event) => handleChange(index, event)}
                   />
                   <label
                     ref={(el) => {
