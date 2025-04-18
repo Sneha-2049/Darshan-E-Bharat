@@ -5,7 +5,6 @@ import durga from './durga.jpg'
 import kedarnath from './kedarnath.jpg'
 
 
-
 const images = [
     {
       src: ganga,
