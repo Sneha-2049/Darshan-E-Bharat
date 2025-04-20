@@ -3,11 +3,20 @@ const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 
+const quizSchema = new mongoose.Schema({
+	topic: { type: String, required: true },
+	score: { type: Number, required: true },
+	coins: { type: Number, required: true },
+	date: { type: Date, default: Date.now },
+  });
+
 const userSchema = new mongoose.Schema({
 	firstName: { type: String, required: true },
 	lastName: { type: String, required: true },
 	email: { type: String, required: true },
 	password: { type: String, required: true },
+	coins: { type: Number, default: 0 }, // Total coins
+        quizResults: [quizSchema],           // Array of quiz attempts
 });
 
 userSchema.methods.generateAuthToken = function () {
