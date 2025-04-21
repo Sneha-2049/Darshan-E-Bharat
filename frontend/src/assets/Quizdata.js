@@ -1,7 +1,13 @@
 import festivals from './hindu.png'
-import history  from './Crusade.png'
-import heritage  from './taj-mahal.png'
 import culture  from './indian-woman.png'
+import food  from './food1.jpg'
+import heritage  from './heritagesite.jpg'
+import history  from './Indianhistory1.jpg'
+
+
+
+
+
 const quiz_data = [
 {
     "topic": "Festivals of India",
@@ -3485,7 +3491,7 @@ const quiz_data = [
     },
     {
         "topic": "Food",
-        "image": heritage,
+        "image": food,
         "description": "Discover the architectural wonders and cultural heritage sites of India.",
         "questionsCount": 10,
         "timeLimit": "5 min",

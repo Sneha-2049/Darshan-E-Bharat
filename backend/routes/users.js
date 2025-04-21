@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { User, validate } = require("../models/user");
 const bcrypt = require("bcrypt");
+const auth = require("../middleware/auth");
 
 router.post("/", async (req, res) => {
 	try {
@@ -23,5 +24,17 @@ router.post("/", async (req, res) => {
 		res.status(500).send({ message: "Internal Server Error" });
 	}
 });
+
+// GET user details (including coins and quizResults)
+router.get("/me", auth, async (req, res) => {
+	try {
+	  const user = await User.findById(req.user._id).select("-password"); // exclude password
+	  if (!user) return res.status(404).json({ message: "User not found" });
+	  res.json(user); // send full user object (with coins & quizResults)
+	} catch (err) {
+	  console.error("Error fetching user:", err);
+	  res.status(500).json({ message: "Server error" });
+	}
+  });
 
 module.exports = router;
