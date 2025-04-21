@@ -100,6 +100,7 @@
   /* Darker green color for logout */
   color: #388e3C;
   border: 1px solid #66bb6a;
+  cursor: pointer;
 }
 
 .logout-btn:hover {
@@ -158,7 +159,6 @@
 .profile-section {
   position: relative;
 }
-
 .profile-btn {
   background: none;
   border: none;
@@ -255,6 +255,7 @@
   margin-left: 5px;
   transition: transform 0.3s ease;
 }
+
 
 /* Logo styling */
 .logo-img {

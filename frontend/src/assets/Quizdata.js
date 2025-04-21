@@ -1,17 +1,16 @@
-import festivals from './hindu.png'
-import culture  from './indian-woman.png'
+import festival from './festival.jpeg'
+import culture  from './culture.jpg'
 import food  from './food1.jpg'
 import heritage  from './heritagesite.jpg'
-import history  from './Indianhistory1.jpg'
-
-
-
+import history  from './history.png'
+import literature  from './literature.webp'
+import cast  from './cast.jpg'
 
 
 const quiz_data = [
 {
     "topic": "Festivals of India",
-    "image": festivals,
+    "image": festival,
     "description": "Test your knowledge about India's famous festivals and their significance.",
     "questionsCount": 10,
     "timeLimit": "5 min",
@@ -2665,7 +2664,7 @@ const quiz_data = [
   },
   {
       "topic": "Art and Culture",
-      "image": heritage,
+      "image": culture,
       "description": "Discover the architectural wonders and cultural heritage sites of India.",
       "questionsCount": 10,
       "timeLimit": "5 min",
@@ -4221,7 +4220,7 @@ const quiz_data = [
       },
       {
           "topic": "Literature and Language",
-          "image": heritage,
+          "image": literature,
           "description": "Discover the architectural wonders and cultural heritage sites of India.",
           "questionsCount": 10,
           "timeLimit": "5 min",
@@ -5067,7 +5066,7 @@ const quiz_data = [
         },
         {
             "topic": "Social and Cast Structure",
-            "image": heritage,
+            "image": cast,
             "description": "Discover the architectural wonders and cultural heritage sites of India.",
             "questionsCount": 10,
             "timeLimit": "5 min",

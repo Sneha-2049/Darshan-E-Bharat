@@ -114,7 +114,6 @@ const Navbar = () => {
               )}
             </div>
 
-
           )}
         </div>
         <div className="hamburger" onClick={() => setIsMobile(!isMobile)}>
@@ -123,7 +122,7 @@ const Navbar = () => {
           <span className="bar"></span>
         </div>
       </div>
-      
+
       {/* Sliding Panel */}
       {token && (
         <div className={`profile-panel ${isPanelOpen ? 'show' : ''}`}>
