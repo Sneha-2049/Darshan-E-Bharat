@@ -92,7 +92,7 @@
 }
 .quiz-timer {
   position: fixed;
-  left: 140px;
+  left: 110px;
   top: 150px;
   font-size: 1.3rem;
   font-weight: bold;
@@ -102,6 +102,7 @@
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   display: inline-block;
+  z-index: 10;
 }
 
 

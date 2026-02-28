@@ -1,62 +1,62 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Link as ScrollLink, animateScroll as scroll } from "react-scroll";
+import { animateScroll as scroll } from "react-scroll";
 import './Navbar.css';
 import { useSnackbar } from 'notistack';
 
 const Navbar = () => {
   const [isMobile, setIsMobile] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false); // State for toggling profile dropdown
-  const [isPanelOpen, setIsPanelOpen] = useState(false); // State for sliding panel
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
   const { enqueueSnackbar } = useSnackbar();
+
   const token = localStorage.getItem('token');
-  // const username = 'Demo t'; // Fetch or set the username from user data (or JWT if available)
+  const role = localStorage.getItem('role');
+
   const firstName = localStorage.getItem('firstName');
   const lastName = localStorage.getItem('lastName');
-  const username = firstName && lastName ? `${firstName} ${lastName}` : 'Demo t';
+  const username = firstName && lastName ? `${firstName} ${lastName}` : 'User';
 
+  const profilePath = role === "teacher" ? "/teacher-profile" : "/profile";
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('firstName');
-    localStorage.removeItem('lastName');
-    localStorage.removeItem('email');
+    localStorage.clear();
     enqueueSnackbar('Logged out!', { variant: 'info' });
     navigate('/');
   };
 
   const handleNavigation = (event) => {
-    console.log(event.target.className)
+    const targetClass = event.target.className;
+
     if (location.pathname === "/") {
-      const targetId = event.target.className;
-      const targetElement = document.getElementById(targetId);
+      const targetElement = document.getElementById(targetClass);
       if (targetElement) {
         const navbarHeight = document.querySelector(".navbar").offsetHeight || 60;
         const extraOffset = 70;
-        const yOffset = targetElement.getBoundingClientRect().top + window.scrollY - navbarHeight - extraOffset;
+        const yOffset =
+          targetElement.getBoundingClientRect().top +
+          window.scrollY -
+          navbarHeight -
+          extraOffset;
+
         scroll.scrollTo(yOffset, {
           duration: 800,
           smooth: "easeInOutQuad",
         });
       }
-    }
-    else {
-      if (event.target.className === 'quiz') {
+    } else {
+      if (targetClass === 'quiz') {
         navigate("/quizcard");
       }
-      if (event.target.className === 'cource') {
+      if (targetClass === 'cource') {
         navigate("/courses");
       }
-      if (event.target.className === 'marketplace') {
+      if (targetClass === 'marketplace') {
         navigate("/marketplace");
       }
     }
-  };
-
-  const toggleProfileDropdown = () => {
-    setIsProfileOpen(!isProfileOpen);
   };
 
   const toggleSlidingPanel = () => {
@@ -66,31 +66,50 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        {/* Logo on the left */}
+
         <Link to="/" className="logo">
-          <img src="/assets/Darshan_logo.png" alt="Logo" className="logo-img" /> {/* Add your logo path here */}
+          <img src="/assets/Darshan_logo.png" alt="Logo" className="logo-img" />
           Darshan-E-Bharat
         </Link>
+
         <ul className={`nav-links ${isMobile ? 'mobile' : ''}`}>
           <li><Link to="/">Home</Link></li>
           <li><Link to="/about">About</Link></li>
+
+          {/* ✅ Restored ID for styling + scroll */}
           <li>
-            <button id='features-button' className='quiz' onClick={handleNavigation}>
+            <button
+              id="features-button"
+              className="quiz"
+              onClick={handleNavigation}
+            >
               Quiz
             </button>
           </li>
+
           <li>
-            <button id='features-button' className='cource' onClick={handleNavigation}>
+            <button
+              id="features-button"
+              className="cource"
+              onClick={handleNavigation}
+            >
               Courses
             </button>
           </li>
+
           <li>
-            <button id='features-button' className='marketplace' onClick={handleNavigation}>
+            <button
+              id="features-button"
+              className="marketplace"
+              onClick={handleNavigation}
+            >
               Marketplace
             </button>
           </li>
+
           <li><Link to="/contact">Contact</Link></li>
         </ul>
+
         <div className="auth-buttons">
           {!token ? (
             <>
@@ -106,16 +125,10 @@ const Navbar = () => {
               <button className="profile-btn" onClick={toggleSlidingPanel}>
                 {username} <span className="dropdown-arrow">&#9662;</span>
               </button>
-              {isProfileOpen && (
-                <div className="profile-dropdown">
-                  <Link to="/profile" className="profile-link">My Profile</Link>
-                  <button onClick={handleLogout} className="profile-link">Logout</button>
-                </div>
-              )}
             </div>
-
           )}
         </div>
+
         <div className="hamburger" onClick={() => setIsMobile(!isMobile)}>
           <span className="bar"></span>
           <span className="bar"></span>
@@ -127,20 +140,26 @@ const Navbar = () => {
       {token && (
         <div className={`profile-panel ${isPanelOpen ? 'show' : ''}`}>
           <div className="panel-header">
-            <button className="close-panel" onClick={toggleSlidingPanel}>&#10005;</button>
+            <button className="close-panel" onClick={toggleSlidingPanel}>
+              &#10005;
+            </button>
           </div>
           <div className="panel-content">
             <h2>Welcome, {username}</h2>
             <p>Manage your account and settings here.</p>
-            <Link to="/profile" className="panel-link">My Profile</Link>
-            <button onClick={handleLogout} className="panel-link">Logout</button>
+
+            <Link to={profilePath} className="panel-link">
+              My Profile
+            </Link>
+
+            <button onClick={handleLogout} className="panel-link">
+              Logout
+            </button>
           </div>
         </div>
       )}
-
     </nav>
   );
 };
-
 
 export default Navbar;

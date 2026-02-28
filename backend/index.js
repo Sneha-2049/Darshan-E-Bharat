@@ -1,24 +1,37 @@
 require("dotenv").config();
+
 const express = require("express");
-const app = express();
 const cors = require("cors");
+
 const connection = require("./db");
-const userRoutes = require("./routes/users");
-const authRoutes = require("./routes/auth");
+
+const userRoutes = require("./routes/users");   // Signup
+const authRoutes = require("./routes/auth");    // Login
 const quizRoutes = require("./routes/quiz");
+const courseRoutes = require("./routes/course");
 
+const app = express();
 
-// database connection
+// 🔹 Database connection
 connection();
 
-// middlewares
+// 🔹 Middlewares
 app.use(express.json());
 app.use(cors());
 
-// routes
-app.use("/api/users", userRoutes);
-app.use("/api/auth", authRoutes);
+// 🔹 Routes
+app.use("/api/users", userRoutes);     // Signup Route
+app.use("/api/auth", authRoutes);      // Login Route
 app.use("/api/quiz", quizRoutes);
+app.use("/api/courses", courseRoutes);
+app.use("/uploads", express.static("uploads"));
+
+// 🔹 Default route (optional but useful for testing)
+app.get("/", (req, res) => {
+  res.send("Backend is running 🚀");
+});
 
 const port = process.env.PORT || 8080;
-app.listen(port, console.log(`Listening on port ${port}...`));
+app.listen(port, () =>
+  console.log(`Listening on port ${port}...`)
+);

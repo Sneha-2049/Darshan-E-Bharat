@@ -1,0 +1,351 @@
+/* ===============================
+   MAIN CONTAINER
+================================= */
+
+.manage-course-container {
+  padding: 50px 80px;
+  background-color: #f4f6f8;
+  min-height: 100vh;
+}
+
+/* ===============================
+   HEADER
+================================= */
+
+.manage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.manage-header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.manage-header p {
+  margin-top: 6px;
+  color: #666;
+}
+
+.back-btn {
+  background: #66bb6a;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.back-btn:hover {
+  background: #4caf50;
+}
+
+/* ===============================
+   COURSE INFO CARD
+================================= */
+
+.course-info-card {
+  background: white;
+  display: flex;
+  gap: 40px;
+  padding: 35px;
+  border-radius: 20px;
+  margin-bottom: 50px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.course-info-card img {
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+.course-info-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.course-info-content p {
+  color: #555;
+  line-height: 1.6;
+}
+
+.course-stats {
+  margin-top: 20px;
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+  font-weight: 600;
+}
+
+.published {
+  color: green;
+  font-weight: 700;
+}
+
+.draft {
+  color: orange;
+  font-weight: 700;
+}
+
+.publish-btn {
+  margin-top: 25px;
+  align-self: flex-start;
+  background: linear-gradient(135deg,#66bb6a,#4caf50);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.publish-btn:hover {
+  transform: translateY(-3px);
+}
+
+/* ===============================
+   ADD / EDIT LECTURE SECTION
+================================= */
+
+.add-lecture-section {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  margin-bottom: 50px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.add-lecture-section h2 {
+  margin-bottom: 30px;
+  font-size: 22px;
+}
+
+.add-lecture-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.add-lecture-section input,
+.add-lecture-section textarea {
+  padding: 15px;
+  border-radius: 12px;
+  border: none;
+  background: #edf5f3;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.add-lecture-section input:focus,
+.add-lecture-section textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #66bb6a50;
+}
+
+.add-lecture-section textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.add-lecture-section button {
+  align-self: flex-start;
+  background: #66bb6a;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.add-lecture-section button:hover {
+  background: #4caf50;
+  transform: translateY(-3px);
+}
+
+/* ===============================
+   LECTURE LIST
+================================= */
+
+.lecture-list {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.lecture-list h2 {
+  margin-bottom: 30px;
+}
+/* ===== Lecture Publish UI ===== */
+
+.lecture-upload-date {
+    font-size: 13px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.lecture-publish-date {
+    font-size: 13px;
+    color: #1e88e5;
+    font-weight: 500;
+    margin-top: 3px;
+}
+
+.lecture-status-badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.published-badge {
+    background-color: #e6f7ed;
+    color: #1b8a3a;
+}
+
+.draft-badge {
+    background-color: #fff3cd;
+    color: #b58100;
+}
+
+.lecture-toggle-btn {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: 0.3s ease;
+}
+
+.upload-btn {
+    background-color: #1e88e5;
+    color: white;
+}
+
+.upload-btn:hover {
+    background-color: #1565c0;
+}
+
+.unupload-btn {
+    background-color: #e53935;
+    color: white;
+}
+
+.unupload-btn:hover {
+    background-color: #c62828;
+}
+/* ===============================
+   LECTURE CARD
+================================= */
+
+.lecture-card {
+  background: #f9fafb;
+  padding: 25px;
+  border-radius: 18px;
+  margin-bottom: 40px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.lecture-info h3 {
+  margin-bottom: 8px;
+}
+
+.lecture-info p {
+  color: #555;
+  line-height: 1.5;
+}
+
+.lecture-date {
+  font-size: 13px;
+  color: #888;
+  margin-top: 8px;
+}
+
+/* Video */
+.lecture-card iframe {
+  width: 60%;
+  height: 420px;
+  border-radius: 15px;
+}
+
+/* ===============================
+   LECTURE ACTIONS
+================================= */
+
+.lecture-actions {
+  display: flex;
+  gap: 15px;
+}
+
+.edit-btn {
+  background: #ffffff;
+  color: #388e3c;
+  border: 1px solid #66bb6a;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.edit-btn:hover {
+  background: #66bb6a;
+  color: white;
+}
+
+.delete-btn {
+  background: #fff0f0;
+  color: #e53935;
+  border: 1px solid #e53935;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.delete-btn:hover {
+  background: #e53935;
+  color: white;
+}
+
+/* ===============================
+   RESPONSIVE
+================================= */
+
+@media (max-width: 900px) {
+
+  .manage-course-container {
+    padding: 30px;
+  }
+
+  .course-info-card {
+    flex-direction: column;
+  }
+
+  .course-info-card img {
+    width: 100%;
+    height: 220px;
+  }
+
+  .lecture-card iframe {
+    height: 250px;
+  }
+}

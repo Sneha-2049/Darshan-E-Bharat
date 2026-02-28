@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { useSnackbar } from 'notistack';
+import { useSnackbar } from "notistack";
 import styles from "./styles.module.css";
 
 const Signup = () => {
@@ -10,32 +10,46 @@ const Signup = () => {
 		lastName: "",
 		email: "",
 		password: "",
+		role: "user",
+		expertise: "",
+		experience: "",
 	});
+
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
 	const { enqueueSnackbar } = useSnackbar();
 
 	const handleChange = ({ currentTarget: input }) => {
 		setData({ ...data, [input.name]: input.value });
-		setError(""); // Clear the error message when the user starts typing
+		setError("");
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
 		try {
+			// ✅ IMPORTANT: Your backend route
 			const url = "http://localhost:8080/api/users";
-			const { data: res } = await axios.post(url, data);
-			enqueueSnackbar('user registered successfully', { variant: 'success' });
-			navigate("/login");
-			console.log(res.message);
+
+			const response = await axios.post(url, data);
+
+			enqueueSnackbar("Account created successfully!", {
+				variant: "success",
+			});
+
+			// ✅ Redirect to login after success
+			setTimeout(() => {
+				navigate("/login");
+			}, 1000);
+
 		} catch (error) {
-			if (
-				error.response &&
-				error.response.status >= 400 &&
-				error.response.status <= 500
-			) {
+			if (error.response) {
 				setError(error.response.data.message);
-				enqueueSnackbar(error.response.data.message, { variant: 'error' });
+				enqueueSnackbar(error.response.data.message, {
+					variant: "error",
+				});
+			} else {
+				setError("Something went wrong");
 			}
 		}
 	};
@@ -51,46 +65,89 @@ const Signup = () => {
 						</button>
 					</Link>
 				</div>
+
 				<div className={styles.right}>
 					<form className={styles.form_container} onSubmit={handleSubmit}>
 						<h1>Create Account</h1>
+
 						<input
 							type="text"
 							placeholder="First Name"
 							name="firstName"
-							onChange={handleChange}
 							value={data.firstName}
+							onChange={handleChange}
 							required
 							className={styles.input}
 						/>
+
 						<input
 							type="text"
 							placeholder="Last Name"
 							name="lastName"
-							onChange={handleChange}
 							value={data.lastName}
+							onChange={handleChange}
 							required
 							className={styles.input}
 						/>
+
 						<input
 							type="email"
 							placeholder="Email"
 							name="email"
-							onChange={handleChange}
 							value={data.email}
+							onChange={handleChange}
 							required
 							className={styles.input}
 						/>
+
 						<input
 							type="password"
 							placeholder="Password"
 							name="password"
-							onChange={handleChange}
 							value={data.password}
+							onChange={handleChange}
 							required
 							className={styles.input}
 						/>
+
+						{/* Role Selection */}
+						<select
+							name="role"
+							value={data.role}
+							onChange={handleChange}
+							className={styles.input}
+						>
+							<option value="user">User</option>
+							<option value="teacher">Teacher</option>
+							<option value="merchant">Merchant</option>
+							<option value="admin">Admin</option>
+						</select>
+
+						{/* Show only if teacher */}
+						{data.role === "teacher" && (
+							<>
+								<input
+									type="text"
+									placeholder="Expertise"
+									name="expertise"
+									value={data.expertise}
+									onChange={handleChange}
+									className={styles.input}
+								/>
+
+								<input
+									type="text"
+									placeholder="Experience"
+									name="experience"
+									value={data.experience}
+									onChange={handleChange}
+									className={styles.input}
+								/>
+							</>
+						)}
+
 						{error && <div className={styles.error_msg}>{error}</div>}
+
 						<button type="submit" className={styles.green_btn}>
 							Sign Up
 						</button>

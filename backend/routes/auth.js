@@ -22,14 +22,17 @@ router.post("/", async (req, res) => {
 
 		const token = user.generateAuthToken();
 
-		res.status(200).send({ 
+		res.status(200).send({
 			data: {
-			token,
-			firstName: user.firstName,
-			lastName: user.lastName,
-			email: user.email 
-		},
-			message: "logged in successfully" 
+				token,
+				firstName: user.firstName,
+				lastName: user.lastName,
+				email: user.email,
+				role: user.role,          // ✅ added
+				expertise: user.expertise, // optional for teacher
+				experience: user.experience
+			},
+			message: "Logged in successfully"
 		});
 
 	} catch (error) {
