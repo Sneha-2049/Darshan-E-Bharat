@@ -5,10 +5,10 @@ import "./ProductCard.css";
 const ProductCard = ({ product, onDelete }) => {
   return (
     <div className="product-card">
-      {/* Product Image */}
+      {/* ⭐ Direct Cloudinary Link */}
       {product.images?.length > 0 ? (
         <img 
-          src={`http://localhost:8080/uploads/${product.images[0]}`} 
+          src={product.images[0]} 
           alt={product.title} 
           className="product-img" 
         />
@@ -16,7 +16,6 @@ const ProductCard = ({ product, onDelete }) => {
         <div className="no-image">No Image</div>
       )}
 
-      {/* Product Info */}
       <div className="product-title">{product.title}</div>
       <div className="product-description">
         {product.description || "No description provided"}
@@ -27,21 +26,9 @@ const ProductCard = ({ product, onDelete }) => {
         <span className="product-stock">Stock: {product.stock}</span>
       </div>
 
-      {/* Modernized Buttons */}
       <div className="product-card-actions">
-        <button 
-          className="card-btn delete-btn" 
-          onClick={() => onDelete(product._id)}
-        >
-          Delete
-        </button>
-        
-        <Link 
-          to={`/product/${product._id}`} 
-          className="card-btn view-btn"
-        >
-          View & Edit
-        </Link>
+        <button className="card-btn delete-btn" onClick={() => onDelete(product._id)}>Delete</button>
+        <Link to={`/product/${product._id}`} className="card-btn view-btn">View & Edit</Link>
       </div>
     </div>
   );

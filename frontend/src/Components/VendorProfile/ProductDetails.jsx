@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useSnackbar } from "notistack";
@@ -145,13 +145,15 @@ const ProductDetails = () => {
       <div className="pd-grid">
         <div className="pd-image-section">
           <div className="pd-main-img">
-            <img src={`http://localhost:8080/uploads/${mainImage}`} alt="Product" />
+            {/* ⭐ Cloudinary Change: Removed localhost prefix */}
+            <img src={mainImage} alt="Product" />
           </div>
           <div className="pd-thumbnails">
             {product.images.map((img, i) => (
               <div key={i} className="thumb-wrapper">
                 <img
-                  src={`http://localhost:8080/uploads/${img}`}
+                  /* ⭐ Cloudinary Change: Removed localhost prefix */
+                  src={img}
                   className={mainImage === img ? "active-thumb" : ""}
                   onClick={() => setMainImage(img)}
                   alt="thumbnail"

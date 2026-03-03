@@ -7,12 +7,11 @@ const ProductManager = ({ token }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
-  
-  // ⭐ State for Custom Delete Modal
   const [showDeleteModal, setShowDeleteModal] = useState(null); 
 
+  // ⭐ Initial state with detailsUrl and stock
   const [formData, setFormData] = useState({ 
-    title: "", price: "", category: "", stock: 0, description: "", detailsUrl: "", images: [] 
+    title: "", price: "", category: "", stock: "", description: "", detailsUrl: "", images: [] 
   });
   const [imagePreviews, setImagePreviews] = useState([]);
 
@@ -37,21 +36,24 @@ const ProductManager = ({ token }) => {
     e.preventDefault();
     const data = new FormData();
     for (const key in formData) {
-      if (key === "images") formData.images.forEach((img) => data.append("images", img));
-      else data.append(key, formData[key]);
+      if (key === "images") {
+        formData.images.forEach((img) => data.append("images", img));
+      } else {
+        data.append(key, formData[key]);
+      }
     }
     try {
       const res = await axios.post("http://localhost:8080/api/products/add", data, {
         headers: { "x-auth-token": token, "Content-Type": "multipart/form-data" },
       });
       setProducts([res.data.product, ...products]);
-      setFormData({ title: "", price: "", category: "", stock: 0, description: "", detailsUrl: "", images: [] });
+      // Reset form correctly
+      setFormData({ title: "", price: "", category: "", stock: 1, description: "", detailsUrl: "", images: [] });
       setImagePreviews([]);
       setShowAddForm(false);
     } catch (err) { alert("Failed to add product"); }
   };
 
-  // ⭐ Logic to perform the actual deletion
   const confirmDelete = async () => {
     const id = showDeleteModal;
     try {
@@ -83,20 +85,48 @@ const ProductManager = ({ token }) => {
       {showAddForm && (
         <div className="form-animation-wrapper">
           <form className="edit-form" onSubmit={handleAddProduct}>
-            {/* ... Form inputs same as before ... */}
             <input type="text" placeholder="Title" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} required />
-            <input type="number" placeholder="Price" value={formData.price} onChange={(e) => setFormData({...formData, price: e.target.value})} required />
+            
+            <div className="form-row">
+              <input type="number" placeholder="Price" value={formData.price} onChange={(e) => setFormData({...formData, price: e.target.value})} required />
+              
+              {/* ⭐ Fix: Stock input with min="0" to prevent negatives */}
+              <input 
+                type="number" 
+                placeholder="Stock Quantity" 
+                min="0" 
+                value={formData.stock === 0 ? "" : formData.stock} 
+                onChange={(e) => setFormData({...formData, stock: e.target.value})} 
+                required 
+              />
+            </div>
+
+            <input type="text" placeholder="Category (e.g. Jewelry, Home Decor)" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} />
+
+            {/* ⭐ New: Details URL input added */}
+            <input 
+              type="url" 
+              placeholder="External Details URL (e.g. Wikipedia or Blog link)" 
+              value={formData.detailsUrl} 
+              onChange={(e) => setFormData({...formData, detailsUrl: e.target.value})} 
+            />
+
             <textarea placeholder="Description" value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} />
-            <input type="file" multiple accept="image/*" onChange={handleImageChange} />
+            
+            <div className="file-input-group">
+                <label>Upload Product Images:</label>
+                <input type="file" multiple accept="image/*" onChange={handleImageChange} />
+            </div>
+
             <div className="form-preview-row">
                 {imagePreviews.map((src, i) => <img key={i} src={src} alt="preview" className="form-preview-img" />)}
             </div>
-            <button type="submit">Publish Product</button>
+            
+            <button type="submit" className="publish-btn">Publish Product</button>
           </form>
         </div>
       )}
 
-      {/* ⭐ CUSTOM DELETE MODAL JSX */}
       {showDeleteModal && (
         <div className="modal-overlay">
           <div className="confirm-modal">
@@ -115,7 +145,7 @@ const ProductManager = ({ token }) => {
           <ProductCard 
             key={p._id} 
             product={p} 
-            onDelete={(id) => setShowDeleteModal(id)} // Open modal instead of deleting
+            onDelete={(id) => setShowDeleteModal(id)} 
           />
         ))}
       </div>

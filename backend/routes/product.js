@@ -1,23 +1,16 @@
 const router = require("express").Router();
 const Product = require("../models/product");
 const auth = require("../middleware/auth");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-const mongoose = require("mongoose");
+const upload = require("../middleware/upload"); // Uses Cloudinary storage
 
-const uploadDir = path.join(__dirname, "../uploads/products");
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+const cloudinary = require('cloudinary').v2;
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadDir),
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({ storage });
+// Helper function: URL se Public ID nikalne ke liye
+const getPublicId = (url) => {
+  const parts = url.split('/');
+  const fileName = parts[parts.length - 1].split('.')[0]; // e.g., "image123"
+  return `darshan-e-bharat/products/${fileName}`;
+};
 
 // ADD PRODUCT
 router.post("/add", auth, upload.array("images", 5), async (req, res) => {
@@ -27,7 +20,8 @@ router.post("/add", auth, upload.array("images", 5), async (req, res) => {
       price: Number(req.body.price),
       stock: Number(req.body.stock),
       vendorId: req.user._id,
-      images: req.files ? req.files.map((f) => `products/${f.filename}`) : [],
+      // ⭐ Cloudinary returns the full URL in file.path
+      images: req.files ? req.files.map((f) => f.path) : [],
     };
     const product = new Product(productData);
     await product.save();
@@ -48,7 +42,7 @@ router.put("/edit/:id", auth, upload.array("images", 5), async (req, res) => {
     if (!existingProduct) return res.status(404).json({ success: false, error: "Product not found" });
 
     if (req.files && req.files.length > 0) {
-      const newImages = req.files.map((f) => `products/${f.filename}`);
+      const newImages = req.files.map((f) => f.path);
       updatedData.images = [...existingProduct.images, ...newImages].slice(0, 5);
     }
 
@@ -70,9 +64,11 @@ router.put("/delete-image/:id", auth, async (req, res) => {
     const product = await Product.findOne({ _id: req.params.id, vendorId: req.user._id });
     if (!product) return res.status(404).json({ success: false, error: "Product not found" });
 
-    const fullPath = path.join(__dirname, "../uploads", imagePath);
-    if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
+    // ⭐ Cloudinary se delete karein
+    const publicId = getPublicId(imagePath);
+    await cloudinary.uploader.destroy(publicId);
 
+    // With Cloudinary, we just remove the URL from the DB array
     product.images = product.images.filter((img) => img !== imagePath);
     await product.save();
     res.json({ success: true, product });
@@ -87,19 +83,23 @@ router.delete("/delete/:id", auth, async (req, res) => {
     const deleted = await Product.findOneAndDelete({ _id: req.params.id, vendorId: req.user._id });
     if (!deleted) return res.status(404).json({ success: false, error: "Product not found" });
 
-    if (deleted.images) {
-      deleted.images.forEach((img) => {
-        const fullPath = path.join(__dirname, "../uploads", img);
-        if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
+    // ⭐ Saari images Cloudinary se delete karein
+    if (deleted.images && deleted.images.length > 0) {
+      const deletePromises = deleted.images.map(img => {
+        const publicId = getPublicId(img);
+        return cloudinary.uploader.destroy(publicId);
       });
+      await Promise.all(deletePromises);
     }
+    
+    // No need for fs.unlink as files are not local anymore
     res.json({ success: true, message: "Deleted successfully" });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
 });
 
-// GET ROUTES
+// GET ROUTES (Same as before)
 router.get("/all", async (req, res) => {
   const products = await Product.find({ isAvailable: true }).sort({ createdAt: -1 });
   res.json({ success: true, products });
