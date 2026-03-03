@@ -109,3 +109,10 @@
     padding: 12px;
   }
 }
+
+/* Isse labels hamesha boxes ke upar aayenge */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}

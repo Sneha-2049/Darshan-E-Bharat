@@ -4,6 +4,8 @@ import "./EditVendorProfile.css";
 
 const EditVendorProfile = () => {
   const [form, setForm] = useState({
+    firstName: "", // ⭐ Added
+    lastName: "",  // ⭐ Added
     shopName: "",
     description: "",
     phone: "",
@@ -17,7 +19,7 @@ const EditVendorProfile = () => {
   const [loading, setLoading] = useState(true);
 
   const token = localStorage.getItem("token");
-   const navigate = useNavigate(); // <-- initialize navigate
+  const navigate = useNavigate();
 
   /* FETCH EXISTING DATA */
   useEffect(() => {
@@ -31,6 +33,8 @@ const EditVendorProfile = () => {
         const data = await res.json();
 
         setForm({
+          firstName: data.firstName || "", // ⭐ Added
+          lastName: data.lastName || "",   // ⭐ Added
           shopName: data.shopName || "",
           description: data.description || "",
           phone: data.phone || "",
@@ -48,7 +52,7 @@ const EditVendorProfile = () => {
     };
 
     fetchVendor();
-  }, []);
+  }, [token]);
 
   /* HANDLE CHANGE */
   const handleChange = (e) =>
@@ -74,11 +78,16 @@ const EditVendorProfile = () => {
 
       if (!res.ok) throw new Error();
 
+      // ⭐ VERY IMPORTANT: Update localStorage so Navbar changes immediately
+      localStorage.setItem("firstName", form.firstName);
+      localStorage.setItem("lastName", form.lastName);
+
       setMsg("Profile updated successfully ✅");
 
-      // Redirect to profile page after 1 second
-        navigate("/vendor-profile"); // <-- redirect
-
+      // Redirect after 1.5 seconds to show success message
+      setTimeout(() => {
+        navigate("/vendor-profile");
+      }, 1500);
 
     } catch {
       setMsg("Update failed ❌");
@@ -89,10 +98,21 @@ const EditVendorProfile = () => {
 
   return (
     <div className="edit-container">
-
       <h1>Edit Vendor Profile</h1>
 
       <form onSubmit={handleSubmit} className="edit-form">
+        
+        {/* ⭐ Name Row for better UI */}
+        <div className="name-row">
+          <div className="input-group">
+            <label>First Name</label>
+            <input name="firstName" value={form.firstName} onChange={handleChange} required />
+          </div>
+          <div className="input-group">
+            <label>Last Name</label>
+            <input name="lastName" value={form.lastName} onChange={handleChange} required />
+          </div>
+        </div>
 
         <label>Shop Name</label>
         <input name="shopName" value={form.shopName} onChange={handleChange} />
@@ -106,14 +126,20 @@ const EditVendorProfile = () => {
         <label>Address</label>
         <input name="address" value={form.address} onChange={handleChange} />
 
-        <label>City</label>
-        <input name="city" value={form.city} onChange={handleChange} />
-
-        <label>State</label>
-        <input name="state" value={form.state} onChange={handleChange} />
-
-        <label>Pincode</label>
-        <input name="pincode" value={form.pincode} onChange={handleChange} />
+        <div className="location-row">
+          <div className="input-group">
+            <label>City</label>
+            <input name="city" value={form.city} onChange={handleChange} />
+          </div>
+          <div className="input-group">
+            <label>State</label>
+            <input name="state" value={form.state} onChange={handleChange} />
+          </div>
+          <div className="input-group">
+            <label>Pincode</label>
+            <input name="pincode" value={form.pincode} onChange={handleChange} />
+          </div>
+        </div>
 
         <button type="submit">Save Changes</button>
 
