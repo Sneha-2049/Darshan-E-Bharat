@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { animateScroll as scroll } from "react-scroll";
 import './Navbar.css';
 import { useSnackbar } from 'notistack';
+import { useCart } from '../Cart/CartContext'; // ⭐ Import useCart
 
 const Navbar = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -11,6 +12,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { enqueueSnackbar } = useSnackbar();
+  const { fetchCart } = useCart();
 
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
@@ -19,10 +21,17 @@ const Navbar = () => {
   const lastName = localStorage.getItem('lastName');
   const username = firstName && lastName ? `${firstName} ${lastName}` : 'User';
 
-  const profilePath = role === "teacher" ? "/teacher-profile" : "/profile";
+  // const profilePath = role === "teacher" ? "/teacher-profile" : "/profile";
+  const profilePath =
+  role === "teacher"
+    ? "/teacher-profile"
+    : role === "vendor"
+    ? "/vendor-profile"
+    : "/profile";
 
   const handleLogout = () => {
     localStorage.clear();
+    window.location.href = "/login"; // This is the safest way to clear all React states
     enqueueSnackbar('Logged out!', { variant: 'info' });
     navigate('/');
   };

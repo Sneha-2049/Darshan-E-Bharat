@@ -187,3 +187,25 @@
   color: #004999;
   font-weight: 700;
 }
+
+
+.stock-badge span{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:600;
+  margin-top:6px;
+}
+
+.stock-badge .out{
+  color:#d60000;
+}
+
+.stock-badge .few{
+  color:#b8860b;
+}
+
+.stock-badge .in{
+  color:#0a7a2f;
+}

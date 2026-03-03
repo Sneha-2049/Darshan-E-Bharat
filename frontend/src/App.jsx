@@ -13,7 +13,7 @@ import Signup from "./Components/Signup";
 import RequiredAuth from "./Components/RequiredAuth";
 import Footer from "./Components/Footer/Footer";
 import Profile from "./Components/UserProfile/Profile";
-import TeacherProfile from "./Components/TeacherProfile/TeacherProfile"; 
+import TeacherProfile from "./Components/TeacherProfile/TeacherProfile";
 import CreateCourse from "./Components/TeacherProfile/CreateCourse";
 import EditCourse from "./Components/TeacherProfile/EditCourse";
 import Marketplace from "./Components/Marketplace/Marketplace";
@@ -21,6 +21,12 @@ import Cart from "./Components/Cart/Cart";
 import AboutPage from "./Components/About/AboutPage";
 import ManageCourse from "./Components/TeacherProfile/ManageCourse";
 import EnrollCourse from "./Components/Courses/EnrollCourse";
+
+import VendorProfile from "./Components/VendorProfile/VendorProfile";
+import EditVendorProfile from "./Components/VendorProfile/EditVendorProfile";
+import ProductDetails from "./Components/VendorProfile/ProductDetails";
+import { CartProvider } from "./Components/Cart/CartContext";
+
 import "./App.css";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -42,20 +48,6 @@ function App() {
     localStorage.setItem("index", data);
   };
 
-  const [cart, setCart] = useState([]);
-
-  const addToCart = (item) => {
-    setCart([...cart, item]);
-  };
-
-  const removeFromCart = (itemId) => {
-    setCart(cart.filter((item) => item.id !== itemId));
-  };
-
-  const clearCart = () => {
-    setCart([]);
-  };
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = () => {
@@ -68,6 +60,7 @@ function App() {
 
   return (
     <SnackbarProvider maxSnack={3}>
+      <CartProvider>
       <Router>
         <div className="App">
           <Navbar />
@@ -95,7 +88,17 @@ function App() {
               <Route path="/course/:id" element={<CourseDetails />} />
 
               {/* ✅ USER PROFILE */}
-              <Route path="/profile" element={<Profile />} />
+              {/* <Route path="/profile" element={<Profile />} /> */}
+              <Route
+                path="/profile"
+                element={(() => {
+                  const role = localStorage.getItem("role");
+
+                  if (role === "vendor") return <VendorProfile />;
+                  if (role === "teacher") return <TeacherProfile />;
+                  return <Profile />;
+                })()}
+              />
 
               {/* ✅ TEACHER PROFILE */}
               <Route path="/teacher-profile" element={<TeacherProfile />} />
@@ -103,18 +106,18 @@ function App() {
               <Route path="/edit-course/:id" element={<EditCourse />} />
               <Route path="/manage-course/:id" element={<ManageCourse />} />
 
+              <Route path="/vendor-profile" element={<VendorProfile />} />
+              <Route path="/vendor/edit" element={<EditVendorProfile />} />
+              <Route path="/product/:id" element={<ProductDetails />} />
+
               <Route
                 path="/marketplace"
-                element={<Marketplace cart={cart} addToCart={addToCart} />}
+                element={<Marketplace />}
               />
               <Route
                 path="/cart"
                 element={
-                  <Cart
-                    cart={cart}
-                    removeFromCart={removeFromCart}
-                    clearCart={clearCart}
-                  />
+                  <Cart/>
                 }
               />
             </Routes>
@@ -122,6 +125,7 @@ function App() {
           <Footer isLoggedIn={isLoggedIn} onLogout={handleLogout} />
         </div>
       </Router>
+      </CartProvider>
     </SnackbarProvider>
   );
 }

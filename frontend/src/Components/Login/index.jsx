@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import styles from "./styles.module.css";
+import { useCart } from "../Cart/CartContext";
 
 const Login = () => {
+
+    const { fetchCart } = useCart();
+
+    useEffect(() => {
+	const token = localStorage.getItem("token");
+	if (token) navigate("/");
+    }, []);
+
 	const [data, setData] = useState({
 		email: "",
 		password: "",
@@ -36,12 +45,21 @@ const Login = () => {
 			localStorage.setItem("firstName", res.firstName);
 			localStorage.setItem("lastName", res.lastName);
 			localStorage.setItem("email", res.email);
+			
 
 			// Store teacher-specific data
 			if (res.role === "teacher") {
 				localStorage.setItem("expertise", res.expertise || "");
 				localStorage.setItem("experience", res.experience || "");
 			}
+
+			//Store vendor specific data
+			if (res.role === "vendor") {
+	            localStorage.setItem("vendorId", res.vendorId || "");
+	            localStorage.setItem("shopName", res.shopName || "");
+
+				await fetchCart();
+}
 
 			enqueueSnackbar("Login successful!", { variant: "success" });
 

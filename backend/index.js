@@ -10,6 +10,10 @@ const authRoutes = require("./routes/auth");    // Login
 const quizRoutes = require("./routes/quiz");
 const courseRoutes = require("./routes/course");
 
+const marketplaceRoutes = require("./routes/marketplace");
+const productRoutes = require("./routes/product");
+const cartRoutes = require("./routes/cart");
+
 const app = express();
 
 // 🔹 Database connection
@@ -25,6 +29,10 @@ app.use("/api/auth", authRoutes);      // Login Route
 app.use("/api/quiz", quizRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/uploads", express.static("uploads"));
+
+app.use("/api/marketplace", marketplaceRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
 
 // 🔹 Default route (optional but useful for testing)
 app.get("/", (req, res) => {
