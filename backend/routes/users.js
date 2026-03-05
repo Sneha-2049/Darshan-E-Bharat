@@ -37,4 +37,35 @@ router.get("/me", auth, async (req, res) => {
 	}
   });
 
+// --- UPDATE: New Route to Update Profile Details ---
+router.put("/update", auth, async (req, res) => {
+    try {
+        const { firstName, lastName } = req.body;
+
+        // Sirf wahi fields update karenge jo allow hain
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user._id,
+            { 
+                $set: { 
+                    firstName: firstName, 
+                    lastName: lastName 
+                } 
+            },
+            { new: true } // Taaki updated data return ho
+        ).select("-password");
+
+        if (!updatedUser) {
+            return res.status(404).send({ message: "User not found" });
+        }
+
+        res.status(200).send({ 
+            message: "Profile updated successfully", 
+            data: updatedUser 
+        });
+    } catch (error) {
+        console.error("Update Error:", error);
+        res.status(500).send({ message: "Internal Server Error" });
+    }
+});
+
 module.exports = router;

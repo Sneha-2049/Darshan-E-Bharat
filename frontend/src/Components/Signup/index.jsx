@@ -3,19 +3,19 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import styles from "./styles.module.css";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Signup = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     role: "user",
-
     // teacher fields
     expertise: "",
     experience: "",
-
     // vendor fields
     shopName: "",
     phone: ""
@@ -35,24 +35,15 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const url = "http://localhost:8080/api/users";
-
       await axios.post(url, data);
-
-      enqueueSnackbar("Account created successfully!", {
-        variant: "success",
-      });
-
+      enqueueSnackbar("Account created successfully!", { variant: "success" });
       setTimeout(() => navigate("/login"), 1200);
-
     } catch (err) {
       if (err.response) {
         setError(err.response.data.message);
-        enqueueSnackbar(err.response.data.message, {
-          variant: "error",
-        });
+        enqueueSnackbar(err.response.data.message, { variant: "error" });
       } else {
         setError("Server error");
       }
@@ -62,7 +53,6 @@ const Signup = () => {
   return (
     <div className={styles.signup_container}>
       <div className={styles.signup_form_container}>
-
         {/* LEFT PANEL */}
         <div className={styles.left}>
           <h1>Welcome Back</h1>
@@ -72,7 +62,6 @@ const Signup = () => {
             </button>
           </Link>
         </div>
-
         {/* RIGHT PANEL */}
         <div className={styles.right}>
           <form className={styles.form_container} onSubmit={handleSubmit}>
@@ -108,17 +97,23 @@ const Signup = () => {
               className={styles.input}
             />
 
-            <input
-              type="password"
-              placeholder="Password"
-              name="password"
-              value={data.password}
-              onChange={handleChange}
-              required
-              className={styles.input}
-            />
-
-            {/* TEACHER FIELDS */}
+            {/* Password Wrapper */}
+            <div className={styles.password_wrapper}>
+                <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Password"
+                    name="password"
+                    value={data.password}
+                    onChange={handleChange}
+                    required
+                    className={styles.input}
+                />
+                <div className={styles.eye_icon} onClick={() => setShowPassword(!showPassword)}>
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </div>
+            </div>
+            
+             {/* TEACHER FIELDS */}
             {data.role === "teacher" && (
               <>
                 <input
@@ -129,7 +124,6 @@ const Signup = () => {
                   onChange={handleChange}
                   className={styles.input}
                 />
-
                 <input
                   type="text"
                   placeholder="Experience"
@@ -140,7 +134,7 @@ const Signup = () => {
                 />
               </>
             )}
-
+            
             {/* VENDOR FIELDS */}
             {data.role === "vendor" && (
               <>
@@ -153,7 +147,6 @@ const Signup = () => {
                   required
                   className={styles.input}
                 />
-
                 <input
                   type="text"
                   placeholder="Phone"
@@ -166,7 +159,7 @@ const Signup = () => {
               </>
             )}
 
-			{/* ROLE SELECT */}
+            {/* ROLE SELECT */}
             <select
               name="role"
               value={data.role}
@@ -183,7 +176,6 @@ const Signup = () => {
             <button type="submit" className={styles.green_btn}>
               Sign Up
             </button>
-
           </form>
         </div>
       </div>

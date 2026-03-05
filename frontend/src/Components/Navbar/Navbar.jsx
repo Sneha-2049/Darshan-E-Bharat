@@ -145,28 +145,38 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Sliding Panel */}
-      {token && (
-        <div className={`profile-panel ${isPanelOpen ? 'show' : ''}`}>
-          <div className="panel-header">
-            <button className="close-panel" onClick={toggleSlidingPanel}>
-              &#10005;
-            </button>
-          </div>
-          <div className="panel-content">
-            <h2>Welcome, {username}</h2>
-            <p>Manage your account and settings here.</p>
+      {/* --- UPDATED Sliding Panel Section --- */}
+{token && (
+  <>
+    {/* Background Overlay: Ispe click karne se bhi panel band ho jayega */}
+    {isPanelOpen && <div className="panel-overlay" onClick={toggleSlidingPanel}></div>}
 
-            <Link to={profilePath} className="panel-link">
-              My Profile
-            </Link>
-
-            <button onClick={handleLogout} className="panel-link">
-              Logout
-            </button>
-          </div>
+    <div className={`profile-panel ${isPanelOpen ? 'show' : ''}`}>
+      <div className="panel-header">
+        <button className="close-panel" onClick={toggleSlidingPanel}>
+          &#10005;
+        </button>
+      </div>
+      <div className="panel-content">
+        <div className="user-avatar">
+          {username.charAt(0).toUpperCase()}
         </div>
-      )}
+        <h2>{username}</h2>
+        <p className="user-role">{role.toUpperCase()}</p>
+        <hr />
+
+        {/* --- UPDATE: Added onClick to close panel on navigation --- */}
+        <Link to={profilePath} className="panel-link" onClick={toggleSlidingPanel}>
+          <i className="fas fa-user-circle"></i> My Profile
+        </Link>
+
+        <button onClick={handleLogout} className="panel-link logout-link">
+          <i className="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </div>
+  </>
+)}
     </nav>
   );
 };
