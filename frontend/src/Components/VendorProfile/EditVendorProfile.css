@@ -1,0 +1,118 @@
+/* Vendor Edit Form (inline, scrollable) */
+/* =================== CONTAINER =================== */
+.edit-container {
+  width: 90%;
+  max-width: 700px; /* adjust max width if needed */
+  margin: 40px auto;
+  font-family: 'Segoe UI', sans-serif;
+  position: relative;
+  padding-bottom: 40px; /* some spacing at bottom */
+  background-color:#0d8836;
+}
+
+/* =================== HEADING =================== */
+.edit-container h1 {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #fafbfc;
+}
+
+/* =================== FORM =================== */
+.edit-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-form label {
+  margin-top: 15px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #388e3c;
+}
+
+.edit-form input,
+.edit-form textarea {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #98d1a9;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.edit-form input:focus,
+.edit-form textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.2);
+}
+
+.edit-form textarea {
+  resize: none;
+  min-height: 100px;
+}
+
+/* =================== BUTTON =================== */
+.edit-form button {
+  margin-top: 25px;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(99,102,241,0.3);
+}
+
+/* =================== MESSAGE =================== */
+.msg {
+  margin-top: 15px;
+  text-align: center;
+  font-weight: 600;
+  color: #059669;
+}
+
+/* =================== LOADING =================== */
+.edit-loading {
+  text-align: center;
+  margin-top: 100px;
+  font-size: 22px;
+  color: #555;
+}
+
+/* =================== RESPONSIVE =================== */
+@media screen and (max-width: 768px) {
+  .edit-container {
+    width: 95%;
+    margin: 30px auto;
+  }
+
+  .edit-container h1 {
+    font-size: 28px;
+  }
+
+  .edit-form input,
+  .edit-form textarea {
+    font-size: 15px;
+  }
+
+  .edit-form button {
+    font-size: 15px;
+    padding: 12px;
+  }
+}
+
+/* Isse labels hamesha boxes ke upar aayenge */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}

@@ -1,0 +1,231 @@
+.login_container {
+	width: 100%;
+	min-height: 100vh;
+	background-color: #f5f5f5;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+}
+
+.login_form_container {
+	width: 900px;
+	max-width: 95%;
+	height: 500px;
+	display: flex;
+	border-radius: 10px;
+	overflow: hidden;
+	box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
+		0px 3px 4px 0px rgb(0 0 0 / 14%),
+		0px 1px 8px 0px rgb(0 0 0 / 12%);
+}
+
+.left {
+	flex: 2;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: white;
+	padding: 20px;
+}
+
+.form_container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+}
+
+.form_container h1 {
+	font-size: 40px;
+	margin-bottom: 20px;
+}
+
+.input {
+	outline: none;
+	border: none;
+	width: 370px;
+	max-width: 100%;
+	padding: 15px;
+	border-radius: 10px;
+	background-color: #edf5f3;
+	margin: 8px 0;
+	font-size: 14px;
+	transition: 0.2s ease;
+}
+
+.input:focus {
+	background-color: #e0f2f1;
+}
+
+.error_msg {
+	width: 370px;
+	max-width: 100%;
+	padding: 12px;
+	margin: 5px 0;
+	font-size: 14px;
+	background-color: #f34646;
+	color: white;
+	border-radius: 5px;
+	text-align: center;
+}
+
+.right {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: #66bb6a;
+	padding: 20px;
+}
+
+.right h1 {
+	margin-top: 0;
+	color: white;
+	font-size: 40px;
+	text-align: center;
+}
+
+.white_btn,
+.green_btn {
+	border: none;
+	outline: none;
+	padding: 12px 0;
+	border-radius: 20px;
+	width: 180px;
+	height: 45px;
+	font-weight: bold;
+	font-size: 14px;
+	cursor: pointer;
+	transition: 0.3s ease;
+}
+
+.green_btn {
+	background-color: #66bb6a;
+	color: white;
+	margin: 10px;
+}
+
+.white_btn {
+	background-color: white;
+	color: #66bb6a;
+}
+
+.white_btn:hover,
+.green_btn:hover {
+	box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
+	transform: scale(1.05);
+}
+
+.green_btn:hover {
+	background-color: #4caf50;
+}
+
+/* Media Queries */
+
+@media (max-width: 1200px) {
+	.login_form_container {
+		width: 700px;
+		height: 450px;
+	}
+
+	.input,
+	.error_msg {
+		width: 300px;
+	}
+}
+
+@media (max-width: 768px) {
+	.login_form_container {
+		width: 500px;
+		height: auto;
+		flex-direction: column;
+	}
+
+	.left,
+	.right {
+		width: 100%;
+	}
+
+	.input,
+	.error_msg {
+		width: 90%;
+	}
+
+	.right h1 {
+		font-size: 30px;
+		margin: 10px;
+	}
+}
+
+@media (max-width: 480px) {
+	.login_form_container {
+		width: 100%;
+		height: auto;
+		flex-direction: column;
+		box-shadow: none;
+	}
+
+	.input,
+	.error_msg {
+		width: 95%;
+	}
+
+	.white_btn,
+	.green_btn {
+		width: 150px;
+		margin: 15px;
+	}
+
+	.form_container h1 {
+		font-size: 28px;
+		margin: 10px 0 15px 0;
+	}
+
+	.right h1 {
+		font-size: 28px;
+	}
+}
+
+/* Password toggle styles - add to both module.css files */
+.password_wrapper {
+    position: relative;
+    width: 370px; /* Same as your .input width */
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Override input inside wrapper to fit perfectly */
+.password_wrapper .input {
+    width: 100% !important;
+    padding-right: 45px !important;
+    margin: 8px 0 !important; /* Matches your login/signup margin */
+}
+
+.eye_icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: black; /* Set to Black as requested */
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    z-index: 10;
+}
+
+/* Media query adjustment for password wrapper */
+@media (max-width: 1200px) {
+    .password_wrapper {
+        width: 300px;
+    }
+}
+@media (max-width: 768px) {
+    .password_wrapper {
+        width: 90%;
+    }
+}

@@ -1,0 +1,125 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
+import styles from "./styles.module.css";
+import { useCart } from "../Cart/CartContext";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
+const Login = () => {
+    const { fetchCart } = useCart();
+    const [showPassword, setShowPassword] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) navigate("/");
+    }, []);
+
+    const [data, setData] = useState({
+        email: "",
+        password: "",
+    });
+
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
+    const { enqueueSnackbar } = useSnackbar();
+
+    const handleChange = ({ currentTarget: input }) => {
+        setData({ ...data, [input.name]: input.value });
+        setError("");
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const url = "http://localhost:8080/api/auth";
+            const response = await axios.post(url, data);
+
+			//VERY IMPORTANT: extract correct structure
+            const res = response.data.data;
+            // Store in localStorage
+            localStorage.setItem("token", res.token);
+            localStorage.setItem("role", res.role);
+            localStorage.setItem("firstName", res.firstName);
+            localStorage.setItem("lastName", res.lastName);
+            localStorage.setItem("email", res.email);
+            // Store teacher-specific data
+            if (res.role === "teacher") {
+                localStorage.setItem("expertise", res.expertise || "");
+                localStorage.setItem("experience", res.experience || "");
+            }
+            //Store vendor specific data
+            if (res.role === "vendor") {
+                localStorage.setItem("vendorId", res.vendorId || "");
+                localStorage.setItem("shopName", res.shopName || "");
+                await fetchCart();
+            }
+
+            enqueueSnackbar("Login successful!", { variant: "success" });
+            navigate("/");
+
+        } catch (error) {
+            if (error.response && error.response.status >= 400 && error.response.status <= 500) {
+                setError(error.response.data.message);
+                enqueueSnackbar(error.response.data.message, { variant: "error" });
+            } else {
+                setError("Something went wrong");
+            }
+        }
+    };
+
+    return (
+        <div className={styles.login_container}>
+            <div className={styles.login_form_container}>
+                <div className={styles.left}>
+                    <form className={styles.form_container} onSubmit={handleSubmit}>
+                        <h1>Login</h1>
+
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            name="email"
+                            onChange={handleChange}
+                            value={data.email}
+                            required
+                            className={styles.input}
+                        />
+
+                        {/* Password Wrapper */}
+                        <div className={styles.password_wrapper}>
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Password"
+                                name="password"
+                                onChange={handleChange}
+                                value={data.password}
+                                required
+                                className={styles.input}
+                            />
+                            <div className={styles.eye_icon} onClick={() => setShowPassword(!showPassword)}>
+                                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                            </div>
+                        </div>
+
+                        {error && <div className={styles.error_msg}>{error}</div>}
+
+                        <button type="submit" className={styles.green_btn}>
+                            Sign In
+                        </button>
+                    </form>
+                </div>
+
+                <div className={styles.right}>
+                    <h1>New Here?</h1>
+                    <Link to="/signup">
+                        <button type="button" className={styles.white_btn}>
+                            Sign Up
+                        </button>
+                    </Link>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Login;

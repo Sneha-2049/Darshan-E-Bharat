@@ -1,0 +1,210 @@
+/* ==============================
+   ENROLL PAGE WRAPPER
+================================ */
+
+.enroll-page-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f9fafb, #eef2ff);
+  padding: 80px 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ==============================
+   MAIN CARD
+================================ */
+
+.enroll-main-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 1150px;
+  display: flex;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.08);
+  transition: 0.4s ease;
+}
+
+/* ==============================
+   LEFT IMAGE SECTION
+================================ */
+
+.enroll-image-section {
+  flex: 1;
+  min-height: 450px;
+  overflow: hidden;
+}
+
+.enroll-image-section img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+
+}
+
+.enroll-main-card:hover .enroll-image-section img {
+  transform: scale(1.05);
+}
+
+/* ==============================
+   RIGHT CONTENT SECTION
+================================ */
+
+.enroll-content-section {
+  flex: 1.2;
+  padding: 60px 55px;
+  display: flex;
+  flex-direction: column;
+}
+
+.enroll-course-title {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #111827;
+}
+
+.enroll-instructor {
+  font-weight: 600;
+  color: #16a34a;
+  margin-bottom: 18px;
+}
+
+.enroll-description {
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+
+/* ==============================
+   COURSE META
+================================ */
+
+.enroll-meta-info {
+  display: flex;
+  gap: 30px;
+  font-size: 13px;
+  margin-bottom: 35px;
+  color: #6b7280;
+}
+
+/* ==============================
+   PRICING BOX
+================================ */
+
+.enroll-pricing-box {
+  background: linear-gradient(135deg, #f3f4f6, #f9fafb);
+  padding: 30px;
+  border-radius: 20px;
+  margin-bottom: 35px;
+  border: 1px solid #e5e7eb;
+}
+
+.enroll-price-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  font-size: 14px;
+}
+
+.enroll-price-row strong {
+  font-weight: 700;
+  color: #111827;
+}
+
+.enroll-coin-toggle {
+  margin: 18px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.enroll-coin-toggle input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.enroll-final-price {
+  margin-top: 18px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+/* ==============================
+   ENROLL BUTTON
+================================ */
+
+.enroll-payment-button {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+  border-radius: 40px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.35s ease;
+}
+
+.enroll-payment-button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px rgba(34, 197, 94, 0.35);
+}
+
+.enroll-payment-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ==============================
+   ALREADY ENROLLED CARD
+================================ */
+
+.enroll-already-card {
+  background: white;
+  padding: 60px;
+  border-radius: 24px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  max-width: 600px;
+  width: 100%;
+}
+
+.enroll-already-card h2 {
+  margin-bottom: 20px;
+}
+
+.enroll-expired-text {
+  margin-top: 15px;
+  font-weight: 600;
+  color: #dc2626;
+}
+
+/* ==============================
+   RESPONSIVE DESIGN
+================================ */
+
+@media (max-width: 1000px) {
+  .enroll-page-container {
+    padding: 50px 30px;
+  }
+
+  .enroll-main-card {
+    flex-direction: column;
+  }
+
+  .enroll-image-section {
+    height: 260px;
+  }
+
+  .enroll-content-section {
+    padding: 40px;
+  }
+}

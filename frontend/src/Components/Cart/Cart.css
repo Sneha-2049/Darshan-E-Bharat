@@ -1,0 +1,129 @@
+.cart-container {
+  padding: 40px;
+  max-width: 950px;
+  margin: 0 auto 0 0; 
+}
+
+.cart-container h2 {
+  font-size: 26px;
+  border-bottom: 2px solid #f3f4f6;
+  padding-bottom: 10px;
+  margin-bottom: 30px;
+  width: fit-content;
+  min-width: 250px;
+}
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 25px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.cart-item-img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.cart-item-info {
+  margin-left: 20px;
+  text-align: left;
+}
+
+.cart-item-info h3 {
+  margin: 0;
+  font-size: 17px;
+  color: #333;
+}
+
+/* Price Green & Qty Grey */
+.price-qty-row {
+  margin-top: 5px;
+}
+
+.item-price {
+  color: #27ae60; 
+  font-weight: 700;
+}
+
+.item-qty {
+  color: #90969b; /* Grey x quantity */
+  margin-left: 8px;
+  font-size: 14px;
+}
+
+/* ⭐ Right Aligned Button with Hover Effect */
+.remove-btn {
+  margin-left: auto; /* Pushes to far right */
+  color: #ff6b6b;
+  background: #fff;
+  border: 1px solid #ffdada;
+  padding: 6px 15px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease; /* Smooth hover transition */
+}
+
+.remove-btn:hover {
+  background: #ff6b6b; /* Fills red on hover */
+  color: #fff;
+  border-color: #ff6b6b;
+}
+
+/* Bottom Section */
+.cart-total {
+  margin-top: 30px;
+  border-top: 2px solid #f3f4f6;
+  padding-top: 20px;
+  text-align: left;
+}
+
+.total-text span {
+  color: #27ae60;
+}
+
+.cart-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.cart-buy-now-btn {
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 12px 35px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.cart-buy-now-btn:hover {
+  background: #219150;
+}
+
+.clear-cart-btn {
+  background: #f1f3f5;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.clear-cart-btn:hover {
+  background: #8b9991;
+  color: #fff;
+}
