@@ -297,3 +297,97 @@
   border-radius: 12px;
   margin-bottom: 12px;
 }
+/* ===========================
+   TEACHER PROFILE EDIT SECTION
+=========================== */
+
+.teacher-profile-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.teacher-edit-btn {
+  background: #ff9800;
+  color: #fff;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.teacher-edit-btn:hover {
+  background: #e68900;
+}
+
+/* ===========================
+   EDIT FORM
+=========================== */
+
+.teacher-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 300px;
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.teacher-edit-form input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  transition: border 0.3s ease;
+}
+
+.teacher-edit-form input:focus {
+  border-color: #21ad5c;
+  outline: none;
+}
+
+/* ===========================
+   BUTTON ROW
+=========================== */
+
+.teacher-form-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.teacher-save-btn {
+  background: #21ad5c;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  flex: 1;
+  transition: 0.3s ease;
+}
+
+.teacher-save-btn:hover {
+  background: #1e9650;
+}
+
+.teacher-cancel-btn {
+  background: #e0e0e0;
+  color: #333;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  flex: 1;
+  transition: 0.3s ease;
+}
+
+.teacher-cancel-btn:hover {
+  background: #d5d5d5;
+}

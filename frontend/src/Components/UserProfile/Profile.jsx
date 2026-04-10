@@ -15,6 +15,7 @@ const Profile = () => {
     email: "",
     coins: 0,
     quizResults: [],
+    purchasedCourses: []
   });
 
   const [formData, setFormData] = useState({
@@ -75,6 +76,7 @@ const Profile = () => {
         </button>
       </div>
 
+      {/* PROFILE */}
       <div className="profile-card">
         {!isEditing ? (
           <div className="view-container">
@@ -88,7 +90,6 @@ const Profile = () => {
             </div>
           </div>
         ) : (
-          /* --- UPDATE: Modern White/Grey Form --- */
           <form onSubmit={handleUpdate} className="edit-form-container">
             <div className="input-vertical">
                 <div className="form-group">
@@ -109,12 +110,60 @@ const Profile = () => {
         )}
       </div>
 
+      {/* MY COURSES */}
+      <div className="profile-card">
+        <h2>My Courses</h2>
+
+        {userDetails.purchasedCourses?.length > 0 ? (
+          <div className="profile-course-grid">
+            {userDetails.purchasedCourses.map((item, idx) => {
+              const course = item.course;
+
+              return (
+                <div key={idx} className="profile-course-card">
+                  <img
+                    src={`http://localhost:8080/${course?.thumbnail}`}
+                    alt="course"
+                  />
+
+                  <h3>{course?.courseName}</h3>
+
+                  <p className="profile-course-meta">
+                    🛒 Purchased: {new Date(item.enrolledAt).toLocaleDateString()}
+                  </p>
+
+                  <p className="profile-course-meta">
+                    ⏳ Expiry: {new Date(item.expiryDate).toLocaleDateString()}
+                  </p>
+
+                  <p className={`profile-status ${item.isActive ? "active" : "expired"}`}>
+                    {item.isActive ? "Active" : "Expired"}
+                  </p>
+
+                  <button
+                    className="profile-view-btn"
+                    onClick={() => navigate(`/course/${course?._id}`)}
+                  >
+                    View Course
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <p>No enrolled courses yet.</p>
+        )}
+      </div>
+
+      {/* QUIZ */}
       <div className="dashboard-content">
         <div className="inventory-section">
           <div className="section-header">
             <h2>My Quiz</h2>
+
+            {/* ✅ FIXED: USE ONLY BACKEND COINS */}
             <p className="coin-status">
-              Total Coins: <span className="coin-wrapper">
+              Total Coins: <span>
                 <i className="fas fa-coins coin-icon"></i> {userDetails.coins || 0}
               </span>
             </p>

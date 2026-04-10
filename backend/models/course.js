@@ -25,12 +25,12 @@ const lectureSchema = new mongoose.Schema({
   },
 
   duration: {
-    type: String,   // optional (10 min, 25 min etc)
+    type: String,
     default: ""
   },
 
   isPreview: {
-    type: Boolean,   // allow preview lecture for students
+    type: Boolean,
     default: false
   },
 
@@ -51,7 +51,6 @@ const lectureSchema = new mongoose.Schema({
 =========================== */
 const courseSchema = new mongoose.Schema({
 
-  // Basic Info
   courseName: {
     type: String,
     required: true
@@ -100,15 +99,16 @@ const courseSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-    publishDate: {
+
+  publishDate: {
     type: Date,
     default: null
   },
-  accessDuration: {
-  type: Number, // in days
-  default: 30
-},
 
+  accessDuration: {
+    type: Number,
+    default: 30
+  },
 
   enrolledStudents: [
     {
@@ -124,4 +124,5 @@ const courseSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-module.exports = mongoose.model("course", courseSchema);
+/* 🔥 ONLY CHANGE BELOW */
+module.exports = mongoose.model("Course", courseSchema);

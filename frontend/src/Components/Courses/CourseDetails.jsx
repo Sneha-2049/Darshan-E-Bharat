@@ -12,6 +12,19 @@ const CourseDetails = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [isEnrolled, setIsEnrolled] = useState(false);
 
+  /* ✅ IMAGE HANDLER */
+  const getImageUrl = (thumbnail) => {
+    if (!thumbnail) return "/default-image.jpg";
+
+    // Cloudinary
+    if (thumbnail.startsWith("http")) {
+      return thumbnail;
+    }
+
+    // Local (old images)
+    return `http://localhost:8080/${thumbnail}`;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -104,12 +117,9 @@ const CourseDetails = () => {
             <div className="cd2-overview-card">
               <div className="cd2-overview-top">
 
+                {/* ✅ FIXED IMAGE */}
                 <img
-                  src={
-                    course.thumbnail
-                      ? `http://localhost:8080/${course.thumbnail}`
-                      : "/default-image.jpg"
-                  }
+                  src={getImageUrl(course.thumbnail)}
                   alt="thumbnail"
                   className="cd2-thumbnail"
                 />

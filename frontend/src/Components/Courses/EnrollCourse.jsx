@@ -12,6 +12,19 @@ const EnrollCourse = () => {
   const [useCoins, setUseCoins] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  /* ✅ IMAGE HANDLER */
+  const getImageUrl = (thumbnail) => {
+    if (!thumbnail) return "/default-image.jpg";
+
+    // Cloudinary
+    if (thumbnail.startsWith("http")) {
+      return thumbnail;
+    }
+
+    // Local
+    return `http://localhost:8080/${thumbnail}`;
+  };
+
   /* ===========================
      FETCH COURSE + USER
   =========================== */
@@ -103,8 +116,9 @@ const EnrollCourse = () => {
 
         {/* LEFT IMAGE */}
         <div className="enroll-image-section">
+          {/* ✅ FIXED IMAGE */}
           <img
-            src={`http://localhost:8080/${course.thumbnail}`}
+            src={getImageUrl(course.thumbnail)}
             alt="thumbnail"
           />
         </div>

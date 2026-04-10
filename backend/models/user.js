@@ -20,25 +20,21 @@ const purchasedCourseSchema = new mongoose.Schema(
   {
     course: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "course",
+      ref: "Course",   // ✅ FIXED
       required: true,
     },
-
     enrolledAt: {
       type: Date,
       default: Date.now,
     },
-
     expiryDate: {
       type: Date,
       required: true,
     },
-
     amountPaid: {
       type: Number,
       required: true,
     },
-
     paymentMethod: {
       type: String,
       enum: ["card", "upi", "netbanking", "coins", "free"],
@@ -49,7 +45,7 @@ const purchasedCourseSchema = new mongoose.Schema(
       default: true,
     },
   },
-  { _id: false },
+  { _id: false }
 );
 
 /* ===========================
@@ -68,29 +64,32 @@ const userSchema = new mongoose.Schema(
       default: "user",
     },
 
-    /* Teacher Fields */
+    /* TEACHER */
     expertise: { type: String, default: "" },
     experience: { type: String, default: "" },
 
-    /* VENDOR */
+    /* ✅ NEW FIELD */
+    bio: { type: String, default: "" },
+
+    /* VENDOR + COMMON */
     shopName: String,
-    phone: String,
+    phone: String,   // ✅ already exists (used for both now)
     address: String,
     city: String,
     state: String,
     pincode: String,
     description: String,
 
-    /* Wallet System */
+    /* WALLET */
     coins: { type: Number, default: 0 },
 
-    /* Quiz */
+    /* QUIZ */
     quizResults: [quizSchema],
 
-    /* LMS System */
+    /* LMS */
     purchasedCourses: [purchasedCourseSchema],
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 /* ===========================
@@ -100,7 +99,7 @@ userSchema.methods.generateAuthToken = function () {
   return jwt.sign(
     { _id: this._id, role: this.role },
     process.env.JWTPRIVATEKEY,
-    { expiresIn: "7d" },
+    { expiresIn: "7d" }
   );
 };
 
@@ -109,35 +108,36 @@ userSchema.methods.generateAuthToken = function () {
 =========================== */
 const validate = (data) => {
   const schema = Joi.object({
-    firstName: Joi.string().required().label("First Name"),
-    lastName: Joi.string().required().label("Last Name"),
-    email: Joi.string().email().required().label("Email"),
-    password: passwordComplexity().required().label("Password"),
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
+    email: Joi.string().email().required(),
+    password: passwordComplexity().required(),
+
     role: Joi.string().valid("user", "teacher", "vendor", "admin").optional(),
+
     expertise: Joi.string().allow(""),
     experience: Joi.string().allow(""),
 
-    /* Vendor minimal fields */
+    /* ✅ NEW FIELD */
+    bio: Joi.string().allow(""),
+
+    /* Vendor conditional */
     shopName: Joi.when("role", {
       is: "vendor",
       then: Joi.required(),
       otherwise: Joi.allow("")
     }),
 
-    phone: Joi.when("role", {
-      is: "vendor",
-      then: Joi.required(),
-      otherwise: Joi.allow("")
-    }),
+    /* ✅ UPDATED (now allowed for all) */
+    phone: Joi.string().allow(""),
 
-    /* Optional vendor fields */
     address: Joi.string().allow(""),
     city: Joi.string().allow(""),
     state: Joi.string().allow(""),
     pincode: Joi.string().allow(""),
     description: Joi.string().allow("")
-
   });
+
   return schema.validate(data);
 };
 
