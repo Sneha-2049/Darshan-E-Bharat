@@ -20,7 +20,7 @@ const purchasedCourseSchema = new mongoose.Schema(
   {
     course: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Course",   // ✅ FIXED
+      ref: "Course", // ✅ FIXED
       required: true,
     },
     enrolledAt: {
@@ -45,7 +45,7 @@ const purchasedCourseSchema = new mongoose.Schema(
       default: true,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 /* ===========================
@@ -73,12 +73,16 @@ const userSchema = new mongoose.Schema(
 
     /* VENDOR + COMMON */
     shopName: String,
-    phone: String,   // ✅ already exists (used for both now)
+    phone: String, // ✅ already exists (used for both now)
     address: String,
     city: String,
     state: String,
     pincode: String,
     description: String,
+
+    documentUrl: { type: String, default: "" }, // Cloudinary link save karne ke liye
+    isVerified: { type: Boolean, default: false }, // Teacher/Vendor ke liye compulsory check
+    isRejected: { type: Boolean, default: false }, // ⭐ New field
 
     /* WALLET */
     coins: { type: Number, default: 0 },
@@ -89,7 +93,7 @@ const userSchema = new mongoose.Schema(
     /* LMS */
     purchasedCourses: [purchasedCourseSchema],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 /* ===========================
@@ -99,7 +103,7 @@ userSchema.methods.generateAuthToken = function () {
   return jwt.sign(
     { _id: this._id, role: this.role },
     process.env.JWTPRIVATEKEY,
-    { expiresIn: "7d" }
+    { expiresIn: "7d" },
   );
 };
 
@@ -125,17 +129,18 @@ const validate = (data) => {
     shopName: Joi.when("role", {
       is: "vendor",
       then: Joi.required(),
-      otherwise: Joi.allow("")
+      otherwise: Joi.allow(""),
     }),
 
     /* ✅ UPDATED (now allowed for all) */
     phone: Joi.string().allow(""),
+    documentUrl: Joi.string().allow("").label("Document URL"),
 
     address: Joi.string().allow(""),
     city: Joi.string().allow(""),
     state: Joi.string().allow(""),
     pincode: Joi.string().allow(""),
-    description: Joi.string().allow("")
+    description: Joi.string().allow(""),
   });
 
   return schema.validate(data);

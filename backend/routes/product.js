@@ -101,8 +101,24 @@ router.delete("/delete/:id", auth, async (req, res) => {
 
 // GET ROUTES (Same as before)
 router.get("/all", async (req, res) => {
-  const products = await Product.find({ isAvailable: true }).sort({ createdAt: -1 });
-  res.json({ success: true, products });
+    try {
+        // ⭐ Yahan humne bataya ki vendorId field ko 'user' model se populate karein
+        const products = await Product.find().populate({
+            path: 'vendorId',
+            model: 'user' // User model ka exact naam jo models/user.js mein hai
+        });
+
+        // ⭐ Filter logic update: p.vendorId use karenge p.vendor ki jagah
+        const verifiedProducts = products.filter(p => {
+            // Check karein ki vendorId exist karta hai aur wo verified hai
+            return p.vendorId && p.vendorId.isVerified === true;
+        });
+
+        res.status(200).send({ products: verifiedProducts });
+    } catch (error) {
+        console.error("Marketplace Fetch Error:", error);
+        res.status(500).send({ message: "Internal Server Error" });
+    }
 });
 
 router.get("/my-products", auth, async (req, res) => {

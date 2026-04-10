@@ -342,3 +342,29 @@
   font-weight: bold;
   text-decoration: none;
 }
+
+/* --- Admin Specific Styles --- */
+
+.admin-badge {
+  background-color: #ffd700 !important; /* Gold Color */
+  color: #000 !important;
+  font-weight: bold !important;
+  border: 1px solid #cca300;
+}
+
+.admin-btn-link {
+  background-color: #fff3e0 !important; /* Soft Gold/Orange */
+  color: #e65100 !important;
+  border: 1px solid #ffb74d !important;
+  font-weight: 700 !important;
+}
+
+.admin-btn-link:hover {
+  background-color: #ffe0b2 !important;
+  transform: translateX(-5px);
+  color: #bf360c !important;
+}
+
+.panel-link i {
+  margin-right: 10px;
+}

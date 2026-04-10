@@ -26,6 +26,8 @@ import VendorProfile from "./Components/VendorProfile/VendorProfile";
 import EditVendorProfile from "./Components/VendorProfile/EditVendorProfile";
 import ProductDetails from "./Components/VendorProfile/ProductDetails";
 import { CartProvider } from "./Components/Cart/CartContext";
+import AdminDashboard from "./Components/Admin/AdminDashboard";
+import AdminRoute from "./Components/Admin/AdminRoute";
 
 import "./App.css";
 import L from "leaflet";
@@ -61,70 +63,73 @@ function App() {
   return (
     <SnackbarProvider maxSnack={3}>
       <CartProvider>
-      <Router>
-        <div className="App">
-          <Navbar />
-          <div className="main-content">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/courses" element={<CoursePage />} />
-              <Route path="/enroll/:id" element={<EnrollCourse />} />
-              <Route
-                path="/quizcard"
-                element={<QuizCard sendIndex={handleChildData} />}
-              />
-              <Route
-                path="/quiz"
-                element={
-                  <RequiredAuth>
-                    <Quiz index={index} />
-                  </RequiredAuth>
-                }
-              />
-              <Route path="/login" element={<Login onLogin={handleLogin} />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/course/:id" element={<CourseDetails />} />
+        <Router>
+          <div className="App">
+            <Navbar />
+            <div className="main-content">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/courses" element={<CoursePage />} />
+                <Route path="/enroll/:id" element={<EnrollCourse />} />
+                <Route
+                  path="/quizcard"
+                  element={<QuizCard sendIndex={handleChildData} />}
+                />
+                <Route
+                  path="/quiz"
+                  element={
+                    <RequiredAuth>
+                      <Quiz index={index} />
+                    </RequiredAuth>
+                  }
+                />
+                <Route
+                  path="/login"
+                  element={<Login onLogin={handleLogin} />}
+                />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/course/:id" element={<CourseDetails />} />
 
-              {/* ✅ USER PROFILE */}
-              {/* <Route path="/profile" element={<Profile />} /> */}
-              <Route
-                path="/profile"
-                element={(() => {
-                  const role = localStorage.getItem("role");
+                {/* ✅ USER PROFILE */}
+                {/* <Route path="/profile" element={<Profile />} /> */}
+                <Route
+                  path="/profile"
+                  element={(() => {
+                    const role = localStorage.getItem("role");
 
-                  if (role === "vendor") return <VendorProfile />;
-                  if (role === "teacher") return <TeacherProfile />;
-                  return <Profile />;
-                })()}
-              />
+                    if (role === "vendor") return <VendorProfile />;
+                    if (role === "teacher") return <TeacherProfile />;
+                    return <Profile />;
+                  })()}
+                />
 
-              {/* ✅ TEACHER PROFILE */}
-              <Route path="/teacher-profile" element={<TeacherProfile />} />
-              <Route path="/create-course" element={<CreateCourse />} />
-              <Route path="/edit-course/:id" element={<EditCourse />} />
-              <Route path="/manage-course/:id" element={<ManageCourse />} />
+                {/* ✅ TEACHER PROFILE */}
+                <Route path="/teacher-profile" element={<TeacherProfile />} />
+                <Route path="/create-course" element={<CreateCourse />} />
+                <Route path="/edit-course/:id" element={<EditCourse />} />
+                <Route path="/manage-course/:id" element={<ManageCourse />} />
 
-              <Route path="/vendor-profile" element={<VendorProfile />} />
-              <Route path="/vendor/edit" element={<EditVendorProfile />} />
-              <Route path="/product/:id" element={<ProductDetails />} />
+                <Route path="/vendor-profile" element={<VendorProfile />} />
+                <Route path="/vendor/edit" element={<EditVendorProfile />} />
+                <Route path="/product/:id" element={<ProductDetails />} />
 
-              <Route
-                path="/marketplace"
-                element={<Marketplace />}
-              />
-              <Route
-                path="/cart"
-                element={
-                  <Cart/>
-                }
-              />
-            </Routes>
+                <Route path="/marketplace" element={<Marketplace />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route
+                  path="/admin-dashboard"
+                  element={
+                    <AdminRoute>
+                      <AdminDashboard />
+                    </AdminRoute>
+                  }
+                />
+              </Routes>
+            </div>
+            <Footer isLoggedIn={isLoggedIn} onLogout={handleLogout} />
           </div>
-          <Footer isLoggedIn={isLoggedIn} onLogout={handleLogout} />
-        </div>
-      </Router>
+        </Router>
       </CartProvider>
     </SnackbarProvider>
   );

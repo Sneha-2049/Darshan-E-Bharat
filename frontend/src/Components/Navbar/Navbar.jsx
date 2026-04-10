@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { animateScroll as scroll } from "react-scroll";
 import './Navbar.css';
 import { useSnackbar } from 'notistack';
-import { useCart } from '../Cart/CartContext'; // ⭐ Import useCart
+import { useCart } from '../Cart/CartContext'; 
 
 const Navbar = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -21,17 +21,16 @@ const Navbar = () => {
   const lastName = localStorage.getItem('lastName');
   const username = firstName && lastName ? `${firstName} ${lastName}` : 'User';
 
-  // const profilePath = role === "teacher" ? "/teacher-profile" : "/profile";
   const profilePath =
-  role === "teacher"
-    ? "/teacher-profile"
-    : role === "vendor"
-    ? "/vendor-profile"
-    : "/profile";
+    role === "teacher"
+      ? "/teacher-profile"
+      : role === "vendor"
+      ? "/vendor-profile"
+      : "/profile";
 
   const handleLogout = () => {
     localStorage.clear();
-    window.location.href = "/login"; // This is the safest way to clear all React states
+    window.location.href = "/login"; 
     enqueueSnackbar('Logged out!', { variant: 'info' });
     navigate('/');
   };
@@ -56,15 +55,9 @@ const Navbar = () => {
         });
       }
     } else {
-      if (targetClass === 'quiz') {
-        navigate("/quizcard");
-      }
-      if (targetClass === 'cource') {
-        navigate("/courses");
-      }
-      if (targetClass === 'marketplace') {
-        navigate("/marketplace");
-      }
+      if (targetClass === 'quiz') navigate("/quizcard");
+      if (targetClass === 'cource') navigate("/courses");
+      if (targetClass === 'marketplace') navigate("/marketplace");
     }
   };
 
@@ -85,33 +78,20 @@ const Navbar = () => {
           <li><Link to="/">Home</Link></li>
           <li><Link to="/about">About</Link></li>
 
-          {/* ✅ Restored ID for styling + scroll */}
           <li>
-            <button
-              id="features-button"
-              className="quiz"
-              onClick={handleNavigation}
-            >
+            <button id="features-button" className="quiz" onClick={handleNavigation}>
               Quiz
             </button>
           </li>
 
           <li>
-            <button
-              id="features-button"
-              className="cource"
-              onClick={handleNavigation}
-            >
+            <button id="features-button" className="cource" onClick={handleNavigation}>
               Courses
             </button>
           </li>
 
           <li>
-            <button
-              id="features-button"
-              className="marketplace"
-              onClick={handleNavigation}
-            >
+            <button id="features-button" className="marketplace" onClick={handleNavigation}>
               Marketplace
             </button>
           </li>
@@ -145,38 +125,45 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* --- UPDATED Sliding Panel Section --- */}
-{token && (
-  <>
-    {/* Background Overlay: Ispe click karne se bhi panel band ho jayega */}
-    {isPanelOpen && <div className="panel-overlay" onClick={toggleSlidingPanel}></div>}
+      {token && (
+        <>
+          {isPanelOpen && <div className="panel-overlay" onClick={toggleSlidingPanel}></div>}
 
-    <div className={`profile-panel ${isPanelOpen ? 'show' : ''}`}>
-      <div className="panel-header">
-        <button className="close-panel" onClick={toggleSlidingPanel}>
-          &#10005;
-        </button>
-      </div>
-      <div className="panel-content">
-        <div className="user-avatar">
-          {username.charAt(0).toUpperCase()}
-        </div>
-        <h2>{username}</h2>
-        <p className="user-role">{role.toUpperCase()}</p>
-        <hr />
+          <div className={`profile-panel ${isPanelOpen ? 'show' : ''}`}>
+            <div className="panel-header">
+              <button className="close-panel" onClick={toggleSlidingPanel}>
+                &#10005;
+              </button>
+            </div>
+            <div className="panel-content">
+              <div className="user-avatar">
+                {username.charAt(0).toUpperCase()}
+              </div>
+              <h2>{username}</h2>
+              {/* Added dynamic class for admin badge color */}
+              <p className={`user-role ${role === 'admin' ? 'admin-badge' : ''}`}>
+                {role ? role.toUpperCase() : ''}
+              </p>
+              <hr />
 
-        {/* --- UPDATE: Added onClick to close panel on navigation --- */}
-        <Link to={profilePath} className="panel-link" onClick={toggleSlidingPanel}>
-          <i className="fas fa-user-circle"></i> My Profile
-        </Link>
+              {/* ⭐ ADMIN DASHBOARD LINK (Only for Admin role) */}
+              {role === "admin" && (
+                <Link to="/admin-dashboard" className="panel-link admin-btn-link" onClick={toggleSlidingPanel}>
+                  <i className="fas fa-user-shield"></i> Admin Dashboard
+                </Link>
+              )}
 
-        <button onClick={handleLogout} className="panel-link logout-link">
-          <i className="fas fa-sign-out-alt"></i> Logout
-        </button>
-      </div>
-    </div>
-  </>
-)}
+              <Link to={profilePath} className="panel-link" onClick={toggleSlidingPanel}>
+                <i className="fas fa-user-circle"></i> My Profile
+              </Link>
+
+              <button onClick={handleLogout} className="panel-link logout-link">
+                <i className="fas fa-sign-out-alt"></i> Logout
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </nav>
   );
 };

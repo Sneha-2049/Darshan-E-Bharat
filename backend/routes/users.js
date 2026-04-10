@@ -13,10 +13,26 @@ router.post("/", async (req, res) => {
 			return res.status(400).send({ message: error.details[0].message });
 
 		const user = await User.findOne({ email: req.body.email });
-		if (user)
-			return res
-				.status(409)
-				.send({ message: "User with given email already Exist!" });
+		if (user) {
+            // ⭐ AGAR USER EXIST KARTA HAI AUR REJECTED HAI:
+            if (user.isRejected) {
+                // Purane data ko naye data se update kar do
+                const salt = await bcrypt.genSalt(Number(process.env.SALT));
+                const hashPassword = await bcrypt.hash(req.body.password, salt);
+
+                await User.findByIdAndUpdate(user._id, {
+                    ...req.body,
+                    password: hashPassword,
+                    isRejected: false, // Status wapas pending kar do
+                    isVerified: false  // Ensure verified false rahe
+                });
+
+                return res.status(201).send({ message: "Request re-submitted successfully!" });
+            }
+
+            // Agar user rejected nahi hai toh normal error
+            return res.status(409).send({ message: "User with given email already exists!" });
+        }
 
 		const salt = await bcrypt.genSalt(Number(process.env.SALT));
 		const hashPassword = await bcrypt.hash(req.body.password, salt);
@@ -92,6 +108,45 @@ router.put("/update", auth, async (req, res) => {
 		console.error("UPDATE ERROR:", error.message);
 		res.status(500).send({ message: "Internal Server Error" });
 	}
+});
+
+// 1. Get Pending Vendors
+router.get("/admin/pending-vendors", async (req, res) => {
+  try {
+        const vendors = await User.find({ 
+            role: { $in: ["vendor"] }, 
+            isVerified: false, 
+            isRejected: false // ⭐ Ye line zaroori hai!
+        });
+        res.status(200).send({ vendors });
+    } catch (error) {
+        res.status(500).send({ message: "Internal Server Error" });
+    }
+});
+
+// 2. Approve Vendor
+router.put("/admin/verify-vendor/:id", async (req, res) => {
+  try {
+    await User.findByIdAndUpdate(req.params.id, { isVerified: true });
+    res.status(200).send({ message: "Vendor approved!" });
+  } catch (error) {
+    res.status(500).send({ message: "Error approving vendor" });
+  }
+});
+
+// 3.  Reject & Delete Vendor
+router.put("/admin/reject-vendor/:id", async (req, res) => {
+    try {
+        const user = await User.findByIdAndUpdate(
+            req.params.id, 
+            { isRejected: true, isVerified: false }, 
+            { new: true }
+        );
+        if (!user) return res.status(404).send({ message: "User not found" });
+        res.status(200).send({ message: "Vendor rejected successfully" });
+    } catch (error) {
+        res.status(500).send({ message: "Server Error" });
+    }
 });
 
 module.exports = router;

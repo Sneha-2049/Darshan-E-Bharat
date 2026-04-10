@@ -3,20 +3,20 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import styles from "./styles.module.css";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaCloudUploadAlt } from "react-icons/fa";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [file, setFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     role: "user",
-    // teacher fields
     expertise: "",
     experience: "",
-    // vendor fields
     shopName: "",
     phone: ""
   });
@@ -33,36 +33,65 @@ const Signup = () => {
     setError("");
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const url = "http://localhost:8080/api/users";
-      await axios.post(url, data);
-      enqueueSnackbar("Account created successfully!", { variant: "success" });
-      setTimeout(() => navigate("/login"), 1200);
-    } catch (err) {
-      if (err.response) {
-        setError(err.response.data.message);
-        enqueueSnackbar(err.response.data.message, { variant: "error" });
-      } else {
-        setError("Server error");
-      }
-    }
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setUploading(true);
+    setError(""); // Purana error saaf karein
+
+    try {
+      let documentUrl = "";
+
+      // 1. Cloudinary Upload (Only for Vendor)
+      if (file && data.role === "vendor") {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", import.meta.env.VITE_CLOUDINARY_PRESET);
+        
+        const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+        const uploadRes = await axios.post(
+          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+          formData
+        );
+        documentUrl = uploadRes.data.secure_url;
+      }
+
+      // 2. API Call to Backend (Sirf EK baar call karein)
+      const url = "http://localhost:8080/api/users";
+      const payload = { ...data, documentUrl };
+      
+      const response = await axios.post(url, payload);
+      
+      // 3. Success Handling
+      const successMsg = response.data.message || "Account created! Waiting for Admin Approval.";
+      enqueueSnackbar(successMsg, { variant: "success" });
+
+      // Redirect to login after a short delay
+      setTimeout(() => navigate("/login"), 1200);
+
+    } catch (err) {
+      console.error("Signup Error:", err);
+      // Backend se aane wala error message dikhayein
+      const errorMsg = err.response?.data?.message || "Server error";
+      setError(errorMsg);
+      enqueueSnackbar(errorMsg, { variant: "error" });
+    } finally {
+      setUploading(false);
+    }
+  };
+  
   return (
     <div className={styles.signup_container}>
       <div className={styles.signup_form_container}>
-        {/* LEFT PANEL */}
         <div className={styles.left}>
           <h1>Welcome Back</h1>
           <Link to="/login">
-            <button type="button" className={styles.white_btn}>
-              Sign In
-            </button>
+            <button type="button" className={styles.white_btn}>Sign In</button>
           </Link>
         </div>
-        {/* RIGHT PANEL */}
         <div className={styles.right}>
           <form className={styles.form_container} onSubmit={handleSubmit}>
             <h1>Create Account</h1>
@@ -97,23 +126,21 @@ const Signup = () => {
               className={styles.input}
             />
 
-            {/* Password Wrapper */}
             <div className={styles.password_wrapper}>
-                <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Password"
-                    name="password"
-                    value={data.password}
-                    onChange={handleChange}
-                    required
-                    className={styles.input}
-                />
-                <div className={styles.eye_icon} onClick={() => setShowPassword(!showPassword)}>
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </div>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                name="password"
+                value={data.password}
+                onChange={handleChange}
+                required
+                className={styles.input}
+              />
+              <div className={styles.eye_icon} onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </div>
             </div>
-            
-             {/* TEACHER FIELDS */}
+
             {data.role === "teacher" && (
               <>
                 <input
@@ -134,8 +161,7 @@ const Signup = () => {
                 />
               </>
             )}
-            
-            {/* VENDOR FIELDS */}
+
             {data.role === "vendor" && (
               <>
                 <input
@@ -159,7 +185,22 @@ const Signup = () => {
               </>
             )}
 
-            {/* ROLE SELECT */}
+            {/* Document Upload for Teacher/Vendor */}
+            {(data.role === "vendor") && (
+              <div className={styles.file_upload_wrapper}>
+                <label htmlFor="doc">
+                   <FaCloudUploadAlt /> Upload Aadhar or Shop License(mandatory)
+                </label>
+                <input 
+                  type="file" 
+                  id="doc" 
+                  onChange={handleFileChange} 
+                  required 
+                />
+                {file && <span className={styles.file_name}>{file.name}</span>}
+              </div>
+            )}
+
             <select
               name="role"
               value={data.role}
@@ -173,8 +214,8 @@ const Signup = () => {
 
             {error && <div className={styles.error_msg}>{error}</div>}
 
-            <button type="submit" className={styles.green_btn}>
-              Sign Up
+            <button type="submit" className={styles.green_btn} disabled={uploading}>
+              {uploading ? "Uploading..." : "Sign Up"}
             </button>
           </form>
         </div>
