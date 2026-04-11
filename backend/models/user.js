@@ -49,6 +49,25 @@ const purchasedCourseSchema = new mongoose.Schema(
 );
 
 /* ===========================
+   ✅ NEW: PURCHASED PRODUCT SCHEMA
+=========================== */
+const purchasedProductSchema = new mongoose.Schema(
+  {
+    productId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+    },
+    title: { type: String, required: true },
+    image: { type: String, default: "" },
+    price: { type: Number, required: true },
+    quantity: { type: Number, default: 1 },
+    paymentId: { type: String, required: true },
+    purchasedAt: { type: Date, default: Date.now },
+  },
+  { _id: false }
+);
+
+/* ===========================
    USER SCHEMA
 =========================== */
 const userSchema = new mongoose.Schema(
@@ -92,6 +111,9 @@ const userSchema = new mongoose.Schema(
 
     /* LMS */
     purchasedCourses: [purchasedCourseSchema],
+
+    purchasedProducts: [purchasedProductSchema],
+
   },
   { timestamps: true },
 );

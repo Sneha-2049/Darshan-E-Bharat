@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../Cart/CartContext";
+import { initiateRazorpayPayment } from "../Cart/PaymentService";
 import axios from "axios";
 import "./Marketplace.css";
 
@@ -50,15 +51,35 @@ const Marketplace = () => {
     }
   };
 
+  // const handleBuyNow = (item) => {
+  //   if (!isLoggedIn) {
+  //     navigate("/login");
+  //   } else {
+  //     // Direct checkout ya cart mein add karke redirect
+  //     addToCart(item);
+  //     navigate("/cart");
+  //   }
+  // };
+
   const handleBuyNow = (item) => {
-    if (!isLoggedIn) {
-      navigate("/login");
-    } else {
-      // Direct checkout ya cart mein add karke redirect
-      addToCart(item);
-      navigate("/cart");
-    }
-  };
+  if (!isLoggedIn) {
+    navigate("/login");
+    return;
+  }
+
+  initiateRazorpayPayment({
+    amount: item.price,
+    cartItems: [item],
+    onSuccess: (paymentId) => {
+      alert(`✅ Payment Successful!\nPayment ID: ${paymentId}`);
+    },
+    onFailure: (msg) => {
+      if (!msg.includes("cancelled")) {
+        alert(`❌ ${msg}`);
+      }
+    },
+  });
+};
 
   return (
     <div className="marketplace-container">
