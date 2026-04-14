@@ -67,6 +67,11 @@ const Profile = () => {
     }
   };
 
+  const totalCoins = userDetails.quizResults?.reduce(
+    (sum, quiz) => sum + (quiz.coins || 0),
+    0
+  );
+
   return (
     <div className="profile-dashboard">
       {/* HEADER */}
@@ -76,22 +81,24 @@ const Profile = () => {
           🛒 View My Cart
         </button>
       </div>
+    <div className="wallet-coin-content">
+    <span className="wallet-coin-label">My Wallet Coins </span>
+    <span className="wallet-coin-value">
+      <i className="fas fa-coins"></i> {userDetails.coins || 0}
+    </span>
+  </div>
+
 
       {/* PROFILE CARD */}
       <div className="profile-card">
         {!isEditing ? (
           <div className="view-container">
             <div className="details-list">
-              <p>
-                <strong>First Name:</strong> {userDetails.firstName}
-              </p>
-              <p>
-                <strong>Last Name:</strong> {userDetails.lastName}
-              </p>
-              <p>
-                <strong>Email:</strong> {userDetails.email}
-              </p>
+              <p><strong>First Name:</strong> {userDetails.firstName}</p>
+              <p><strong>Last Name:</strong> {userDetails.lastName}</p>
+              <p><strong>Email:</strong> {userDetails.email}</p>
             </div>
+            
             <div className="action-right">
               <button
                 className="edit-action-btn"
@@ -139,7 +146,7 @@ const Profile = () => {
         )}
       </div>
 
-      {/* MY COURSES TABLE */}
+      {/* COURSES */}
       <div className="profile-card">
         <h2>My Enrolled Courses</h2>
         <div className="inventory-table">
@@ -148,31 +155,49 @@ const Profile = () => {
             <span>Date</span>
             <span>Expiry</span>
             <span>Status</span>
+            <span>Payment ID</span> {/* ✅ Added */}
             <span>Action</span>
           </div>
+
           {userDetails.purchasedCourses?.length > 0 ? (
             userDetails.purchasedCourses.map((item, idx) => {
-              // ⭐ LOGIC: Check if current date is past expiry date
               const isExpired = new Date() > new Date(item.expiryDate);
+              const isDeleted = !item.course;
 
               return (
                 <div className="table-row course-cols" key={idx}>
-                  <span className="topic-name">{item.course?.courseName}</span>
+                  
+                  <span className="topic-name">
+                    {isDeleted ? "Course Removed" : item.course?.courseName}
+                  </span>
+
                   <span>{new Date(item.enrolledAt).toLocaleDateString()}</span>
                   <span>{new Date(item.expiryDate).toLocaleDateString()}</span>
 
-                  {/* ⭐ Dynamic Status Display */}
                   <span
-                    className={`profile-status ${!isExpired && item.isActive ? "active" : "expired"}`}
+                    className={`profile-status ${
+                      !isExpired && item.isActive && !isDeleted
+                        ? "active"
+                        : "expired"
+                    }`}
                   >
-                    {!isExpired && item.isActive ? "Active" : "Expired"}
+                    {!isExpired && item.isActive && !isDeleted
+                      ? "Active"
+                      : "Expired"}
+                  </span>
+
+                  {/* ✅ Payment ID */}
+                  <span className="table-payment-id">
+                    {item.paymentId || "N/A"}
                   </span>
 
                   <button
                     className="table-view-btn"
                     onClick={() => navigate(`/course/${item.course?._id}`)}
-                    disabled={isExpired} // Optional: Expired hone par click disable kar sakte ho
-                    style={{ opacity: isExpired ? 0.5 : 1 }}
+                    disabled={isExpired || isDeleted}
+                    style={{
+                      opacity: isExpired || isDeleted ? 0.5 : 1,
+                    }}
                   >
                     View
                   </button>
@@ -185,7 +210,7 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* MY PURCHASED PRODUCTS TABLE */}
+      {/* PRODUCTS */}
       <div className="profile-card">
         <h2>Purchase History (Products)</h2>
         <div className="inventory-table">
@@ -215,18 +240,18 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* MY QUIZ RESULTS TABLE */}
+      {/* QUIZ */}
       <div className="profile-card">
         <div className="section-header">
           <h2>My Quiz History</h2>
           <p className="coin-status">
             Total Coins:{" "}
             <span>
-              <i className="fas fa-coins coin-icon"></i>{" "}
-              {userDetails.coins || 0}
+              <i className="fas fa-coins coin-icon"></i> {totalCoins}
             </span>
           </p>
         </div>
+
         <div className="inventory-table">
           <div className="table-header quiz-cols">
             <span>Topic</span>

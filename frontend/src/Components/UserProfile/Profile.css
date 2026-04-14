@@ -11,6 +11,38 @@
   align-items: center;
   margin-bottom: 25px;
 }
+/* ==============================
+   WALLET COIN BOX (NEW)
+============================== */
+.wallet-coin-box {
+  background: linear-gradient(135deg, #fff9e6, #fff3cc);
+  border: 1px solid #ffe08a;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(255, 180, 0, 0.15);
+}
+
+.wallet-coin-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wallet-coin-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.wallet-coin-value {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #ffb400;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
 .cart-btn-top {
   background: #ffb400;
@@ -86,21 +118,24 @@
   align-items: center;
   font-size: 0.95rem;
   color: #444;
+  transition: 0.2s ease;
 }
 
 .table-row:hover {
   background-color: #fcfcfc;
 }
 
-/* Column Definitions */
+/* ✅ UPDATED COLUMN DEFINITIONS */
 .course-cols {
   display: grid;
-  grid-template-columns: 2fr 1.2fr 1.2fr 1fr 0.8fr;
+  grid-template-columns: 2fr 1.2fr 1.2fr 1fr 1.5fr 0.8fr; /* Added Payment ID column */
 }
+
 .product-cols {
   display: grid;
   grid-template-columns: 2fr 0.8fr 0.6fr 1.2fr 1.5fr;
 }
+
 .quiz-cols {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1.5fr;
@@ -111,15 +146,27 @@
   font-weight: 600;
   color: #2c3e50;
 }
+
 .price-text {
   color: #21ad5c;
   font-weight: bold;
 }
+
+/* ✅ IMPROVED PAYMENT ID STYLE */
 .table-payment-id {
   font-size: 0.75rem;
-  color: #999;
+  color: #888;
   font-family: monospace;
+  background: #f4f6f8;
+  padding: 4px 6px;
+  border-radius: 4px;
+  display: inline-block;
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
+
 .no-data-msg {
   padding: 20px;
   text-align: center;
@@ -148,6 +195,11 @@
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.85rem;
+  transition: 0.2s ease;
+}
+
+.table-view-btn:hover {
+  background: #0056b3;
 }
 
 /* --- STATUS & COINS --- */
@@ -155,11 +207,18 @@
   font-weight: bold;
   font-size: 0.85rem;
 }
+
 .profile-status.active {
   color: #21ad5c;
 }
+
 .profile-status.expired {
   color: #e74c3c;
+}
+
+/* ✅ OPTIONAL: DELETED COURSE LOOK */
+.profile-status.deleted {
+  color: #999;
 }
 
 .coin-status span {
@@ -174,6 +233,7 @@
   color: #ffb400;
   margin-right: 4px;
 }
+
 .coin-earned {
   color: #ffb400;
   font-weight: bold;
@@ -185,21 +245,25 @@
   flex-direction: column;
   gap: 15px;
 }
+
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
+
 .form-group input {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 6px;
   background: #f9f9f9;
 }
+
 .form-button-row {
   display: flex;
   gap: 10px;
 }
+
 .save-btn {
   background: #21ad5c;
   color: white;
@@ -208,6 +272,7 @@
   border-radius: 6px;
   cursor: pointer;
 }
+
 .cancel-btn {
   background: #eee;
   border: none;
@@ -216,18 +281,30 @@
   cursor: pointer;
 }
 
-.profile-status.active { color: #21ad5c; }
-.profile-status.expired { color: #e74c3c; }
-
 /* Responsive */
 @media (max-width: 768px) {
   .course-cols,
   .product-cols,
   .quiz-cols {
-    grid-template-columns: 1.5fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
+
   .table-header {
     display: none;
+  }
+
+  .table-row {
+    display: grid;
+    gap: 8px;
+    background: #fff;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    padding: 12px;
+  }
+
+  .table-payment-id {
+    max-width: 100%;
+    word-break: break-all;
   }
 }

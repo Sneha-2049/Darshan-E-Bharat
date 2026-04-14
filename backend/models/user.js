@@ -44,6 +44,11 @@ const purchasedCourseSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    paymentId: {
+      type: String,
+      default: null,
+    },
+
   },
   { _id: false },
 );
