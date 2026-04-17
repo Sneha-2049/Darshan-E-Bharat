@@ -8,7 +8,7 @@ const ManageCourse = () => {
     const token = localStorage.getItem("token");
 
     const formRef = useRef(null);
-    const lectureListRef = useRef(null); // 🔥 scroll target after update
+    const lectureListRef = useRef(null);
 
     const [course, setCourse] = useState(null);
     const [lectureData, setLectureData] = useState({
@@ -19,6 +19,17 @@ const ManageCourse = () => {
 
     const [editingLectureId, setEditingLectureId] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    /* ✅ IMAGE HANDLER */
+    const getImageUrl = (thumbnail) => {
+        if (!thumbnail) return "/default-image.jpg";
+
+        if (thumbnail.startsWith("http")) {
+            return thumbnail; // Cloudinary
+        }
+
+        return `http://localhost:8080/${thumbnail}`; // Local
+    };
 
     /* ===========================
        FETCH COURSE DETAILS
@@ -79,7 +90,6 @@ const ManageCourse = () => {
                 return;
             }
 
-            // Reset form
             setLectureData({
                 lectureTitle: "",
                 lectureDescription: "",
@@ -90,7 +100,6 @@ const ManageCourse = () => {
 
             await fetchCourse();
 
-            // 🔥 Scroll to lecture list after update
             setTimeout(() => {
                 lectureListRef.current?.scrollIntoView({
                     behavior: "smooth",
@@ -136,7 +145,6 @@ const ManageCourse = () => {
 
         setEditingLectureId(lecture._id);
 
-        // Scroll to form
         setTimeout(() => {
             formRef.current?.scrollIntoView({
                 behavior: "smooth",
@@ -202,8 +210,9 @@ const ManageCourse = () => {
 
             {/* COURSE INFO */}
             <div className="course-info-card">
+                {/* ✅ FIXED IMAGE */}
                 <img
-                    src={`http://localhost:8080/${course.thumbnail}`}
+                    src={getImageUrl(course.thumbnail)}
                     alt="thumbnail"
                 />
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { initiateCoursePayment } from "../Cart/PaymentService"; // ✅ IMPORT
 import "./EnrollCourse.css";
 
 const EnrollCourse = () => {
@@ -12,9 +13,12 @@ const EnrollCourse = () => {
   const [useCoins, setUseCoins] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  /* ===========================
-     FETCH COURSE + USER
-  =========================== */
+  const getImageUrl = (thumbnail) => {
+    if (!thumbnail) return "/default-image.jpg";
+    if (thumbnail.startsWith("http")) return thumbnail;
+    return `http://localhost:8080/${thumbnail}`;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,7 +34,6 @@ const EnrollCourse = () => {
         );
         const userData = await userRes.json();
         setUser(userData);
-
       } catch (err) {
         console.error(err);
       }
@@ -41,9 +44,9 @@ const EnrollCourse = () => {
 
   if (!course || !user) return <p>Loading...</p>;
 
-  /* ===========================
-     PRICE CALCULATION
-  =========================== */
+  // ===========================
+  // PRICE LOGIC
+  // ===========================
   const originalPrice = course.price;
   const availableCoins = user.coins || 0;
 
@@ -55,38 +58,63 @@ const EnrollCourse = () => {
 
   const payableAmount = originalPrice - coinsToUse;
 
-  /* ===========================
-     HANDLE ENROLL
-  =========================== */
+  // ===========================
+  // HANDLE ENROLL
+  // ===========================
   const handleEnroll = async () => {
     setLoading(true);
 
     try {
-      const res = await fetch(
-        `http://localhost:8080/api/courses/${id}/enroll`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": token
-          },
-          body: JSON.stringify({
-            coinsUsed: coinsToUse
-          })
+      // ✅ CASE 1: FREE (coins cover full amount)
+      if (payableAmount === 0) {
+        const res = await fetch(
+          "http://localhost:8080/api/payment/verify-course",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-auth-token": token,
+            },
+            body: JSON.stringify({
+              razorpay_order_id: "FREE",
+              razorpay_payment_id: "FREE",
+              razorpay_signature: "FREE",
+              courseId: id,
+              coinsUsed: useCoins ? coinsToUse : 0,
+            }),
+          }
+        );
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert(data.message);
+          setLoading(false);
+          return;
         }
-      );
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.message);
-        setLoading(false);
+        alert("🎉 Enrolled Successfully using Coins!");
+        navigate(`/course/${id}`);
         return;
       }
 
-      alert("🎉 Enrolled Successfully!");
+      // ✅ CASE 2: PAYMENT REQUIRED
+      initiateCoursePayment({
+        amount: payableAmount,
+        courseId: id,
+        coinsUsed: useCoins ? coinsToUse : 0,
 
-      navigate(`/course/${id}`);
+        onSuccess: (paymentId) => {
+          alert(`🎉 Payment Successful!\nPayment ID: ${paymentId}`);
+          navigate(`/course/${id}`);
+        },
+
+        onFailure: (msg) => {
+          if (!msg.includes("cancelled")) {
+            alert(`❌ ${msg}`);
+          }
+        },
+      });
 
     } catch (error) {
       console.error(error);
@@ -98,18 +126,15 @@ const EnrollCourse = () => {
 
   return (
     <div className="enroll-page-container">
-
       <div className="enroll-main-card">
 
-        {/* LEFT IMAGE */}
         <div className="enroll-image-section">
           <img
-            src={`http://localhost:8080/${course.thumbnail}`}
+            src={getImageUrl(course.thumbnail)}
             alt="thumbnail"
           />
         </div>
 
-        {/* RIGHT CONTENT */}
         <div className="enroll-content-section">
 
           <h1 className="enroll-course-title">
@@ -137,7 +162,6 @@ const EnrollCourse = () => {
             </span>
           </div>
 
-          {/* PRICING SECTION */}
           <div className="enroll-pricing-box">
 
             <div className="enroll-price-row">

@@ -1,169 +1,310 @@
 .profile-dashboard {
-    max-width: 850px;
-    margin: 40px auto;
-    padding: 20px;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .profile-header-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+/* ==============================
+   WALLET COIN BOX (NEW)
+============================== */
+.wallet-coin-box {
+  background: linear-gradient(135deg, #fff9e6, #fff3cc);
+  border: 1px solid #ffe08a;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(255, 180, 0, 0.15);
+}
+
+.wallet-coin-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wallet-coin-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.wallet-coin-value {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #ffb400;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .cart-btn-top {
-    background: #ffb400;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 25px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s ease;
+  background: #ffb400;
+  color: white;
+  padding: 10px 24px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(255, 180, 0, 0.3);
 }
 
 .profile-card {
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    border: 1px solid #eee;
-    margin-bottom: 30px;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06);
+  border: 1px solid #eee;
+  margin-bottom: 30px;
+}
+
+.profile-card h2 {
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+  color: #2c3e50;
+  border-left: 4px solid #21ad5c;
+  padding-left: 12px;
 }
 
 .view-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .details-list p {
-    margin: 15px 0;
-    font-size: 1.05rem;
-    color: #333;
+  margin: 10px 0;
+  font-size: 1.05rem;
+  color: #444;
 }
 
 .edit-action-btn {
-    background: #21ad5c;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
+  background: #21ad5c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
 }
 
-/* --- UPDATED FORM STYLES --- */
-.edit-form-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.input-vertical {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.form-group label {
-    font-size: 0.9rem;
-    color: #fff;
-    font-weight: 200;
-}
-
-.form-group input {
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9; /* Soft grey background */
-    font-size: 1rem;
-    transition: border 0.3s ease;
-}
-
-.form-group input:focus {
-    border-color: #21ad5c;
-    outline: none;
-    background-color: #fff;
-}
-
-/* --- BUTTONS IN ONE LINE --- */
-.form-button-row {
-    display: flex;
-    gap: 12px;
-    margin-top: 10px;
-}
-
-.save-btn {
-    background: #21ad5c;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.cancel-btn {
-    background: #e0e0e0; /* Grey background */
-    color: #333;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.save-btn:hover { background: #1e9650; }
-.cancel-btn:hover { background: #d5d5d5; }
-
-/* --- COIN STYLES --- */
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.coin-icon {
-    color: #ffb400;
-    margin-right: 5px;
-}
-
-.coin-icon-sm {
-    color: #ffb400;
-    font-size: 0.9rem;
-}
-
+/* --- TABLE SYSTEM --- */
 .inventory-table {
-    background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 1px solid #eee;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #f1f1f1;
 }
 
 .table-header {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1.5fr;
-    padding: 15px;
-    background: #f8f9fa;
-    font-weight: bold;
-    color: #555;
+  padding: 15px;
+  background: #f9fafb;
+  font-weight: bold;
+  color: #666;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .table-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1.5fr;
-    padding: 15px;
-    border-top: 1px solid #f1f1f1;
-    align-items: center;
+  padding: 15px;
+  border-top: 1px solid #f1f1f1;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #444;
+  transition: 0.2s ease;
 }
 
-.topic-name { font-weight: 600; color: #2c3e50; }
-.coin-earned { color: #ffb400; font-weight: bold; }
+.table-row:hover {
+  background-color: #fcfcfc;
+}
+
+/* ✅ UPDATED COLUMN DEFINITIONS */
+.course-cols {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1.2fr 1fr 1.5fr 0.8fr; /* Added Payment ID column */
+}
+
+.product-cols {
+  display: grid;
+  grid-template-columns: 2fr 0.8fr 0.6fr 1.2fr 1.5fr;
+}
+
+.quiz-cols {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+}
+
+/* Table Elements */
+.topic-name {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.price-text {
+  color: #21ad5c;
+  font-weight: bold;
+}
+
+/* ✅ IMPROVED PAYMENT ID STYLE */
+.table-payment-id {
+  font-size: 0.75rem;
+  color: #888;
+  font-family: monospace;
+  background: #f4f6f8;
+  padding: 4px 6px;
+  border-radius: 4px;
+  display: inline-block;
+  max-width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.no-data-msg {
+  padding: 20px;
+  text-align: center;
+  color: #999;
+}
+
+.product-cell-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.table-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid #eee;
+}
+
+.table-view-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: 0.2s ease;
+}
+
+.table-view-btn:hover {
+  background: #0056b3;
+}
+
+/* --- STATUS & COINS --- */
+.profile-status {
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.profile-status.active {
+  color: #21ad5c;
+}
+
+.profile-status.expired {
+  color: #e74c3c;
+}
+
+/* ✅ OPTIONAL: DELETED COURSE LOOK */
+.profile-status.deleted {
+  color: #999;
+}
+
+.coin-status span {
+  background: #fff9e6;
+  padding: 5px 12px;
+  border-radius: 15px;
+  color: #ffb400;
+  font-weight: bold;
+}
+
+.coin-icon {
+  color: #ffb400;
+  margin-right: 4px;
+}
+
+.coin-earned {
+  color: #ffb400;
+  font-weight: bold;
+}
+
+/* --- EDIT FORM --- */
+.edit-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #f9f9f9;
+}
+
+.form-button-row {
+  display: flex;
+  gap: 10px;
+}
+
+.save-btn {
+  background: #21ad5c;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: #eee;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .course-cols,
+  .product-cols,
+  .quiz-cols {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .table-header {
+    display: none;
+  }
+
+  .table-row {
+    display: grid;
+    gap: 8px;
+    background: #fff;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    padding: 12px;
+  }
+
+  .table-payment-id {
+    max-width: 100%;
+    word-break: break-all;
+  }
+}

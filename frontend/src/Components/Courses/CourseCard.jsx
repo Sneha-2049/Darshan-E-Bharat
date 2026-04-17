@@ -5,17 +5,27 @@ import { Link } from "react-router-dom";
 import "./Courses.css";
 
 const CourseCard = ({ course, isEnrolled }) => {
+
+  /* ✅ IMAGE HANDLER (IMPORTANT) */
+  const getImageUrl = (thumbnail) => {
+    if (!thumbnail) return "/default-image.jpg";
+
+    // Cloudinary image
+    if (thumbnail.startsWith("http")) {
+      return thumbnail;
+    }
+
+    // Local image (old data)
+    return `http://localhost:8080/${thumbnail}`;
+  };
+
   return (
     <div className="student-course-card">
 
       {/* Thumbnail */}
       <div className="student-course-image">
         <img
-          src={
-            course.thumbnail
-              ? `http://localhost:8080/${course.thumbnail}`
-              : "/default-image.jpg"
-          }
+          src={getImageUrl(course.thumbnail)}
           alt={course.courseName}
         />
 
@@ -39,7 +49,7 @@ const CourseCard = ({ course, isEnrolled }) => {
           👨‍🏫 {course.teacher?.firstName} {course.teacher?.lastName}
         </p>
 
-        {/* Description (limited lines) */}
+        {/* Description */}
         <p className="student-course-description">
           {course.description}
         </p>

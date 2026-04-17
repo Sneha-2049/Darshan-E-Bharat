@@ -3,21 +3,9 @@ const mongoose = require("mongoose");
 const Course = require("../models/course");
 const { User } = require("../models/user");
 const auth = require("../middleware/auth");
-const multer = require("multer");
-const path = require("path");
 
-/* ===========================
-   MULTER CONFIG
-=========================== */
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
-});
-const upload = multer({ storage });
+/* ✅ USE CLOUDINARY INSTEAD OF LOCAL MULTER */
+const upload = require("../middleware/upload");
 
 /* ===========================
    HELPER → Convert YouTube URL
@@ -69,17 +57,21 @@ const calculateExpiry = (durationText) => {
 =========================== */
 router.get("/teacher", auth, async (req, res) => {
   try {
+    if (!req.user || !req.user._id) {
+      return res.status(401).send({ message: "Unauthorized" });
+    }
+
     const courses = await Course.find({ teacher: req.user._id });
 
     const updated = courses.map(course => ({
       ...course._doc,
-      enrollmentCount: course.enrolledStudents.length,
-      lectureCount: course.lectures.length
+      enrollmentCount: course.enrolledStudents?.length || 0,
+      lectureCount: course.lectures?.length || 0
     }));
 
     res.send(updated);
   } catch (error) {
-    console.error(error);
+    console.error("Teacher Route Error:", error);
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
@@ -100,7 +92,7 @@ router.get("/", async (req, res) => {
 });
 
 /* ===========================
-   CREATE COURSE
+   CREATE COURSE (CLOUDINARY)
 =========================== */
 router.post("/create", auth, upload.single("thumbnail"), async (req, res) => {
   try {
@@ -125,7 +117,7 @@ router.post("/create", auth, upload.single("thumbnail"), async (req, res) => {
       learningPoints: learningPoints
         ? learningPoints.split(",").map(p => p.trim())
         : [],
-      thumbnail: req.file ? req.file.path : "",
+      thumbnail: req.file ? req.file.path : "", // ✅ CLOUDINARY URL
       teacher: req.user._id,
       isPublished: false,
       publishDate: null
@@ -166,7 +158,7 @@ router.get("/:id", async (req, res) => {
 });
 
 /* ===========================
-   UPDATE COURSE
+   UPDATE COURSE (CLOUDINARY)
 =========================== */
 router.put("/:id", auth, upload.single("thumbnail"), async (req, res) => {
   try {
@@ -200,7 +192,7 @@ router.put("/:id", auth, upload.single("thumbnail"), async (req, res) => {
       course.learningPoints = learningPoints.split(",").map(p => p.trim());
 
     if (req.file)
-      course.thumbnail = req.file.path;
+      course.thumbnail = req.file.path; // ✅ CLOUDINARY
 
     await course.save();
 
@@ -332,7 +324,10 @@ router.delete("/:courseId/lecture/:lectureId", auth, async (req, res) => {
 =========================== */
 router.post("/:id/enroll", auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user?._id);
+    if (!user)
+      return res.status(404).send({ message: "User not found" });
+
     const course = await Course.findById(req.params.id);
 
     if (!course || !course.isPublished)

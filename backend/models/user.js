@@ -20,25 +20,21 @@ const purchasedCourseSchema = new mongoose.Schema(
   {
     course: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "course",
+      ref: "Course", // ✅ FIXED
       required: true,
     },
-
     enrolledAt: {
       type: Date,
       default: Date.now,
     },
-
     expiryDate: {
       type: Date,
       required: true,
     },
-
     amountPaid: {
       type: Number,
       required: true,
     },
-
     paymentMethod: {
       type: String,
       enum: ["card", "upi", "netbanking", "coins", "free"],
@@ -48,8 +44,32 @@ const purchasedCourseSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    paymentId: {
+      type: String,
+      default: null,
+    },
+
   },
   { _id: false },
+);
+
+/* ===========================
+   ✅ NEW: PURCHASED PRODUCT SCHEMA
+=========================== */
+const purchasedProductSchema = new mongoose.Schema(
+  {
+    productId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+    },
+    title: { type: String, required: true },
+    image: { type: String, default: "" },
+    price: { type: Number, required: true },
+    quantity: { type: Number, default: 1 },
+    paymentId: { type: String, required: true },
+    purchasedAt: { type: Date, default: Date.now },
+  },
+  { _id: false }
 );
 
 /* ===========================
@@ -68,27 +88,37 @@ const userSchema = new mongoose.Schema(
       default: "user",
     },
 
-    /* Teacher Fields */
+    /* TEACHER */
     expertise: { type: String, default: "" },
     experience: { type: String, default: "" },
 
-    /* VENDOR */
+    /* ✅ NEW FIELD */
+    bio: { type: String, default: "" },
+
+    /* VENDOR + COMMON */
     shopName: String,
-    phone: String,
+    phone: String, // ✅ already exists (used for both now)
     address: String,
     city: String,
     state: String,
     pincode: String,
     description: String,
 
-    /* Wallet System */
+    documentUrl: { type: String, default: "" }, // Cloudinary link save karne ke liye
+    isVerified: { type: Boolean, default: false }, // Teacher/Vendor ke liye compulsory check
+    isRejected: { type: Boolean, default: false }, // ⭐ New field
+
+    /* WALLET */
     coins: { type: Number, default: 0 },
 
-    /* Quiz */
+    /* QUIZ */
     quizResults: [quizSchema],
 
-    /* LMS System */
+    /* LMS */
     purchasedCourses: [purchasedCourseSchema],
+
+    purchasedProducts: [purchasedProductSchema],
+
   },
   { timestamps: true },
 );
@@ -109,35 +139,37 @@ userSchema.methods.generateAuthToken = function () {
 =========================== */
 const validate = (data) => {
   const schema = Joi.object({
-    firstName: Joi.string().required().label("First Name"),
-    lastName: Joi.string().required().label("Last Name"),
-    email: Joi.string().email().required().label("Email"),
-    password: passwordComplexity().required().label("Password"),
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
+    email: Joi.string().email().required(),
+    password: passwordComplexity().required(),
+
     role: Joi.string().valid("user", "teacher", "vendor", "admin").optional(),
+
     expertise: Joi.string().allow(""),
     experience: Joi.string().allow(""),
 
-    /* Vendor minimal fields */
+    /* ✅ NEW FIELD */
+    bio: Joi.string().allow(""),
+
+    /* Vendor conditional */
     shopName: Joi.when("role", {
       is: "vendor",
       then: Joi.required(),
-      otherwise: Joi.allow("")
+      otherwise: Joi.allow(""),
     }),
 
-    phone: Joi.when("role", {
-      is: "vendor",
-      then: Joi.required(),
-      otherwise: Joi.allow("")
-    }),
+    /* ✅ UPDATED (now allowed for all) */
+    phone: Joi.string().allow(""),
+    documentUrl: Joi.string().allow("").label("Document URL"),
 
-    /* Optional vendor fields */
     address: Joi.string().allow(""),
     city: Joi.string().allow(""),
     state: Joi.string().allow(""),
     pincode: Joi.string().allow(""),
-    description: Joi.string().allow("")
-
+    description: Joi.string().allow(""),
   });
+
   return schema.validate(data);
 };
 

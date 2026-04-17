@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // Added Link for the home link
 import "./TeacherProfile.css";
 
 const TeacherProfile = () => {
@@ -8,20 +8,35 @@ const TeacherProfile = () => {
 
   const [teacherDetails, setTeacherDetails] = useState({});
   const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true); // Added to track initial data load
 
-  /* ===========================
-     FETCH DATA
-  ============================ */
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    expertise: "",
+    experience: "",
+    phone: "",
+    bio: ""
+  });
+
   const fetchData = async () => {
     try {
-      // Teacher details
       const userRes = await fetch("http://localhost:8080/api/users/me", {
         headers: { "x-auth-token": token }
       });
       const userData = await userRes.json();
-      setTeacherDetails(userData);
 
-      // Teacher courses
+      setTeacherDetails(userData || {});
+      setFormData({
+        firstName: userData.firstName || "",
+        lastName: userData.lastName || "",
+        expertise: userData.expertise || "",
+        experience: userData.experience || "",
+        phone: userData.phone || "",
+        bio: userData.bio || ""
+      });
+
       const courseRes = await fetch(
         "http://localhost:8080/api/courses/teacher",
         {
@@ -29,9 +44,18 @@ const TeacherProfile = () => {
         }
       );
       const courseData = await courseRes.json();
-      setCourses(courseData || []);
+
+      setCourses(
+        Array.isArray(courseData)
+          ? courseData
+          : courseData?.courses || []
+      );
+
     } catch (err) {
       console.error(err);
+      setCourses([]);
+    } finally {
+      setLoading(false); // Data fetching is done
     }
   };
 
@@ -39,9 +63,30 @@ const TeacherProfile = () => {
     fetchData();
   }, []);
 
-  /* ===========================
-     DELETE COURSE
-  ============================ */
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+
+    try {
+      await fetch("http://localhost:8080/api/users/update", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": token
+        },
+        body: JSON.stringify(formData)
+      });
+
+      setIsEditing(false);
+      fetchData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this course?"
@@ -60,9 +105,6 @@ const TeacherProfile = () => {
     }
   };
 
-  /* ===========================
-     TOGGLE PUBLISH
-  ============================ */
   const handlePublish = async (id) => {
     try {
       await fetch(`http://localhost:8080/api/courses/${id}/publish`, {
@@ -76,73 +118,166 @@ const TeacherProfile = () => {
     }
   };
 
+  /* ✅ FIX: IMAGE HANDLER */
+  const getImageUrl = (thumbnail) => {
+    if (!thumbnail) return "/default.png";
+
+    // Cloudinary
+    if (thumbnail.startsWith("http")) {
+      return thumbnail;
+    }
+
+    // Local storage
+    return `http://localhost:8080/${thumbnail}`;
+  };
+
+  // --- NEW STATUS LOGIC START ---
+  if (loading) return <div className="status-msg">Loading teacher profile...</div>;
+
+  if (teacherDetails.isRejected) {
+    return (
+      <div className="teacher-dashboard">
+        <div className="rejected-card">
+          <h1>❌ Application Rejected</h1>
+          <p>We are sorry, but your teacher application has been rejected by the administrator.</p>
+          <p className="reject-note">This usually happens due to unclear documents or incorrect details.</p>
+          <div className="rejected-actions">
+            <button 
+              className="reapply-btn" 
+              onClick={() => {
+                localStorage.removeItem("token");
+                navigate("/signup");
+              }}
+            >
+              Update Details & Re-apply
+            </button>
+            <Link to="/" className="home-link">Back to Home</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!teacherDetails.isVerified) {
+    return (
+      <div className="teacher-dashboard">
+        <div className="verification-notice">
+           <div className="notice-icon">⏳</div>
+           <h3>Account Under Review</h3>
+           <p>Your credentials and documents are currently being verified by our admin team.</p>
+           <p>You will be able to manage your classrooms as soon as your account is approved.</p>
+        </div>
+      </div>
+    );
+  }
+  // --- NEW STATUS LOGIC END ---
+
   return (
     <div className="teacher-dashboard">
 
-      {/* ================= HEADER ================= */}
       <div className="dashboard-header">
-        <div>
-          <h1>
-            {teacherDetails.firstName} {teacherDetails.lastName}
-          </h1>
-          <p className="expertise">
-            {teacherDetails.expertise} | {teacherDetails.experience}
-          </p>
-          <p>{teacherDetails.email}</p>
-        </div>
 
-        <button
-          className="create-course-btn"
-          onClick={() => navigate("/create-course")}
-        >
-          + Create Classroom
-        </button>
+        {!isEditing ? (
+          <>
+            <div>
+              <h1>
+                {teacherDetails?.firstName} {teacherDetails?.lastName}
+              </h1>
+
+              <p className="expertise">
+                {teacherDetails?.expertise} | {teacherDetails?.experience}
+              </p>
+
+              <p>{teacherDetails?.email}</p>
+
+              {/* ✅ FIXED DISPLAY */}
+              <p>📞 {teacherDetails?.phone || "Not added"}</p>
+              <p className="teacher-bio">
+                {teacherDetails?.bio || "No bio available"}
+              </p>
+            </div>
+
+            <div className="teacher-profile-actions">
+              <button
+                className="teacher-edit-btn"
+                onClick={() => setIsEditing(true)}
+              >
+                ✏️ Edit Profile
+              </button>
+
+              <button
+                className="create-course-btn"
+                onClick={() => navigate("/create-course")}
+              >
+                + Create Classroom
+              </button>
+            </div>
+          </>
+        ) : (
+          <form className="teacher-edit-form" onSubmit={handleUpdate}>
+            <input name="firstName" value={formData.firstName} onChange={handleChange} placeholder="First Name" />
+            <input name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last Name" />
+            <input name="expertise" value={formData.expertise} onChange={handleChange} placeholder="Expertise" />
+            <input name="experience" value={formData.experience} onChange={handleChange} placeholder="Experience" />
+            <input name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone Number" />
+
+            <textarea
+              name="bio"
+              value={formData.bio}
+              onChange={handleChange}
+              placeholder="About Yourself"
+              rows="3"
+            />
+
+            <div className="teacher-form-buttons">
+              <button type="submit" className="teacher-save-btn">Save</button>
+              <button type="button" className="teacher-cancel-btn" onClick={() => setIsEditing(false)}>Cancel</button>
+            </div>
+          </form>
+        )}
+
       </div>
 
-      {/* ================= STATS ================= */}
       <div className="stats-section">
         <div className="stat-card">
           <h3>Coins</h3>
-          <p>💰 {teacherDetails.coins || 0}</p>
+          <p>💰 {teacherDetails?.coins || 0}</p>
         </div>
 
         <div className="stat-card">
           <h3>Total Courses</h3>
-          <p>{courses.length}</p>
+          <p>{Array.isArray(courses) ? courses.length : 0}</p>
         </div>
 
         <div className="stat-card">
           <h3>Total Enrollments</h3>
           <p>
-            {courses.reduce(
-              (sum, c) => sum + (c.enrollmentCount || 0),
-              0
-            )}
+            {Array.isArray(courses)
+              ? courses.reduce(
+                  (sum, c) => sum + (c.enrollmentCount || 0),
+                  0
+                )
+              : 0}
           </p>
         </div>
       </div>
 
-      {/* ================= COURSE GRID ================= */}
       <div className="teacher-course-grid">
-        {courses.length === 0 ? (
+        {!Array.isArray(courses) || courses.length === 0 ? (
           <p>No courses created yet.</p>
         ) : (
           courses.map((course) => (
             <div key={course._id} className="teacher-course-card">
 
-              {/* Thumbnail */}
+              {/* ✅ FIXED IMAGE */}
               <img
-                src={`http://localhost:8080/${course.thumbnail}`}
+                src={getImageUrl(course.thumbnail)}
                 alt="thumbnail"
               />
 
-              {/* Title */}
               <h3>{course.courseName}</h3>
-
-              {/* Description */}
               <p>{course.description}</p>
 
-              {/* Meta Info */}
               <div className="course-meta">
                 <span className="price">₹ {course.price}</span>
                 <span>👥 {course.enrollmentCount || 0} Students</span>
@@ -155,7 +290,6 @@ const TeacherProfile = () => {
                 </span>
               </div>
 
-              {/* Publish Date */}
               {course.publishDate && (
                 <p className="publish-date">
                   📅 Published on:{" "}
@@ -163,7 +297,6 @@ const TeacherProfile = () => {
                 </p>
               )}
 
-              {/* ================= ACTION BUTTONS ================= */}
               <div className="teacher-course-actions">
 
                 <div className="action-row">
@@ -191,9 +324,7 @@ const TeacherProfile = () => {
                     className="publish-btn"
                     onClick={() => handlePublish(course._id)}
                   >
-                    {course.isPublished
-                      ? "Unpublish"
-                      : "Publish"}
+                    {course.isPublished ? "Unpublish" : "Publish"}
                   </button>
 
                   <button
@@ -211,10 +342,9 @@ const TeacherProfile = () => {
         )}
       </div>
 
-      {/* ================= QUIZ SECTION ================= */}
       <div className="quiz-section">
         <h2>Quiz Performance</h2>
-        {teacherDetails.quizResults?.length > 0 ? (
+        {teacherDetails?.quizResults?.length > 0 ? (
           teacherDetails.quizResults.map((quiz, idx) => (
             <div key={idx} className="quiz-card">
               <h4>{quiz.topic}</h4>

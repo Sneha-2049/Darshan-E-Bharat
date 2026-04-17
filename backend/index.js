@@ -13,6 +13,7 @@ const courseRoutes = require("./routes/course");
 const marketplaceRoutes = require("./routes/marketplace");
 const productRoutes = require("./routes/product");
 const cartRoutes = require("./routes/cart");
+const paymentRoutes = require("./routes/payment");
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/marketplace", marketplaceRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/payment", paymentRoutes);
 
 // 🔹 Default route (optional but useful for testing)
 app.get("/", (req, res) => {
