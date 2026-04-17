@@ -209,3 +209,62 @@
 .stock-badge .in{
   color:#0a7a2f;
 }
+
+/* ... baki purani CSS waisi hi rahegi ... */
+
+.coin-redemption-section {
+  background-color: #f8f9fa;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px dashed #19c05f;
+  margin-top: 10px;
+}
+
+.coin-text {
+  font-size: 0.85rem;
+  margin: 0 0 8px 0;
+  color: #555;
+  font-weight: bold;
+}
+
+.coin-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.final-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.confirm-pay-btn {
+  background-color: #19c05f;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  flex: 2;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.cancel-pay-btn {
+  background-color: #e0e0e0;
+  color: #333;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.confirm-pay-btn:hover {
+  background-color: #15a350;
+}

@@ -92,31 +92,36 @@ router.put("/update", auth, async (req, res) => {
 });
 
 /* ===========================
-   ADMIN ROUTES
+   GENERALIZED ADMIN ROUTES
 =========================== */
-router.get("/admin/pending-vendors", async (req, res) => {
+
+// 1. Get Pending Users by Role (vendor or teacher)
+router.get("/admin/pending/:role", async (req, res) => {
   try {
-    const vendors = await User.find({
-      role: { $in: ["vendor"] },
+    const { role } = req.params;
+    const pendingUsers = await User.find({
+      role: role,
       isVerified: false,
       isRejected: false,
     });
-    res.status(200).send({ vendors });
+    res.status(200).send({ users: pendingUsers });
   } catch (error) {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
 
-router.put("/admin/verify-vendor/:id", async (req, res) => {
+// 2. Universal Verify Route
+router.put("/admin/verify-user/:id", async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.params.id, { isVerified: true });
-    res.status(200).send({ message: "Vendor approved!" });
+    res.status(200).send({ message: "User approved successfully!" });
   } catch (error) {
-    res.status(500).send({ message: "Error approving vendor" });
+    res.status(500).send({ message: "Error approving user" });
   }
 });
 
-router.put("/admin/reject-vendor/:id", async (req, res) => {
+// 3. Universal Reject Route
+router.put("/admin/reject-user/:id", async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(
       req.params.id,
@@ -124,7 +129,7 @@ router.put("/admin/reject-vendor/:id", async (req, res) => {
       { new: true }
     );
     if (!user) return res.status(404).send({ message: "User not found" });
-    res.status(200).send({ message: "Vendor rejected successfully" });
+    res.status(200).send({ message: "User rejected successfully" });
   } catch (error) {
     res.status(500).send({ message: "Server Error" });
   }

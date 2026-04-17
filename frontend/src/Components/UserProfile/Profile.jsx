@@ -244,12 +244,6 @@ const Profile = () => {
       <div className="profile-card">
         <div className="section-header">
           <h2>My Quiz History</h2>
-          <p className="coin-status">
-            Total Coins:{" "}
-            <span>
-              <i className="fas fa-coins coin-icon"></i> {totalCoins}
-            </span>
-          </p>
         </div>
 
         <div className="inventory-table">

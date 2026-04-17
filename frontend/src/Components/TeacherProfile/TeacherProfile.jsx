@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // Added Link for the home link
 import "./TeacherProfile.css";
 
 const TeacherProfile = () => {
@@ -8,6 +8,7 @@ const TeacherProfile = () => {
 
   const [teacherDetails, setTeacherDetails] = useState({});
   const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true); // Added to track initial data load
 
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -53,6 +54,8 @@ const TeacherProfile = () => {
     } catch (err) {
       console.error(err);
       setCourses([]);
+    } finally {
+      setLoading(false); // Data fetching is done
     }
   };
 
@@ -127,6 +130,47 @@ const TeacherProfile = () => {
     // Local storage
     return `http://localhost:8080/${thumbnail}`;
   };
+
+  // --- NEW STATUS LOGIC START ---
+  if (loading) return <div className="status-msg">Loading teacher profile...</div>;
+
+  if (teacherDetails.isRejected) {
+    return (
+      <div className="teacher-dashboard">
+        <div className="rejected-card">
+          <h1>❌ Application Rejected</h1>
+          <p>We are sorry, but your teacher application has been rejected by the administrator.</p>
+          <p className="reject-note">This usually happens due to unclear documents or incorrect details.</p>
+          <div className="rejected-actions">
+            <button 
+              className="reapply-btn" 
+              onClick={() => {
+                localStorage.removeItem("token");
+                navigate("/signup");
+              }}
+            >
+              Update Details & Re-apply
+            </button>
+            <Link to="/" className="home-link">Back to Home</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!teacherDetails.isVerified) {
+    return (
+      <div className="teacher-dashboard">
+        <div className="verification-notice">
+           <div className="notice-icon">⏳</div>
+           <h3>Account Under Review</h3>
+           <p>Your credentials and documents are currently being verified by our admin team.</p>
+           <p>You will be able to manage your classrooms as soon as your account is approved.</p>
+        </div>
+      </div>
+    );
+  }
+  // --- NEW STATUS LOGIC END ---
 
   return (
     <div className="teacher-dashboard">

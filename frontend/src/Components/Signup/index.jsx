@@ -46,7 +46,7 @@ const Signup = () => {
       let documentUrl = "";
 
       // 1. Cloudinary Upload (Only for Vendor)
-      if (file && data.role === "vendor") {
+      if (file && data.role === "vendor"|| data.role === "teacher") {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("upload_preset", import.meta.env.VITE_CLOUDINARY_PRESET);
@@ -57,7 +57,12 @@ const Signup = () => {
           formData
         );
         documentUrl = uploadRes.data.secure_url;
-      }
+      }else if (!file && (data.role === "vendor" || data.role === "teacher")) {
+        // Validation check if file is missing for these roles
+        setError("Please upload a verification document.");
+        setUploading(false);
+        return;
+    }
 
       // 2. API Call to Backend (Sirf EK baar call karein)
       const url = "http://localhost:8080/api/users";
@@ -186,10 +191,10 @@ const Signup = () => {
             )}
 
             {/* Document Upload for Teacher/Vendor */}
-            {(data.role === "vendor") && (
+            {(data.role === "vendor" || data.role === "teacher") && (
               <div className={styles.file_upload_wrapper}>
                 <label htmlFor="doc">
-                   <FaCloudUploadAlt /> Upload Aadhar or Shop License(mandatory)
+                   <FaCloudUploadAlt /> {data.role === "vendor" ? "Upload Shop License/Aadhar" : "Upload Teaching Certificate/Aadhar"}
                 </label>
                 <input 
                   type="file" 

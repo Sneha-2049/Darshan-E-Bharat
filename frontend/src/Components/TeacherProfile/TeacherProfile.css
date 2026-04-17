@@ -391,3 +391,34 @@
 .teacher-cancel-btn:hover {
   background: #d5d5d5;
 }
+
+/* Status UI Reuse */
+.rejected-card {
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    padding: 60px;
+    border-radius: 24px;
+    text-align: center;
+}
+
+.verification-notice {
+    padding: 30px 20px;
+    background: #fffdf5;
+    border: 2px dashed #f59e0b;
+    border-radius: 16px;
+    text-align: center;
+    color: #92400e;
+}
+
+.notice-icon { font-size: 2.5rem; margin-bottom: 10px; }
+
+.reapply-btn {
+    background: #be123c;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-right: 15px;
+}

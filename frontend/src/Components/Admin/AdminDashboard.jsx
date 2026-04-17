@@ -6,17 +6,26 @@ import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
   const [vendors, setVendors] = useState([]);
+  const [teachers, setTeachers] = useState([]); // ✅ New state for teachers
   const [loading, setLoading] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    fetchPendingVendors();
+    fetchAllPending();
   }, []);
 
-  const fetchPendingVendors = async () => {
+  const fetchAllPending = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/api/users/admin/pending-vendors");
-      setVendors(res.data.vendors || []);
+      // ✅ UPDATED: Fetching using the generalized routes to fix 404
+      const [venRes, teaRes] = await Promise.all([
+        axios.get("http://localhost:8080/api/users/admin/pending/vendor"),
+        axios.get("http://localhost:8080/api/users/admin/pending/teacher")
+      ]);
+      
+      // ✅ UPDATED: Matching the new backend response structure { users: [] }
+      setVendors(venRes.data.users || []);
+      setTeachers(teaRes.data.users || []);
+      
       setLoading(false);
     } catch (err) {
       enqueueSnackbar("Error loading dashboard", { variant: "error" });
@@ -26,9 +35,10 @@ const AdminDashboard = () => {
 
   const handleApprove = async (id) => {
     try {
-      await axios.put(`http://localhost:8080/api/users/admin/verify-vendor/${id}`);
+      // ✅ UPDATED: Using universal verify-user route
+      await axios.put(`http://localhost:8080/api/users/admin/verify-user/${id}`);
       enqueueSnackbar("Approved Successfully!", { variant: "success" });
-      fetchPendingVendors(); 
+      fetchAllPending(); 
     } catch (err) {
       enqueueSnackbar("Approval failed", { variant: "error" });
     }
@@ -37,18 +47,13 @@ const AdminDashboard = () => {
   const handleReject = async (id) => {
     if (window.confirm("Are you sure you want to reject this request?")) {
         try {
-            // ⭐ URL check karein: backend port 8080 hai na?
-            const url = `http://localhost:8080/api/users/admin/reject-vendor/${id}`;
-            
-            // Method PUT use karein kyunki hum user delete nahi, update kar rahe hain
+            // ✅ UPDATED: Using universal reject-user route
+            const url = `http://localhost:8080/api/users/admin/reject-user/${id}`;
             await axios.put(url);
-            
             enqueueSnackbar("Request Rejected!", { variant: "warning" });
-            fetchPendingVendors(); // List refresh karne ke liye
+            fetchAllPending(); 
         } catch (err) {
-            console.error("Reject Error:", err);
-            // Notistack fix taaki snackbar crash na ho
-            const msg = err.response?.data?.message || "Failed to reject vendor";
+            const msg = err.response?.data?.message || "Failed to reject";
             enqueueSnackbar(msg, { variant: "error" });
         }
     }
@@ -56,42 +61,22 @@ const AdminDashboard = () => {
 
   if (loading) return <div className="admin-loader-container"><div className="spinner"></div></div>;
 
-  return (
-    <div className="admin-dashboard-wrapper">
-      <header className="admin-dashboard-header">
-        <div className="header-text">
-          <h1>Admin Management</h1>
-          <p>Verify vendors/teachers to maintain marketplace integrity.</p>
-        </div>
-        <div className="header-date">
-          <FaCalendarAlt /> {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
-        </div>
-      </header>
-
-      <div className="stats-grid">
-        <div className="stat-card pending">
-          <div className="stat-icon"><FaHourglassHalf /></div>
-          <div className="stat-info">
-            <h3>{vendors.length}</h3>
-            <p>Pending Requests</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="admin-table-section">
-        <div className="table-header"><h2><FaUserCheck /> Onboarding Requests</h2></div>
+  // Reusable Component for Tables to keep your UI identical
+  const RenderTable = (title, dataList, icon) => (
+    <div className="admin-table-section" style={{marginBottom: "30px"}}>
+        <div className="table-header"><h2>{icon} {title}</h2></div>
         <div className="admin-table-responsive">
           <table className="modern-admin-table">
             <thead>
               <tr>
                 <th>User Details</th>
-                <th>Shop/Expertise</th>
+                <th>Expertise/Shop</th>
                 <th>Identity Proof</th>
                 <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {vendors.length > 0 ? vendors.map((v) => (
+              {dataList.length > 0 ? dataList.map((v) => (
                 <tr key={v._id}>
                   <td>
                     <div className="vendor-name-cell">
@@ -116,13 +101,40 @@ const AdminDashboard = () => {
                   </td>
                 </tr>
               )) : (
-                <tr><td colSpan="4" className="admin-empty-state">No pending requests! ✅</td></tr>
+                <tr><td colSpan="4" className="admin-empty-state">No pending {title}! ✅</td></tr>
               )}
             </tbody>
           </table>
         </div>
+    </div>
+  );
+
+  return (
+    <div className="admin-dashboard-wrapper">
+      <header className="admin-dashboard-header">
+        <div className="header-text">
+          <h1>Admin Management</h1>
+          <p>Verify vendors/teachers to maintain marketplace integrity.</p>
+        </div>
+        <div className="header-date">
+          <FaCalendarAlt /> {new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+        </div>
+      </header>
+
+      <div className="stats-grid">
+        <div className="stat-card pending">
+          <div className="stat-icon"><FaHourglassHalf /></div>
+          <div className="stat-info">
+            <h3>{vendors.length + teachers.length}</h3>
+            <p>Total Pending Requests</p>
+          </div>
+        </div>
       </div>
+
+      {RenderTable("Vendor Requests", vendors, <FaStore />)}
+      {RenderTable("Teacher Requests", teachers, <FaUserCheck />)}
     </div>
   );
 };
+
 export default AdminDashboard;
