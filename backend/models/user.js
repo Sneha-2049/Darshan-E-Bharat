@@ -20,7 +20,7 @@ const purchasedCourseSchema = new mongoose.Schema(
   {
     course: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Course", // ✅ FIXED
+      ref: "Course",
       required: true,
     },
     enrolledAt: {
@@ -48,13 +48,12 @@ const purchasedCourseSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
-
   },
-  { _id: false },
+  { _id: false }
 );
 
 /* ===========================
-   ✅ NEW: PURCHASED PRODUCT SCHEMA
+   PURCHASED PRODUCT SCHEMA
 =========================== */
 const purchasedProductSchema = new mongoose.Schema(
   {
@@ -91,22 +90,26 @@ const userSchema = new mongoose.Schema(
     /* TEACHER */
     expertise: { type: String, default: "" },
     experience: { type: String, default: "" },
-
-    /* ✅ NEW FIELD */
     bio: { type: String, default: "" },
+
+    // ✅🔥 NEW FIELDS (VERY IMPORTANT)
+    region: { type: String, default: "" },
+    tradition: { type: String, default: "" },
+    teachingStyle: { type: String, default: "" },
+    languages: { type: String, default: "" },
 
     /* VENDOR + COMMON */
     shopName: String,
-    phone: String, // ✅ already exists (used for both now)
+    phone: String,
     address: String,
     city: String,
     state: String,
     pincode: String,
     description: String,
 
-    documentUrl: { type: String, default: "" }, // Cloudinary link save karne ke liye
-    isVerified: { type: Boolean, default: false }, // Teacher/Vendor ke liye compulsory check
-    isRejected: { type: Boolean, default: false }, // ⭐ New field
+    documentUrl: { type: String, default: "" },
+    isVerified: { type: Boolean, default: false },
+    isRejected: { type: Boolean, default: false },
 
     /* WALLET */
     coins: { type: Number, default: 0 },
@@ -116,11 +119,9 @@ const userSchema = new mongoose.Schema(
 
     /* LMS */
     purchasedCourses: [purchasedCourseSchema],
-
     purchasedProducts: [purchasedProductSchema],
-
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 /* ===========================
@@ -130,7 +131,7 @@ userSchema.methods.generateAuthToken = function () {
   return jwt.sign(
     { _id: this._id, role: this.role },
     process.env.JWTPRIVATEKEY,
-    { expiresIn: "7d" },
+    { expiresIn: "7d" }
   );
 };
 
@@ -148,18 +149,21 @@ const validate = (data) => {
 
     expertise: Joi.string().allow(""),
     experience: Joi.string().allow(""),
-
-    /* ✅ NEW FIELD */
     bio: Joi.string().allow(""),
 
-    /* Vendor conditional */
+    // ✅ NEW VALIDATION FIELDS
+    region: Joi.string().allow(""),
+    tradition: Joi.string().allow(""),
+    teachingStyle: Joi.string().allow(""),
+    languages: Joi.string().allow(""),
+    demoVideo: Joi.string().allow(""),
+
     shopName: Joi.when("role", {
       is: "vendor",
       then: Joi.required(),
       otherwise: Joi.allow(""),
     }),
 
-    /* ✅ UPDATED (now allowed for all) */
     phone: Joi.string().allow(""),
     documentUrl: Joi.string().allow("").label("Document URL"),
 

@@ -47,6 +47,41 @@ const lectureSchema = new mongoose.Schema({
 
 
 /* ===========================
+   ⭐ REVIEW SCHEMA (NEW)
+=========================== */
+const reviewSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    required: true
+  },
+
+  userName: {
+    type: String,
+    required: true
+  },
+
+  rating: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 5
+  },
+
+  comment: {
+    type: String,
+    default: ""
+  },
+
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+
+}, { _id: true });
+
+
+/* ===========================
    COURSE SCHEMA
 =========================== */
 const courseSchema = new mongoose.Schema({
@@ -76,6 +111,7 @@ const courseSchema = new mongoose.Schema({
     type: String,
     default: ""
   },
+
   learningPoints: [
     {
       type: String
@@ -120,9 +156,17 @@ const courseSchema = new mongoose.Schema({
   totalEnrollments: {
     type: Number,
     default: 0
+  },
+
+  /* ⭐ NEW: REVIEWS */
+  reviews: [reviewSchema],
+
+  /* ⭐ NEW: AVERAGE RATING */
+  averageRating: {
+    type: Number,
+    default: 0
   }
 
 }, { timestamps: true });
 
-/* 🔥 ONLY CHANGE BELOW */
 module.exports = mongoose.model("Course", courseSchema);

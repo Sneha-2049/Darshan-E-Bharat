@@ -122,11 +122,37 @@
   font-size: 13px;
   color: #16a34a;
   font-weight: 600;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 
-/* Description (limited lines clean look) */
+/* ⭐ NEW: RATING SECTION */
+.course-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.stars {
+  font-size: 16px;
+  color: #facc15; /* yellow stars */
+  letter-spacing: 2px;
+}
+
+.rating-value {
+  font-size: 13px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.no-rating {
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+
+/* Description */
 .student-course-description {
   font-size: 14px;
   color: #475569;

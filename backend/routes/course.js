@@ -82,7 +82,7 @@ router.get("/teacher", auth, async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const courses = await Course.find({ isPublished: true })
-      .populate("teacher", "firstName lastName experience");
+      .populate("teacher", "-password"); // ✅ FIXED
 
     res.send(courses);
   } catch (error) {
@@ -91,6 +91,26 @@ router.get("/", async (req, res) => {
   }
 });
 
+/* ===========================
+   GET SINGLE COURSE
+=========================== */
+router.get("/:id", async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id))
+      return res.status(400).send({ message: "Invalid Course ID" });
+
+    const course = await Course.findById(req.params.id)
+      .populate("teacher", "-password"); // ✅ FIXED
+
+    if (!course)
+      return res.status(404).send({ message: "Course not found" });
+
+    res.send(course);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
 /* ===========================
    CREATE COURSE (CLOUDINARY)
 =========================== */
@@ -126,31 +146,6 @@ router.post("/create", auth, upload.single("thumbnail"), async (req, res) => {
     await course.save();
     res.status(201).send({ message: "Course created", course });
 
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: "Internal Server Error" });
-  }
-});
-
-/* =========================================================
-   PARAM ROUTES LAST
-========================================================= */
-
-/* ===========================
-   GET SINGLE COURSE
-=========================== */
-router.get("/:id", async (req, res) => {
-  try {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id))
-      return res.status(400).send({ message: "Invalid Course ID" });
-
-    const course = await Course.findById(req.params.id)
-      .populate("teacher", "firstName lastName experience");
-
-    if (!course)
-      return res.status(404).send({ message: "Course not found" });
-
-    res.send(course);
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: "Internal Server Error" });
@@ -371,6 +366,55 @@ router.post("/:id/enroll", auth, async (req, res) => {
 
   } catch (error) {
     console.error("Enroll Error:", error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+
+/* ===========================
+   ⭐ ADD REVIEW
+=========================== */
+router.post("/:id/review", auth, async (req, res) => {
+  try {
+    const { rating, comment } = req.body;
+
+    const user = await User.findById(req.user._id);
+    if (!user)
+      return res.status(404).send({ message: "User not found" });
+
+    const course = await Course.findById(req.params.id);
+    if (!course)
+      return res.status(404).send({ message: "Course not found" });
+
+    // 🚫 Prevent duplicate review
+    const alreadyReviewed = course.reviews.find(
+      (r) => r.user.toString() === req.user._id
+    );
+
+    if (alreadyReviewed)
+      return res.status(400).send({ message: "You already reviewed this course" });
+
+    // ✅ Add review
+    course.reviews.push({
+      user: req.user._id,
+      userName: `${user.firstName} ${user.lastName}`,
+      rating,
+      comment
+    });
+
+    // ⭐ Calculate average rating
+    const totalRatings = course.reviews.reduce((sum, r) => sum + r.rating, 0);
+    course.averageRating = totalRatings / course.reviews.length;
+
+    await course.save();
+
+    res.send({
+      message: "Review added successfully",
+      averageRating: course.averageRating,
+      reviews: course.reviews
+    });
+
+  } catch (error) {
+    console.error("Review Error:", error);
     res.status(500).send({ message: "Internal Server Error" });
   }
 });

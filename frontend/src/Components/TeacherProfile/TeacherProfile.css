@@ -422,3 +422,36 @@
     cursor: pointer;
     margin-right: 15px;
 }
+/* ===== ⭐ COURSE RATING (STRUCTURED) ===== */
+.teacher-course-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  background: #f8fafc;
+  padding: 6px 10px;
+  border-radius: 8px;
+
+  width: fit-content;
+  margin: 10px 0 14px;
+}
+
+/* Stars */
+.teacher-course-rating .stars {
+  font-size: 16px;
+  color: #facc15;
+  letter-spacing: 2px;
+}
+
+/* Rating number */
+.teacher-course-rating .rating-value {
+  font-size: 13px;
+  color: #334155;
+  font-weight: 600;
+}
+
+/* No rating */
+.teacher-course-rating .no-rating {
+  font-size: 13px;
+  color: #94a3b8;
+}

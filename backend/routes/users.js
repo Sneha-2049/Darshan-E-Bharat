@@ -70,11 +70,41 @@ router.get("/me", auth, async (req, res) => {
 =========================== */
 router.put("/update", auth, async (req, res) => {
   try {
-    const { firstName, lastName, expertise, experience, phone, bio } = req.body;
+    const {
+      firstName,
+      lastName,
+      expertise,
+      experience,
+      phone,
+      bio,
+
+      // ✅ NEW FIELDS
+      region,
+      tradition,
+      teachingStyle,
+      languages,
+      demoVideo
+    } = req.body;
 
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
-      { $set: { firstName, lastName, expertise, experience, phone, bio } },
+      {
+        $set: {
+          firstName,
+          lastName,
+          expertise,
+          experience,
+          phone,
+          bio,
+
+          // ✅ ADD THESE (MAIN FIX)
+          region,
+          tradition,
+          teachingStyle,
+          languages,
+          demoVideo
+        },
+      },
       { new: true }
     ).select("-password");
 
@@ -90,7 +120,6 @@ router.put("/update", auth, async (req, res) => {
     res.status(500).send({ message: "Internal Server Error" });
   }
 });
-
 /* ===========================
    GENERALIZED ADMIN ROUTES
 =========================== */

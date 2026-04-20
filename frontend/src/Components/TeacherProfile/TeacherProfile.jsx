@@ -17,9 +17,14 @@ const TeacherProfile = () => {
     expertise: "",
     experience: "",
     phone: "",
-    bio: ""
-  });
+    bio: "",
 
+    // ✅ NEW FIELDS
+    region: "",
+    tradition: "",
+    teachingStyle: "",
+    languages: ""
+  });
   const fetchData = async () => {
     try {
       const userRes = await fetch("http://localhost:8080/api/users/me", {
@@ -34,9 +39,14 @@ const TeacherProfile = () => {
         expertise: userData.expertise || "",
         experience: userData.experience || "",
         phone: userData.phone || "",
-        bio: userData.bio || ""
-      });
+        bio: userData.bio || "",
 
+        // ✅ NEW FIELDS
+        region: userData.region || "",
+        tradition: userData.tradition || "",
+        teachingStyle: userData.teachingStyle || "",
+        languages: userData.languages || ""
+      });
       const courseRes = await fetch(
         "http://localhost:8080/api/courses/teacher",
         {
@@ -142,8 +152,8 @@ const TeacherProfile = () => {
           <p>We are sorry, but your teacher application has been rejected by the administrator.</p>
           <p className="reject-note">This usually happens due to unclear documents or incorrect details.</p>
           <div className="rejected-actions">
-            <button 
-              className="reapply-btn" 
+            <button
+              className="reapply-btn"
               onClick={() => {
                 localStorage.removeItem("token");
                 navigate("/signup");
@@ -162,10 +172,10 @@ const TeacherProfile = () => {
     return (
       <div className="teacher-dashboard">
         <div className="verification-notice">
-           <div className="notice-icon">⏳</div>
-           <h3>Account Under Review</h3>
-           <p>Your credentials and documents are currently being verified by our admin team.</p>
-           <p>You will be able to manage your classrooms as soon as your account is approved.</p>
+          <div className="notice-icon">⏳</div>
+          <h3>Account Under Review</h3>
+          <p>Your credentials and documents are currently being verified by our admin team.</p>
+          <p>You will be able to manage your classrooms as soon as your account is approved.</p>
         </div>
       </div>
     );
@@ -179,24 +189,29 @@ const TeacherProfile = () => {
 
         {!isEditing ? (
           <>
-            <div>
-              <h1>
-                {teacherDetails?.firstName} {teacherDetails?.lastName}
-              </h1>
+<div>
+        <h1>
+          {teacherDetails?.firstName} {teacherDetails?.lastName}
+        </h1>
 
-              <p className="expertise">
-                {teacherDetails?.expertise} | {teacherDetails?.experience}
-              </p>
+        <p className="expertise">
+          {teacherDetails?.expertise} | {teacherDetails?.experience}
+        </p>
 
-              <p>{teacherDetails?.email}</p>
+        <p>{teacherDetails?.email}</p>
 
-              {/* ✅ FIXED DISPLAY */}
-              <p>📞 {teacherDetails?.phone || "Not added"}</p>
-              <p className="teacher-bio">
-                {teacherDetails?.bio || "No bio available"}
-              </p>
-            </div>
+        <p>📞 {teacherDetails?.phone || "Not added"}</p>
 
+        <p className="teacher-bio">
+          {teacherDetails?.bio || "No bio available"}
+        </p>
+
+        {/* ✅ NEW FIELDS DISPLAY */}
+        <p><b>🌍 Region:</b> {teacherDetails?.region || "Not added"}</p>
+        <p><b>🎭 Tradition:</b> {teacherDetails?.tradition || "Not added"}</p>
+        <p><b>🎓 Teaching Style:</b> {teacherDetails?.teachingStyle || "Not added"}</p>
+        <p><b>🗣️ Languages:</b> {teacherDetails?.languages || "Not added"}</p>
+      </div>
             <div className="teacher-profile-actions">
               <button
                 className="teacher-edit-btn"
@@ -228,6 +243,33 @@ const TeacherProfile = () => {
               placeholder="About Yourself"
               rows="3"
             />
+            <input
+              name="region"
+              value={formData.region}
+              onChange={handleChange}
+              placeholder="Region (e.g., Rajasthan)"
+            />
+
+            <input
+              name="tradition"
+              value={formData.tradition}
+              onChange={handleChange}
+              placeholder="Tradition (Kathak, Bharatanatyam)"
+            />
+
+            <input
+              name="teachingStyle"
+              value={formData.teachingStyle}
+              onChange={handleChange}
+              placeholder="Teaching Style"
+            />
+
+            <input
+              name="languages"
+              value={formData.languages}
+              onChange={handleChange}
+              placeholder="Languages"
+            />
 
             <div className="teacher-form-buttons">
               <button type="submit" className="teacher-save-btn">Save</button>
@@ -254,9 +296,9 @@ const TeacherProfile = () => {
           <p>
             {Array.isArray(courses)
               ? courses.reduce(
-                  (sum, c) => sum + (c.enrollmentCount || 0),
-                  0
-                )
+                (sum, c) => sum + (c.enrollmentCount || 0),
+                0
+              )
               : 0}
           </p>
         </div>
@@ -277,14 +319,27 @@ const TeacherProfile = () => {
 
               <h3>{course.courseName}</h3>
               <p>{course.description}</p>
-
+<div className="teacher-course-rating">
+  {course.averageRating > 0 ? (
+    <>
+      <span className="stars">
+        {"★".repeat(Math.floor(course.averageRating))}
+        {"☆".repeat(5 - Math.floor(course.averageRating))}
+      </span>
+      <span className="rating-value">
+        ({course.averageRating.toFixed(1)})
+      </span>
+    </>
+  ) : (
+    <span className="no-rating">No ratings yet</span>
+  )}
+</div>
               <div className="course-meta">
                 <span className="price">₹ {course.price}</span>
                 <span>👥 {course.enrollmentCount || 0} Students</span>
                 <span
-                  className={`status ${
-                    course.isPublished ? "published" : "draft"
-                  }`}
+                  className={`status ${course.isPublished ? "published" : "draft"
+                    }`}
                 >
                   {course.isPublished ? "Published" : "Draft"}
                 </span>

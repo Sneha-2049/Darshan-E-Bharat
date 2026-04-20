@@ -6,17 +6,33 @@ import "./Courses.css";
 
 const CourseCard = ({ course, isEnrolled }) => {
 
-  /* ✅ IMAGE HANDLER (IMPORTANT) */
+  /* ✅ IMAGE HANDLER */
   const getImageUrl = (thumbnail) => {
     if (!thumbnail) return "/default-image.jpg";
+    if (thumbnail.startsWith("http")) return thumbnail;
+    return `http://localhost:8080/${thumbnail}`;
+  };
 
-    // Cloudinary image
-    if (thumbnail.startsWith("http")) {
-      return thumbnail;
+  /* ⭐ RENDER STARS */
+  const renderStars = (rating) => {
+    const fullStars = Math.floor(rating);
+    const halfStar = rating % 1 >= 0.5;
+
+    let stars = "";
+
+    for (let i = 0; i < fullStars; i++) {
+      stars += "★";
     }
 
-    // Local image (old data)
-    return `http://localhost:8080/${thumbnail}`;
+    if (halfStar) {
+      stars += "☆"; // simple half representation
+    }
+
+    while (stars.length < 5) {
+      stars += "☆";
+    }
+
+    return stars;
   };
 
   return (
@@ -48,6 +64,22 @@ const CourseCard = ({ course, isEnrolled }) => {
         <p className="course-instructor">
           👨‍🏫 {course.teacher?.firstName} {course.teacher?.lastName}
         </p>
+
+        {/* ⭐ NEW: RATING */}
+        <div className="course-rating">
+          {course.averageRating > 0 ? (
+            <>
+              <span className="stars">
+                {renderStars(course.averageRating)}
+              </span>
+              <span className="rating-value">
+                ({course.averageRating.toFixed(1)})
+              </span>
+            </>
+          ) : (
+            <span className="no-rating">No ratings yet</span>
+          )}
+        </div>
 
         {/* Description */}
         <p className="student-course-description">
