@@ -145,14 +145,14 @@ const ProductDetails = () => {
       <div className="pd-grid">
         <div className="pd-image-section">
           <div className="pd-main-img">
-            {/* ⭐ Cloudinary Change: Removed localhost prefix */}
+            {/* Cloudinary Change: Removed localhost prefix */}
             <img src={mainImage} alt="Product" />
           </div>
           <div className="pd-thumbnails">
             {product.images.map((img, i) => (
               <div key={i} className="thumb-wrapper">
                 <img
-                  /* ⭐ Cloudinary Change: Removed localhost prefix */
+                  /* Cloudinary Change: Removed localhost prefix */
                   src={img}
                   className={mainImage === img ? "active-thumb" : ""}
                   onClick={() => setMainImage(img)}

@@ -28,7 +28,7 @@ router.post("/", async (req, res) => {
 				firstName: user.firstName,
 				lastName: user.lastName,
 				email: user.email,
-				role: user.role,          // ✅ added
+				role: user.role,          //added
 				expertise: user.expertise, // optional for teacher
 				experience: user.experience
 			},

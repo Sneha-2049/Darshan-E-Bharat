@@ -44,7 +44,7 @@ const VendorProfile = () => {
   if (error) return <div className="status-msg error">{error}</div>;
   if (!vendor) return null;
 
-  // ⭐ CASE 1: AGAR REJECT HO GAYA HAI
+  // CASE 1: AGAR REJECT HO GAYA HAI
   if (vendor.isRejected) {
     return (
       <div className="vendor-container">
@@ -69,7 +69,7 @@ const VendorProfile = () => {
     );
   }
 
-  // ⭐ CASE 2: NORMAL FLOW (PENDING YA VERIFIED)
+  // CASE 2: NORMAL FLOW (PENDING YA VERIFIED)
   return (
     <div className="vendor-container">
       <h1 className="vendor-title">Vendor Dashboard</h1>
