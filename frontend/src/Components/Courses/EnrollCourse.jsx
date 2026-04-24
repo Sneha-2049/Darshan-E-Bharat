@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { initiateCoursePayment } from "../Cart/PaymentService"; // ✅ IMPORT
+import { initiateCoursePayment } from "../Cart/PaymentService"; // IMPORT
 import "./EnrollCourse.css";
 
 const EnrollCourse = () => {
@@ -65,7 +65,7 @@ const EnrollCourse = () => {
     setLoading(true);
 
     try {
-      // ✅ CASE 1: FREE (coins cover full amount)
+      // CASE 1: FREE (coins cover full amount)
       if (payableAmount === 0) {
         const res = await fetch(
           "http://localhost:8080/api/payment/verify-course",
@@ -98,7 +98,7 @@ const EnrollCourse = () => {
         return;
       }
 
-      // ✅ CASE 2: PAYMENT REQUIRED
+      // CASE 2: PAYMENT REQUIRED
       initiateCoursePayment({
         amount: payableAmount,
         courseId: id,

@@ -8,8 +8,8 @@ const Cart = () => {
   const { cart, removeFromCart, clearCart } = useCart();
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [paymentMsg, setPaymentMsg] = useState("");
-  const [userCoins, setUserCoins] = useState(0); // ⭐ Coins fetch karne ke liye
-  const [useCoins, setUseCoins] = useState(false); // ⭐ Checkbox state
+  const [userCoins, setUserCoins] = useState(0); //  Coins fetch karne ke liye
+  const [useCoins, setUseCoins] = useState(false); //  Checkbox state
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -26,7 +26,7 @@ const Cart = () => {
 
   const totalAmount = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
   
-  // ⭐ Discount Logic
+  //  Discount Logic
   const discount = useCoins ? userCoins : 0;
   const finalPayable = Math.max(0, totalAmount - discount);
 
@@ -36,13 +36,13 @@ const Cart = () => {
     setPaymentLoading(true);
 
     initiateRazorpayPayment({
-      amount: finalPayable, // ⭐ Razorpay ko discounted amount jayega
+      amount: finalPayable, // Razorpay ko discounted amount jayega
       cartItems: cart,
       useCoins: useCoins,
       discountedPrice: finalPayable,
       onSuccess: async (paymentId) => {
         setPaymentLoading(false);
-        setPaymentMsg(`✅ Payment Successful! ID: ${paymentId}`);
+        setPaymentMsg(` Payment Successful! ID: ${paymentId}`);
         await clearCart();
       },
       onFailure: (msg) => {
@@ -74,7 +74,7 @@ const Cart = () => {
       </div>
 
       <div className="cart-total">
-        {/* ⭐ COIN REDEMPTION BOX */}
+        {/*  COIN REDEMPTION BOX */}
         {userCoins > 0 && (
           <div className="coin-box" style={{ marginBottom: "15px", padding: "10px", background: "#f9f9f9", borderRadius: "8px" }}>
             <label style={{ cursor: "pointer", display: "flex", alignItems: "center", gap: "10px" }}>

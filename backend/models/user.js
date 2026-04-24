@@ -92,7 +92,7 @@ const userSchema = new mongoose.Schema(
     experience: { type: String, default: "" },
     bio: { type: String, default: "" },
 
-    // ✅🔥 NEW FIELDS (VERY IMPORTANT)
+    // NEW FIELDS (VERY IMPORTANT)
     region: { type: String, default: "" },
     tradition: { type: String, default: "" },
     teachingStyle: { type: String, default: "" },
@@ -151,7 +151,7 @@ const validate = (data) => {
     experience: Joi.string().allow(""),
     bio: Joi.string().allow(""),
 
-    // ✅ NEW VALIDATION FIELDS
+    //NEW VALIDATION FIELDS
     region: Joi.string().allow(""),
     tradition: Joi.string().allow(""),
     teachingStyle: Joi.string().allow(""),

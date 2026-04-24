@@ -50,7 +50,7 @@ router.get("/me", auth, async (req, res) => {
         model: "Course",
       })
       .populate({
-        path: "purchasedProducts.productId", // ✅ Added
+        path: "purchasedProducts.productId", //Added
         model: "Product",
       })
       .select("-password");
@@ -78,7 +78,7 @@ router.put("/update", auth, async (req, res) => {
       phone,
       bio,
 
-      // ✅ NEW FIELDS
+      // NEW FIELDS
       region,
       tradition,
       teachingStyle,
@@ -97,7 +97,7 @@ router.put("/update", auth, async (req, res) => {
           phone,
           bio,
 
-          // ✅ ADD THESE (MAIN FIX)
+          // ADD THESE (MAIN FIX)
           region,
           tradition,
           teachingStyle,

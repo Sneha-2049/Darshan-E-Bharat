@@ -6,7 +6,7 @@ import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
   const [vendors, setVendors] = useState([]);
-  const [teachers, setTeachers] = useState([]); // ✅ New state for teachers
+  const [teachers, setTeachers] = useState([]); // New state for teachers
   const [loading, setLoading] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
 
@@ -16,13 +16,13 @@ const AdminDashboard = () => {
 
   const fetchAllPending = async () => {
     try {
-      // ✅ UPDATED: Fetching using the generalized routes to fix 404
+      // UPDATED: Fetching using the generalized routes to fix 404
       const [venRes, teaRes] = await Promise.all([
         axios.get("http://localhost:8080/api/users/admin/pending/vendor"),
         axios.get("http://localhost:8080/api/users/admin/pending/teacher")
       ]);
       
-      // ✅ UPDATED: Matching the new backend response structure { users: [] }
+      // UPDATED: Matching the new backend response structure { users: [] }
       setVendors(venRes.data.users || []);
       setTeachers(teaRes.data.users || []);
       
@@ -35,7 +35,7 @@ const AdminDashboard = () => {
 
   const handleApprove = async (id) => {
     try {
-      // ✅ UPDATED: Using universal verify-user route
+      // UPDATED: Using universal verify-user route
       await axios.put(`http://localhost:8080/api/users/admin/verify-user/${id}`);
       enqueueSnackbar("Approved Successfully!", { variant: "success" });
       fetchAllPending(); 
@@ -47,7 +47,7 @@ const AdminDashboard = () => {
   const handleReject = async (id) => {
     if (window.confirm("Are you sure you want to reject this request?")) {
         try {
-            // ✅ UPDATED: Using universal reject-user route
+            // UPDATED: Using universal reject-user route
             const url = `http://localhost:8080/api/users/admin/reject-user/${id}`;
             await axios.put(url);
             enqueueSnackbar("Request Rejected!", { variant: "warning" });

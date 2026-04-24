@@ -4,8 +4,8 @@ import "./EditVendorProfile.css";
 
 const EditVendorProfile = () => {
   const [form, setForm] = useState({
-    firstName: "", // ⭐ Added
-    lastName: "",  // ⭐ Added
+    firstName: "", // Added
+    lastName: "",  // Added
     shopName: "",
     description: "",
     phone: "",
@@ -33,8 +33,8 @@ const EditVendorProfile = () => {
         const data = await res.json();
 
         setForm({
-          firstName: data.firstName || "", // ⭐ Added
-          lastName: data.lastName || "",   // ⭐ Added
+          firstName: data.firstName || "", // Added
+          lastName: data.lastName || "",   // Added
           shopName: data.shopName || "",
           description: data.description || "",
           phone: data.phone || "",
@@ -78,7 +78,7 @@ const EditVendorProfile = () => {
 
       if (!res.ok) throw new Error();
 
-      // ⭐ VERY IMPORTANT: Update localStorage so Navbar changes immediately
+      // VERY IMPORTANT: Update localStorage so Navbar changes immediately
       localStorage.setItem("firstName", form.firstName);
       localStorage.setItem("lastName", form.lastName);
 
@@ -102,7 +102,7 @@ const EditVendorProfile = () => {
 
       <form onSubmit={handleSubmit} className="edit-form">
         
-        {/* ⭐ Name Row for better UI */}
+        {/* Name Row for better UI */}
         <div className="name-row">
           <div className="input-group">
             <label>First Name</label>

@@ -23,7 +23,7 @@ export const CartProvider = ({ children }) => {
     try {
       const res = await axios.get("http://localhost:8080/api/cart", getHeaders());
       
-      // ⭐ DATA CONSISTENCY CHECK
+      //  DATA CONSISTENCY CHECK
       // Filters out items that have been deleted or have corrupted paths
       const validCart = res.data.filter(item => 
         item.title && 

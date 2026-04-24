@@ -25,15 +25,15 @@ const storage = new CloudinaryStorage({
     try {
       let folder = "darshan-e-bharat/products";
 
-      /* ✅ Detect route properly */
+      /* Detect route properly */
       if (req.originalUrl.includes("course")) {
         folder = "darshan-e-bharat/courses";
       }
 
       return {
         folder,
-        allowed_formats: ["jpg", "png", "jpeg", "webp"], // ✅ FIXED
-        public_id: Date.now() + "-" + file.originalname, // ✅ unique name
+        allowed_formats: ["jpg", "png", "jpeg", "webp"], // FIXED
+        public_id: Date.now() + "-" + file.originalname, // unique name
       };
     } catch (err) {
       console.error("Cloudinary Param Error:", err);
@@ -48,7 +48,7 @@ const storage = new CloudinaryStorage({
 const upload = multer({
   storage,
   limits: {
-    fileSize: 5 * 1024 * 1024, // ✅ 5MB limit
+    fileSize: 5 * 1024 * 1024, // 5MB limit
   },
 });
 
@@ -62,7 +62,7 @@ upload.singleFileDebug = (fieldName) => (req, res, next) => {
       return res.status(500).send({ message: err.message });
     }
 
-    console.log("Uploaded File:", req.file); // 🔥 important debug
+    console.log("Uploaded File:", req.file); //important debug
 
     next();
   });
