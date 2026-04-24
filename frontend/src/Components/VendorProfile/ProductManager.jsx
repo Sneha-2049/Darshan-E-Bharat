@@ -9,7 +9,7 @@ const ProductManager = ({ token }) => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(null); 
 
-  // ⭐ Initial state with detailsUrl and stock
+  // Initial state with detailsUrl and stock
   const [formData, setFormData] = useState({ 
     title: "", price: "", category: "", stock: "", description: "", detailsUrl: "", images: [] 
   });
@@ -90,7 +90,7 @@ const ProductManager = ({ token }) => {
             <div className="form-row">
               <input type="number" placeholder="Price" value={formData.price} onChange={(e) => setFormData({...formData, price: e.target.value})} required />
               
-              {/* ⭐ Fix: Stock input with min="0" to prevent negatives */}
+              {/* Fix: Stock input with min="0" to prevent negatives */}
               <input 
                 type="number" 
                 placeholder="Stock Quantity" 
@@ -103,7 +103,7 @@ const ProductManager = ({ token }) => {
 
             <input type="text" placeholder="Category (e.g. Jewelry, Home Decor)" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} />
 
-            {/* ⭐ New: Details URL input added */}
+            {/* New: Details URL input added */}
             <input 
               type="url" 
               placeholder="External Details URL (e.g. Wikipedia or Blog link)" 

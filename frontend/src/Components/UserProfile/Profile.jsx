@@ -155,7 +155,7 @@ const Profile = () => {
             <span>Date</span>
             <span>Expiry</span>
             <span>Status</span>
-            <span>Payment ID</span> {/* ✅ Added */}
+            <span>Payment ID</span> {/* Added */}
             <span>Action</span>
           </div>
 
@@ -186,7 +186,7 @@ const Profile = () => {
                       : "Expired"}
                   </span>
 
-                  {/* ✅ Payment ID */}
+                  {/* Payment ID */}
                   <span className="table-payment-id">
                     {item.paymentId || "N/A"}
                   </span>

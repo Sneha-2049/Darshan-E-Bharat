@@ -47,7 +47,7 @@ const lectureSchema = new mongoose.Schema({
 
 
 /* ===========================
-   ⭐ REVIEW SCHEMA (NEW)
+   REVIEW SCHEMA (NEW)
 =========================== */
 const reviewSchema = new mongoose.Schema({
   user: {
@@ -158,10 +158,10 @@ const courseSchema = new mongoose.Schema({
     default: 0
   },
 
-  /* ⭐ NEW: REVIEWS */
+  /* NEW: REVIEWS */
   reviews: [reviewSchema],
 
-  /* ⭐ NEW: AVERAGE RATING */
+  /* NEW: AVERAGE RATING */
   averageRating: {
     type: Number,
     default: 0

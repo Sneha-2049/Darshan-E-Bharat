@@ -79,7 +79,7 @@ export const initiateRazorpayPayment = async ({
 };
 
 // ==============================
-// ✅ COURSE PAYMENT FUNCTION (UPDATED)
+// COURSE PAYMENT FUNCTION (UPDATED)
 // ==============================
 export const initiateCoursePayment = async ({
   amount,
@@ -122,7 +122,7 @@ export const initiateCoursePayment = async ({
               courseId: courseId,
               coinsUsed: coinsUsed,
 
-              // ✅ IMPORTANT ADDITION
+              // IMPORTANT ADDITION
               amountPaid: amount,
             },
             getHeaders()

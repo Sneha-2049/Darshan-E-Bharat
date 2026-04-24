@@ -4,7 +4,7 @@ const Course = require("../models/course");
 const { User } = require("../models/user");
 const auth = require("../middleware/auth");
 
-/* ✅ USE CLOUDINARY INSTEAD OF LOCAL MULTER */
+/*USE CLOUDINARY INSTEAD OF LOCAL MULTER */
 const upload = require("../middleware/upload");
 
 /* ===========================
@@ -48,10 +48,6 @@ const calculateExpiry = (durationText) => {
   return expiry;
 };
 
-/* =========================================================
-   SPECIFIC ROUTES FIRST
-========================================================= */
-
 /* ===========================
    GET TEACHER COURSES
 =========================== */
@@ -82,7 +78,7 @@ router.get("/teacher", auth, async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const courses = await Course.find({ isPublished: true })
-      .populate("teacher", "-password"); // ✅ FIXED
+      .populate("teacher", "-password"); //FIXED
 
     res.send(courses);
   } catch (error) {
@@ -100,7 +96,7 @@ router.get("/:id", async (req, res) => {
       return res.status(400).send({ message: "Invalid Course ID" });
 
     const course = await Course.findById(req.params.id)
-      .populate("teacher", "-password"); // ✅ FIXED
+      .populate("teacher", "-password"); // FIXED
 
     if (!course)
       return res.status(404).send({ message: "Course not found" });
@@ -137,7 +133,7 @@ router.post("/create", auth, upload.single("thumbnail"), async (req, res) => {
       learningPoints: learningPoints
         ? learningPoints.split(",").map(p => p.trim())
         : [],
-      thumbnail: req.file ? req.file.path : "", // ✅ CLOUDINARY URL
+      thumbnail: req.file ? req.file.path : "", // CLOUDINARY URL
       teacher: req.user._id,
       isPublished: false,
       publishDate: null
@@ -187,7 +183,7 @@ router.put("/:id", auth, upload.single("thumbnail"), async (req, res) => {
       course.learningPoints = learningPoints.split(",").map(p => p.trim());
 
     if (req.file)
-      course.thumbnail = req.file.path; // ✅ CLOUDINARY
+      course.thumbnail = req.file.path; // CLOUDINARY
 
     await course.save();
 
@@ -371,7 +367,7 @@ router.post("/:id/enroll", auth, async (req, res) => {
 });
 
 /* ===========================
-   ⭐ ADD REVIEW
+   ADD REVIEW
 =========================== */
 router.post("/:id/review", auth, async (req, res) => {
   try {
@@ -393,7 +389,7 @@ router.post("/:id/review", auth, async (req, res) => {
     if (alreadyReviewed)
       return res.status(400).send({ message: "You already reviewed this course" });
 
-    // ✅ Add review
+    //Add review
     course.reviews.push({
       user: req.user._id,
       userName: `${user.firstName} ${user.lastName}`,
@@ -401,7 +397,7 @@ router.post("/:id/review", auth, async (req, res) => {
       comment
     });
 
-    // ⭐ Calculate average rating
+    //Calculate average rating
     const totalRatings = course.reviews.reduce((sum, r) => sum + r.rating, 0);
     course.averageRating = totalRatings / course.reviews.length;
 

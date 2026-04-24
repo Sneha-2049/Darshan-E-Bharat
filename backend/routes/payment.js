@@ -97,7 +97,7 @@ router.post("/verify", auth, async (req, res) => {
 });
 
 // ============================
-// ✅ VERIFY COURSE PAYMENT (UPDATED)
+// VERIFY COURSE PAYMENT (UPDATED)
 // ============================
 router.post("/verify-course", auth, async (req, res) => {
   try {
@@ -107,7 +107,7 @@ router.post("/verify-course", auth, async (req, res) => {
       razorpay_signature,
       courseId,
       coinsUsed,
-      amountPaid, // ⭐ NEW from frontend
+      amountPaid, // NEW from frontend
     } = req.body;
 
     const body = razorpay_order_id + "|" + razorpay_payment_id;
@@ -117,7 +117,7 @@ router.post("/verify-course", auth, async (req, res) => {
       .update(body.toString())
       .digest("hex");
 
-    // ⭐ FREE CASE HANDLE
+    // FREE CASE HANDLE
     const isFree = razorpay_payment_id === "FREE";
 
     if (!isFree && expectedSignature !== razorpay_signature) {
@@ -137,7 +137,7 @@ router.post("/verify-course", auth, async (req, res) => {
     }
 
     // ============================
-    // ✅ DETERMINE PAYMENT METHOD
+    // DETERMINE PAYMENT METHOD
     // ============================
     let paymentMethod = "card";
 
@@ -150,7 +150,7 @@ router.post("/verify-course", auth, async (req, res) => {
     }
 
     // ============================
-    // ✅ SAVE COURSE
+    // SAVE COURSE
     // ============================
     const courseData = {
       course: courseId,
@@ -167,7 +167,7 @@ router.post("/verify-course", auth, async (req, res) => {
     };
 
     // ============================
-    // ✅ COINS DEDUCTION
+    // COINS DEDUCTION
     // ============================
     if (coinsUsed && coinsUsed > 0) {
       updateData.$inc = { coins: -coinsUsed };

@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Product = require("../models/product");
-const User = require("../models/user"); // ⭐ NEW
+const User = require("../models/user"); // NEW
 const auth = require("../middleware/auth");
 const upload = require("../middleware/upload");
 
@@ -36,7 +36,7 @@ router.post("/add", auth, upload.array("images", 5), async (req, res) => {
 });
 
 /* ===========================
-   ⭐ ADD REVIEW
+   ADD REVIEW
 =========================== */
 router.post("/:id/review", auth, async (req, res) => {
   try {
@@ -48,7 +48,7 @@ router.post("/:id/review", auth, async (req, res) => {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: "Product not found" });
 
-    // 🚫 Duplicate check
+    // Duplicate check
     const alreadyReviewed = product.reviews.find(
       (r) => r.user.toString() === req.user._id
     );
@@ -56,7 +56,7 @@ router.post("/:id/review", auth, async (req, res) => {
     if (alreadyReviewed)
       return res.status(400).json({ message: "You already reviewed this product" });
 
-    // ✅ Add review
+    // Add review
     product.reviews.push({
       user: req.user._id,
       userName: `${user.firstName} ${user.lastName}`,
@@ -64,7 +64,7 @@ router.post("/:id/review", auth, async (req, res) => {
       comment
     });
 
-    // ⭐ Calculate average
+    // Calculate average
     const total = product.reviews.reduce((sum, r) => sum + r.rating, 0);
     product.averageRating = total / product.reviews.length;
 

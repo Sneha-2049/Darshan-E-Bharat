@@ -5,7 +5,7 @@ import "./ProductCard.css";
 const ProductCard = ({ product, onDelete }) => {
   return (
     <div className="product-card">
-      {/* ⭐ Direct Cloudinary Link */}
+      {/* Direct Cloudinary Link */}
       {product.images?.length > 0 ? (
         <img 
           src={product.images[0]} 

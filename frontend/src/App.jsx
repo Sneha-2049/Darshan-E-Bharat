@@ -92,7 +92,7 @@ function App() {
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/course/:id" element={<CourseDetails />} />
 
-                {/* ✅ USER PROFILE */}
+                {/* USER PROFILE */}
                 {/* <Route path="/profile" element={<Profile />} /> */}
                 <Route
                   path="/profile"
@@ -105,7 +105,7 @@ function App() {
                   })()}
                 />
 
-                {/* ✅ TEACHER PROFILE */}
+                {/*TEACHER PROFILE */}
                 <Route path="/teacher-profile" element={<TeacherProfile />} />
                 <Route path="/create-course" element={<CreateCourse />} />
                 <Route path="/edit-course/:id" element={<EditCourse />} />
