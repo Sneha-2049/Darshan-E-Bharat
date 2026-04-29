@@ -179,4 +179,10 @@ const validate = (data) => {
 
 const User = mongoose.model("user", userSchema);
 
-module.exports = { User, validate };
+// module.exports = { User, validate };
+
+User.validateUser = validate; 
+//(Direct Export)
+module.exports = User;
+module.exports.User = User;  
+module.exports.validate = validate;

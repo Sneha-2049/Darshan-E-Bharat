@@ -359,3 +359,77 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
+
+/* Heritage Tags Styles */
+.heritage-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 15px 0;
+}
+
+.h-tag {
+    background: #fdf2e9;
+    border: 1px solid #e67e22;
+    color: #a04000;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+.auth-tag {
+    background: #e8f5e9;
+    border-color: #2e7d32;
+    color: #1b5e20;
+}
+
+/* Cultural Story Box */
+.heritage-story-box {
+    background: #fdfbf7;
+    border-left: 4px solid #e67e22;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.heritage-story-box h4, .specifications-display h4 {
+    margin-top: 0;
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Specs Display Section */
+.specifications-display {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.specs-list p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Edit Form Updations */
+.form-section-label {
+    margin: 20px 0 10px;
+    font-weight: 600;
+    color: #e67e22;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.pd-edit-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+}
+
+.pd-edit-form input[placeholder] {
+    margin-bottom: 10px;
+}

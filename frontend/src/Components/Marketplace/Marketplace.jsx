@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../Cart/CartContext";
 import { initiateRazorpayPayment } from "../Cart/PaymentService";
@@ -33,8 +33,17 @@ const Marketplace = () => {
         price: p.price,
         stock: Number(p.stock) || 0,
         image: p.images?.length ? p.images[0] : "/assets/no-image.png",
-        detailsUrl: p.detailsUrl || null,
+        createdAt: p.createdAt,
+        originState: p.originState,
+        tribeName: p.tribeName,
+        materialUsed: p.materialUsed,
+        authenticity: p.authenticity,
+        artisanName: p.artisanName,
+        // NEW: Mapping review data
+        averageRating: p.averageRating || 0,
+        reviewsCount: p.reviews?.length || 0
       }));
+      formatted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       setDbProducts(formatted);
     } catch (err) {
       console.error("Failed to load marketplace products", err);
@@ -47,7 +56,7 @@ const Marketplace = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get("http://localhost:8080/api/users/me", {
-        headers: { "x-auth-token": token }
+        headers: { "x-auth-token": token },
       });
       setUserCoins(res.data.coins || 0);
     } catch (err) {
@@ -74,7 +83,6 @@ const Marketplace = () => {
 
   const handleFinalPayment = (item) => {
     const finalPrice = useCoins ? Math.max(0, item.price - userCoins) : item.price;
-
     initiateRazorpayPayment({
       amount: finalPrice,
       cartItems: [item],
@@ -99,7 +107,9 @@ const Marketplace = () => {
         <h2 className="marketplace-title">Tribal Marketplace</h2>
         {isLoggedIn && (
           <div className="go-to-cart">
-            <span style={{ marginRight: '15px', fontWeight: 'bold', color: '#f39c12' }}>💰 {userCoins} Coins</span>
+            <span style={{ marginRight: "15px", fontWeight: "bold", color: "#f39c12" }}>
+              💰 {userCoins} Coins
+            </span>
             <Link to="/cart">
               <button className="view-cart-btn">Go to Cart</button>
             </Link>
@@ -113,11 +123,35 @@ const Marketplace = () => {
         ) : dbProducts.length > 0 ? (
           dbProducts.map((item) => (
             <div key={item.id} className="item-card">
-              <img src={item.image} alt={item.name} className="item-image" />
+
+              {/* Image */}
+              <div className="item-image-wrap">
+                <img src={item.image} alt={item.name} className="item-image" />
+              </div>
+
+              {/* Info */}
               <div className="item-info">
+                {/* Header Row: Tribe + Rating Badge */}
+                <div className="card-top-row">
+                    <p className="item-tribe">
+                      {item.tribeName} · {item.originState}
+                    </p>
+                    <div className="card-overall-rating">
+                        <span className={`star-badge-market color-${Math.round(item.averageRating)}`}>
+                            ★ {item.averageRating.toFixed(1)}
+                        </span>
+                        <span className="market-rev-count">({item.reviewsCount})</span>
+                    </div>
+                </div>
+
                 <h3 className="item-name">{item.name}</h3>
                 <p className="item-description">{item.description}</p>
-                <p className="item-price">₹{item.price}</p>
+
+                <div className="item-meta">
+                  {item.materialUsed && (
+                    <span className="meta-tag">{item.materialUsed}</span>
+                  )}
+                </div>
 
                 <div className="stock-badge">
                   {item.stock === 0 ? (
@@ -130,46 +164,62 @@ const Marketplace = () => {
                 </div>
 
                 {item.stock > 0 && (
-                  <div className="action-area">
-                    {activeBuyNowId !== item.id ? (
-                      <div className="action-btns">
-                        <button className="add-to-cart-btn" onClick={() => handleAddToCart(item)}>
-                          Add to Cart
-                        </button>
-                        <button className="buy-now-btn" onClick={() => handleBuyNowClick(item.id)}>
-                          Buy Now
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="coin-redemption-section">
-                        <p className="coin-text">Available Coins: {userCoins}</p>
-                        <label className="coin-checkbox-label">
-                          <input 
-                            type="checkbox" 
-                            checked={useCoins} 
-                            onChange={(e) => setUseCoins(e.target.checked)} 
-                          />
-                          <span>Use coins (Save ₹{userCoins})</span>
-                        </label>
-                        <div className="final-btns">
-                          <button className="confirm-pay-btn" onClick={() => handleFinalPayment(item)}>
-                            Pay ₹{useCoins ? Math.max(0, item.price - userCoins) : item.price}
+                  <div className="item-footer">
+                    <p className="item-price">₹{item.price}</p>
+                    <div className="action-area">
+                      {activeBuyNowId !== item.id ? (
+                        <div className="action-btns">
+                          <button
+                            className="add-to-cart-btn"
+                            onClick={() => handleAddToCart(item)}
+                          >
+                            + Cart
                           </button>
-                          <button className="cancel-pay-btn" onClick={() => setActiveBuyNowId(null)}>Cancel</button>
+                          <button
+                            className="buy-now-btn"
+                            onClick={() => handleBuyNowClick(item.id)}
+                          >
+                            Buy Now
+                          </button>
                         </div>
-                      </div>
-                    )}
+                      ) : (
+                        <div className="coin-redemption-section">
+                          <p className="coin-text">Available Coins: {userCoins}</p>
+                          <label className="coin-checkbox-label">
+                            <input
+                              type="checkbox"
+                              checked={useCoins}
+                              onChange={(e) => setUseCoins(e.target.checked)}
+                            />
+                            <span>Use coins (Save ₹{userCoins})</span>
+                          </label>
+                          <div className="final-btns">
+                            <button
+                              className="confirm-pay-btn"
+                              onClick={() => handleFinalPayment(item)}
+                            >
+                              Pay ₹{useCoins ? Math.max(0, item.price - userCoins) : item.price}
+                            </button>
+                            <button
+                              className="cancel-pay-btn"
+                              onClick={() => setActiveBuyNowId(null)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
 
-                {item.detailsUrl && (
-                  <div className="view-details">
-                    <a href={item.detailsUrl} target="_blank" rel="noopener noreferrer" className="view-details-link">
-                      Know more
-                    </a>
-                  </div>
-                )}
+                <div className="view-details">
+                  <Link to={`/product-view/${item.id}`} className="view-link">
+                    View Details →
+                  </Link>
+                </div>
               </div>
+
             </div>
           ))
         ) : (

@@ -42,7 +42,7 @@ router.post("/:id/review", auth, async (req, res) => {
   try {
     const { rating, comment } = req.body;
 
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id || req.user.id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const product = await Product.findById(req.params.id);
@@ -82,18 +82,40 @@ router.post("/:id/review", auth, async (req, res) => {
   }
 });
 
-/* ===========================
-   EDIT PRODUCT
-=========================== */
 router.put("/edit/:id", auth, upload.array("images", 5), async (req, res) => {
   try {
-    const updatedData = { ...req.body };
-    if (updatedData.price) updatedData.price = Number(updatedData.price);
-    if (updatedData.stock) updatedData.stock = Number(updatedData.stock);
+    const existingProduct = await Product.findOne({ 
+      _id: req.params.id, 
+      vendorId: req.user._id 
+    });
 
-    let existingProduct = await Product.findOne({ _id: req.params.id, vendorId: req.user._id });
-    if (!existingProduct) return res.status(404).json({ success: false, error: "Product not found" });
+    if (!existingProduct) {
+      return res.status(404).json({ success: false, error: "Product not found" });
+    }
 
+    // Build update object manually - simple and clear
+    const updatedData = {};
+
+    if (req.body.title) updatedData.title = req.body.title;
+    if (req.body.description !== undefined) updatedData.description = req.body.description;
+    if (req.body.price !== undefined) updatedData.price = Number(req.body.price);
+    if (req.body.stock !== undefined) updatedData.stock = Number(req.body.stock);
+    if (req.body.category !== undefined) updatedData.category = req.body.category;
+
+    // Heritage fields
+    if (req.body.originState) updatedData.originState = req.body.originState;
+    if (req.body.tribeName) updatedData.tribeName = req.body.tribeName;
+    if (req.body.materialUsed) updatedData.materialUsed = req.body.materialUsed;
+    if (req.body.heritageHistory !== undefined) updatedData.heritageHistory = req.body.heritageHistory;
+
+    // Optional specs
+    if (req.body.authenticity !== undefined) updatedData.authenticity = req.body.authenticity;
+    if (req.body.artisanName !== undefined) updatedData.artisanName = req.body.artisanName;
+    if (req.body.dimensions !== undefined) updatedData.dimensions = req.body.dimensions;
+    if (req.body.weight !== undefined) updatedData.weight = req.body.weight;
+    if (req.body.careInstructions !== undefined) updatedData.careInstructions = req.body.careInstructions;
+
+    // Only update images if new files were uploaded
     if (req.files && req.files.length > 0) {
       const newImages = req.files.map((f) => f.path);
       updatedData.images = [...existingProduct.images, ...newImages].slice(0, 5);
@@ -101,11 +123,14 @@ router.put("/edit/:id", auth, upload.array("images", 5), async (req, res) => {
 
     const product = await Product.findOneAndUpdate(
       { _id: req.params.id, vendorId: req.user._id },
-      updatedData,
-      { new: true }
+      { $set: updatedData },
+      { new: true, runValidators: true }
     );
+
     res.json({ success: true, product });
+
   } catch (err) {
+    console.error("Edit error:", err);
     res.status(500).json({ success: false, error: err.message });
   }
 });
@@ -191,6 +216,30 @@ router.get("/:id", async (req, res) => {
     res.json({ success: true, product });
   } catch (err) {
     res.status(404).json({ success: false, error: "Not found" });
+  }
+});
+
+/* ===========================
+   PUBLIC: GET SINGLE PRODUCT (For ProductView Page)
+=========================== */
+// We use /public/:id to distinguish it from vendor-specific routes
+router.get("/public/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id)
+      .populate({
+        path: 'vendorId',
+        model:'user',
+        select: 'shopName city state isVerified' // Only get what we need for the UI
+      });
+
+    if (!product) {
+      return res.status(404).json({ success: false, error: "Product not found" });
+    }
+
+    res.json({ success: true, product });
+  } catch (err) {
+    console.error("Public Fetch Error:", err);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 });
 

@@ -53,6 +53,19 @@ const productSchema = new mongoose.Schema({
     default: "",
   },
 
+  // NEW HERITAGE FIELDS (Replacing detailsUrl)
+  originState: { type: String, required: true },
+  tribeName: { type: String, required: true },
+  materialUsed: { type: String, required: true },
+  heritageHistory: { type: String, default: "" },
+
+  /* OPTIONAL SPECIFICATIONS */
+  authenticity: { type: String, default: "" },      // e.g., GI Tagged
+  artisanName: { type: String, default: "" },       // Artisans's Name
+  dimensions: { type: String, default: "" },        // Size
+  weight: { type: String, default: "" },            // Weight
+  careInstructions: { type: String, default: "" },  // How to handle
+
   /* NEW: REVIEWS */
   reviews: [reviewSchema],
 

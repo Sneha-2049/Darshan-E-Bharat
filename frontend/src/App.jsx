@@ -18,6 +18,7 @@ import CreateCourse from "./Components/TeacherProfile/CreateCourse";
 import EditCourse from "./Components/TeacherProfile/EditCourse";
 import Marketplace from "./Components/Marketplace/Marketplace";
 import Cart from "./Components/Cart/Cart";
+import ProductView from "./Components/Marketplace/ProductView";
 import AboutPage from "./Components/About/AboutPage";
 import ManageCourse from "./Components/TeacherProfile/ManageCourse";
 import EnrollCourse from "./Components/Courses/EnrollCourse";
@@ -117,6 +118,7 @@ function App() {
 
                 <Route path="/marketplace" element={<Marketplace />} />
                 <Route path="/cart" element={<Cart />} />
+                <Route path="/product-view/:id" element={<ProductView />} />
                 <Route
                   path="/admin-dashboard"
                   element={

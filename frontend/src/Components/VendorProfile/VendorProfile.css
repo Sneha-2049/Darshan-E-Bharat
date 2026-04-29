@@ -521,3 +521,75 @@
     font-size: 26px;
   }
 }
+
+/* Ensure the textareas have consistent styling */
+.edit-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+/* Specific styling for the History box to distinguish from general description */
+.edit-form textarea[placeholder*="History"] {
+    border-left: 4px solid #e67e22; /* Heritage orange accent */
+    background-color: #fffaf5;
+}
+
+/* Row styling for side-by-side inputs */
+.form-row {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+}
+
+.form-row input {
+    flex: 1;
+}
+
+/* Styling for the Image Upload label */
+.file-input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #444;
+}
+
+/* Status message improvements */
+.status-msg {
+    text-align: center;
+    padding: 40px;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.form-section-divider {
+    margin: 25px 0 10px;
+    font-weight: bold;
+    color: #e67e22; /* Heritage Orange */
+    border-bottom: 1px solid #fdf2e9;
+    padding-bottom: 5px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.edit-form select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    margin-bottom: 15px;
+}
+
+.edit-form textarea[required] {
+    border-left: 3px solid #e67e22;
+}
+
+.form-row input, .form-row select {
+    flex: 1;
+}

@@ -36,6 +36,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/payment", paymentRoutes);
 
+app.use("/api/summary", require("./routes/summary"));
+
 // 🔹 Default route (optional but useful for testing)
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
